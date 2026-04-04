@@ -599,7 +599,7 @@
       flex: 1;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 16px;
+      padding: 16px 16px 40px;
     }
 
     .detail-section {
@@ -2464,6 +2464,7 @@
 
       // Load route-specific data on tab switch
       if (tabId === 'routeTab') {
+        updateRouteDisplay();
         loadMileageHistory();
       }
     }
@@ -3235,9 +3236,25 @@
 
     function navigateRoute(idx) {
       const stop = routeData[idx];
-      const parts = [stop.co, stop.addr, stop.city, stop.st, stop.zip].filter(Boolean);
-      const query = parts.join(' ').trim();
-      if (query) window.open('https://www.google.com/maps/search/' + encodeURIComponent(query));
+      const parts = [stop.co, stop.addr, stop.city, stop.st].filter(Boolean);
+      const destination = parts.join(' ').trim();
+      if (!destination) return;
+
+      // Navigate from current location to this stop
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const origin = position.coords.latitude + ',' + position.coords.longitude;
+            window.open('https://www.google.com/maps/dir/' + origin + '/' + encodeURIComponent(destination));
+          },
+          () => {
+            window.open('https://www.google.com/maps/dir/My+Location/' + encodeURIComponent(destination));
+          },
+          { enableHighAccuracy: true, timeout: 5000 }
+        );
+      } else {
+        window.open('https://www.google.com/maps/dir/My+Location/' + encodeURIComponent(destination));
+      }
     }
 
     function startRoute() {
@@ -3246,9 +3263,38 @@
         return;
       }
 
-      const stops = routeData.map(s => encodeURIComponent(s.co + ' ' + (s.city || '')));
-      const url = 'https://www.google.com/maps/dir/' + stops.join('/');
-      window.open(url);
+      // Use current GPS location as starting point
+      if (navigator.geolocation) {
+        showToast('Getting your location...');
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const origin = position.coords.latitude + ',' + position.coords.longitude;
+            const stops = routeData.map(s => {
+              const parts = [s.co, s.addr, s.city, s.st].filter(Boolean);
+              return encodeURIComponent(parts.join(' '));
+            });
+            const url = 'https://www.google.com/maps/dir/' + origin + '/' + stops.join('/');
+            window.open(url);
+          },
+          () => {
+            // Fallback if GPS denied — use "My+Location" keyword
+            const stops = routeData.map(s => {
+              const parts = [s.co, s.addr, s.city, s.st].filter(Boolean);
+              return encodeURIComponent(parts.join(' '));
+            });
+            const url = 'https://www.google.com/maps/dir/My+Location/' + stops.join('/');
+            window.open(url);
+          },
+          { enableHighAccuracy: true, timeout: 5000 }
+        );
+      } else {
+        const stops = routeData.map(s => {
+          const parts = [s.co, s.addr, s.city, s.st].filter(Boolean);
+          return encodeURIComponent(parts.join(' '));
+        });
+        const url = 'https://www.google.com/maps/dir/My+Location/' + stops.join('/');
+        window.open(url);
+      }
     }
 
     function checkInRoute(idx) {
