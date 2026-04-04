@@ -2186,13 +2186,13 @@
           } else if (action === 'email') {
             if (prospect.em) window.location.href = 'mailto:' + prospect.em;
           } else if (action === 'map') {
+            const dealerName = prospect.co || prospect.n || '';
             const addr = prospect.addr || prospect.address || prospect.street || '';
             const city = prospect.city || prospect.cty || prospect.ter || '';
             const state = prospect.st || prospect.sta || '';
             const zip = prospect.zip || prospect.postal || '';
-            const fullAddr = [addr, city, state, zip].filter(Boolean).join(' ').trim();
-            const dealerName = prospect.co || prospect.n || '';
-            const query = fullAddr.length > 3 ? fullAddr : dealerName;
+            const parts = [dealerName, addr, city, state, zip].filter(Boolean);
+            const query = parts.join(' ').trim();
             if (query) window.open('https://maps.google.com/?q=' + encodeURIComponent(query));
           }
         });
@@ -2547,16 +2547,16 @@
 
     function navigateProspect() {
       if (currentProspect) {
-        // Build best available address: full address > city/state > dealership name
+        const dealerName = currentProspect.co || currentProspect.n || '';
         const addr = currentProspect.addr || currentProspect.address || currentProspect.street || '';
         const city = currentProspect.city || currentProspect.cty || currentProspect.ter || '';
         const state = currentProspect.st || currentProspect.sta || '';
         const zip = currentProspect.zip || currentProspect.postal || '';
-        const fullAddr = [addr, city, state, zip].filter(Boolean).join(' ').trim();
 
-        // If we have a real street address, use it; otherwise search by dealership name
-        const dealerName = currentProspect.co || currentProspect.n || '';
-        const query = fullAddr.length > 3 ? fullAddr : dealerName;
+        // Always lead with dealership name — Google Maps resolves it to the location.
+        // Append city/state/zip as hints when available.
+        const parts = [dealerName, addr, city, state, zip].filter(Boolean);
+        const query = parts.join(' ').trim();
         if (query) window.open('https://maps.google.com/?q=' + encodeURIComponent(query));
       }
     }
