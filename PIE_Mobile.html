@@ -2188,7 +2188,7 @@
           } else if (action === 'map') {
             const dealerName = prospect.co || prospect.n || '';
             const addr = prospect.addr || prospect.address || prospect.street || '';
-            const city = prospect.city || prospect.cty || prospect.ter || '';
+            const city = prospect.city || prospect.cty || '';
             const state = prospect.st || prospect.sta || '';
             const zip = prospect.zip || prospect.postal || '';
             const parts = [dealerName, addr, city, state, zip].filter(Boolean);
@@ -2549,7 +2549,7 @@
       if (currentProspect) {
         const dealerName = currentProspect.co || currentProspect.n || '';
         const addr = currentProspect.addr || currentProspect.address || currentProspect.street || '';
-        const city = currentProspect.city || currentProspect.cty || currentProspect.ter || '';
+        const city = currentProspect.city || currentProspect.cty || '';
         const state = currentProspect.st || currentProspect.sta || '';
         const zip = currentProspect.zip || currentProspect.postal || '';
 
