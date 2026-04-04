@@ -12,8 +12,21 @@
       "dealer_intel": null,
       "source": "pie_mobile",
       "timestamp": "2026-04-04T10:01:31.376Z"
+    },
+    {
+      "id": "4121f4de-e02b-44ab-99b5-b5fadccfbfb0",
+      "rep": "Trish Smith",
+      "prospect_id": "9f7567a014680bfa",
+      "prospect_name": "Lost Pines Toyota",
+      "prospect_type": "net_new",
+      "activity_type": "disposition",
+      "outcome": "meeting",
+      "notes": "Phase 2 disposition test",
+      "dealer_intel": null,
+      "source": "pie_mobile",
+      "timestamp": "2026-04-04T10:01:45.468Z"
     }
   ],
   "schema_version": "1.0",
-  "last_updated": "2026-04-04T10:01:31.753Z"
+  "last_updated": "2026-04-04T10:01:45.669Z"
 }
