@@ -3157,20 +3157,32 @@
     function clearRoute() {
       routeData = [];
       saveRoute();
-      // Force immediate DOM update
-      const container = document.getElementById('routeListContainer');
-      if (container) container.innerHTML = '';
+      // Force immediate DOM update — iOS Safari needs aggressive reflow
+      var container = document.getElementById('routeListContainer');
+      if (container) {
+        while (container.firstChild) container.removeChild(container.firstChild);
+      }
       updateRouteDisplay();
+      forceRepaint(container);
       loadMileageHistory();
       showToast('Route cleared');
     }
 
     function removeFromRoute(idx) {
-      const company = routeData[idx].co;
+      var company = routeData[idx] ? routeData[idx].co : '';
       routeData.splice(idx, 1);
       saveRoute();
       updateRouteDisplay();
-      showToast(`Removed ${company}`);
+      showToast(company ? 'Removed ' + company : 'Removed');
+    }
+
+    // iOS Safari sometimes skips repaint after innerHTML replacement.
+    // Toggle display to force the browser to re-render the container.
+    function forceRepaint(el) {
+      if (!el) return;
+      el.style.display = 'none';
+      void el.offsetHeight;
+      el.style.display = '';
     }
 
     function updateRouteDisplay() {
@@ -3182,91 +3194,62 @@
 
       countEl.textContent = routeData.length;
 
+      // Remove all existing children first (more reliable than innerHTML = '' on iOS Safari)
+      while (container.firstChild) container.removeChild(container.firstChild);
+
       if (routeData.length === 0) {
-        container.innerHTML = `
-          <div class="route-empty">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:48px;height:48px;margin-bottom:12px;opacity:0.3;">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            <div class="route-empty-text">No stops planned</div>
-            <div class="route-empty-hint">Add prospects from the Prospects tab</div>
-          </div>
-        `;
+        container.innerHTML = '<div class="route-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:48px;height:48px;margin-bottom:12px;opacity:0.3;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><div class="route-empty-text">No stops planned</div><div class="route-empty-hint">Add prospects from the Prospects tab</div></div>';
         mileageSection.style.display = 'none';
         clearBtn.style.display = 'none';
         startBtn.style.display = 'none';
       } else {
-        const html = routeData.map((stop, idx) => {
-          const isCheckedIn = stop.checkedIn;
-          const checkBadge = isCheckedIn
+        routeData.forEach(function(stop, idx) {
+          var card = document.createElement('div');
+          card.className = 'route-card';
+          card.setAttribute('data-route-idx', idx);
+
+          var isCheckedIn = stop.checkedIn;
+          var checkBadge = isCheckedIn
             ? '<div style="font-size:10px;color:var(--success);margin-top:4px;font-weight:600;">✓ Checked in ' + (stop.checkInTime ? new Date(stop.checkInTime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '') + '</div>'
             : '';
 
-          return `
-            <div class="route-card" data-route-idx="${idx}">
-              <div class="route-stop-number">${idx + 1}</div>
-              <div class="route-card-body" data-action="detail" data-idx="${idx}">
-                <div class="route-card-company">${stop.co}</div>
-                <div class="route-card-contact">${stop.cn || ''}${stop.ph ? ' · ' + stop.ph : ''}</div>
-                <div class="route-card-location">${stop.city}${stop.city && stop.st ? ', ' : ''}${stop.st}</div>
-                ${checkBadge}
-              </div>
-              <div class="route-card-actions">
-                <button class="route-action-btn" data-action="call" data-idx="${idx}" title="Call">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg>
-                </button>
-                <button class="route-action-btn" data-action="text" data-idx="${idx}" title="Text">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg>
-                </button>
-                <button class="route-action-btn" data-action="navigate" data-idx="${idx}" title="Navigate">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
-                </button>
-                <button class="route-action-btn route-remove-btn" data-action="remove" data-idx="${idx}" title="Remove">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"></path></svg>
-                </button>
-              </div>
-            </div>
-          `;
-        }).join('');
+          card.innerHTML = '<div class="route-stop-number">' + (idx + 1) + '</div>' +
+            '<div class="route-card-body"><div class="route-card-company">' + (stop.co || '') + '</div>' +
+            '<div class="route-card-contact">' + (stop.cn || '') + (stop.ph ? ' \u00b7 ' + stop.ph : '') + '</div>' +
+            '<div class="route-card-location">' + (stop.city || '') + (stop.city && stop.st ? ', ' : '') + (stop.st || '') + '</div>' +
+            checkBadge + '</div>' +
+            '<div class="route-card-actions">' +
+            '<button class="route-action-btn" title="Call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg></button>' +
+            '<button class="route-action-btn" title="Text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg></button>' +
+            '<button class="route-action-btn" title="Navigate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg></button>' +
+            '<button class="route-action-btn route-remove-btn" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>' +
+            '</div>';
 
-        container.innerHTML = html;
-        // Attach direct click handlers to every button and card body
-        bindRouteCardHandlers(container);
+          // Direct click handlers — no delegation, no data attributes
+          var body = card.querySelector('.route-card-body');
+          var btns = card.querySelectorAll('.route-action-btn');
+
+          body.addEventListener('click', function(e) { e.stopPropagation(); openRouteDetail(idx); });
+
+          btns[0].addEventListener('click', function(e) { e.stopPropagation(); routeCall(idx); });
+          btns[1].addEventListener('click', function(e) { e.stopPropagation(); routeText(idx); });
+          btns[2].addEventListener('click', function(e) { e.stopPropagation(); navigateRoute(idx); });
+          btns[3].addEventListener('click', function(e) { e.stopPropagation(); removeFromRoute(idx); });
+
+          container.appendChild(card);
+        });
+
         mileageSection.style.display = 'block';
         clearBtn.style.display = 'block';
         startBtn.style.display = 'block';
       }
 
+      // Force iOS Safari repaint
+      forceRepaint(container);
       updateMileageDisplay();
     }
 
-    // ---- Direct Route Card Handlers ----
-    // Attaches individual click+touchend handlers to each button after innerHTML render.
-    // More reliable on mobile Safari than event delegation.
-    function bindRouteCardHandlers(container) {
-      // Bind action buttons (call, text, navigate, remove, checkin)
-      container.querySelectorAll('[data-action]').forEach(function(el) {
-        var action = el.dataset.action;
-        var idx = parseInt(el.dataset.idx, 10);
-        function handler(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          if (isNaN(idx) || idx < 0 || idx >= routeData.length) return;
-          switch (action) {
-            case 'call': routeCall(idx); break;
-            case 'text': routeText(idx); break;
-            case 'navigate': navigateRoute(idx); break;
-            case 'remove': removeFromRoute(idx); break;
-            case 'detail': openRouteDetail(idx); break;
-            case 'checkin': checkInRoute(idx); break;
-          }
-        }
-        el.addEventListener('click', handler);
-      });
-    }
-
-    // Legacy stub — no longer needed, handlers bound directly in updateRouteDisplay
+    // Legacy stub — handlers now bound directly in updateRouteDisplay via appendChild
     function initRouteListeners() { }
 
     function routeCall(idx) {
