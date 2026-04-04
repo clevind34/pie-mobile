@@ -646,6 +646,30 @@
 
     .detail-value.editable {
       color: var(--accent);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .detail-value.editable svg.edit-icon {
+      width: 14px;
+      height: 14px;
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    .detail-value.editable input {
+      flex: 1;
+      border: 2px solid var(--accent);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: var(--surface);
+      outline: none;
+      width: 100%;
     }
 
     .detail-field input {
@@ -1650,6 +1674,301 @@
     .status-high { color: var(--success); }
     .status-medium { color: var(--warning); }
     .status-low { color: var(--danger); }
+
+    /* ── Route Tab ── */
+    .route-content {
+      padding: 16px;
+    }
+
+    .route-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), #0a3a5f);
+      border-radius: 12px;
+      color: white;
+    }
+
+    .route-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .route-stop-count {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .route-subtext {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .route-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .route-btn {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 150ms ease;
+      font-family: inherit;
+    }
+
+    .route-btn-primary {
+      background: white;
+      color: var(--primary);
+    }
+
+    .route-btn-primary:active {
+      transform: scale(0.96);
+      opacity: 0.8;
+    }
+
+    .route-btn-danger {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .route-btn-danger:active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .route-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .route-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: grab;
+      transition: all 150ms ease;
+    }
+
+    .route-card:active {
+      cursor: grabbing;
+      transform: scale(1.01);
+      background: #f5f3ff;
+    }
+
+    .route-stop-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .route-card-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .route-card-company {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .route-card-contact {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+
+    .route-card-location {
+      font-size: 11px;
+      color: var(--text-tertiary);
+    }
+
+    .route-card-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .route-card-action {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: transparent;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 150ms ease;
+    }
+
+    .route-card-action:active {
+      background: #f0f0f0;
+      color: var(--text-primary);
+    }
+
+    .route-card-action svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .route-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-tertiary);
+    }
+
+    .route-empty svg {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 12px;
+      opacity: 0.5;
+    }
+
+    .route-empty-text {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .route-empty-hint {
+      font-size: 12px;
+    }
+
+    .mileage-section {
+      background: linear-gradient(135deg, rgba(102, 39, 232, 0.1), rgba(139, 92, 246, 0.1));
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .mileage-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .mileage-display {
+      font-size: 32px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .mileage-rate {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .add-to-route-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      background: var(--success);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+
+    .add-to-route-btn:active {
+      background: #047857;
+      transform: scale(0.98);
+    }
+
+    .mileage-history {
+      margin-top: 20px;
+    }
+
+    .mileage-history-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .mileage-entry {
+      padding: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .mileage-entry-date {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .mileage-entry-detail {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .mileage-entry-miles {
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+
+    .export-mileage-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 16px;
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+
+    .export-mileage-btn:active {
+      background: var(--accent);
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -1704,6 +2023,45 @@
         </div>
       </div>
 
+      <!-- Route Tab -->
+      <div class="tab-content" id="routeTab">
+        <div class="route-content">
+          <div class="route-header">
+            <div class="route-header-left">
+              <div class="route-stop-count" id="routeStopCount">0</div>
+              <div class="route-subtext">stops today</div>
+            </div>
+            <div class="route-actions">
+              <button class="route-btn route-btn-danger" id="routeClearBtn" onclick="clearRoute()" style="display:none;">Clear</button>
+              <button class="route-btn route-btn-primary" id="routeStartBtn" onclick="startRoute()" style="display:none;">Start</button>
+            </div>
+          </div>
+
+          <div id="routeListContainer">
+            <div class="route-empty">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <div class="route-empty-text">No stops planned</div>
+              <div class="route-empty-hint">Add prospects from the Prospects tab</div>
+            </div>
+          </div>
+
+          <div class="mileage-section" id="mileageSection" style="display:none;">
+            <div class="mileage-title">Today's Mileage</div>
+            <div class="mileage-display" id="totalMiles">0.0</div>
+            <div class="mileage-rate">@ $0.70/mile = <span id="mileageReimburse">$0.00</span> estimated</div>
+            <button class="export-mileage-btn" onclick="exportMileageCSV()" style="margin-top:12px;">📊 Export Mileage</button>
+          </div>
+
+          <div class="mileage-history" id="mileageHistory" style="display:none;">
+            <div class="mileage-history-title">Last 30 Days</div>
+            <div id="mileageHistoryBody"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- More Tab -->
       <div class="tab-content" id="moreTab">
         <div class="more-content">
@@ -1743,6 +2101,14 @@
           <path d="M12 6v6l4 2"></path>
         </svg>
         Activity
+      </button>
+
+      <button class="nav-item" data-tab="routeTab" aria-selected="false" role="tab" aria-label="Route">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Route
       </button>
 
       <button class="nav-item" data-tab="moreTab" aria-selected="false" role="tab" aria-label="More">
@@ -1994,10 +2360,38 @@
 
     function selectRep(rep) {
       currentRep = rep;
+      selectedRep = rep;
       localStorage.setItem('selectedRep', rep);
       document.getElementById('repModal').classList.remove('active');
+      loadSavedContacts(); // Load any previously saved contact edits
+      initRoute(); // Load route for this rep
       renderProspects();
       setupEventListeners();
+    }
+
+    function loadSavedContacts() {
+      // Load saved contact edits from pie-contacts API
+      fetch('/.netlify/functions/pie-contacts', { method: 'GET' })
+        .then(r => r.json())
+        .then(data => {
+          if (data.contacts && typeof data.contacts === 'object') {
+            // Apply edits to all prospect arrays
+            [PIE_NN, PIE_CS, AFFILIATE_RAW].forEach(arr => {
+              if (!Array.isArray(arr)) return;
+              arr.forEach(prospect => {
+                const prospectId = prospect.id || `${prospect.co}-${prospect.cn}`;
+                const edits = data.contacts[prospectId];
+                if (edits) {
+                  if (edits.contact_name) prospect.cn = edits.contact_name;
+                  if (edits.title) prospect.ti = edits.title;
+                  if (edits.email) prospect.em = edits.email;
+                  if (edits.phone) prospect.ph = edits.phone;
+                }
+              });
+            });
+          }
+        })
+        .catch(err => console.error('Failed to load saved contacts:', err));
     }
 
     function setupEventListeners() {
@@ -2067,6 +2461,11 @@
       document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
 
       currentTab = tabId;
+
+      // Load route-specific data on tab switch
+      if (tabId === 'routeTab') {
+        loadMileageHistory();
+      }
     }
 
     function switchSubTab(sub) {
@@ -2329,13 +2728,23 @@
           <div class="detail-field">
             <div>
               <div class="detail-label">Contact</div>
-              <div class="detail-value">${(prospect.cn || `${prospect.fn} ${prospect.ln}`.trim()) || 'N/A'}</div>
+              <div class="detail-value editable" data-field="contact_name">
+                ${(prospect.cn || `${prospect.fn} ${prospect.ln}`.trim()) || 'Add name'}
+                <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
+              </div>
             </div>
           </div>
           <div class="detail-field">
             <div>
               <div class="detail-label">Title</div>
-              <div class="detail-value">${prospect.ti || 'N/A'}</div>
+              <div class="detail-value editable" data-field="title">
+                ${prospect.ti || 'Add title'}
+                <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -2345,13 +2754,23 @@
           <div class="detail-field">
             <div>
               <div class="detail-label">Email</div>
-              <div class="detail-value editable">${prospect.em || 'Add email'}</div>
+              <div class="detail-value editable" data-field="email">
+                ${prospect.em || 'Add email'}
+                <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
+              </div>
             </div>
           </div>
           <div class="detail-field">
             <div>
               <div class="detail-label">Phone</div>
-              <div class="detail-value editable">${prospect.ph || 'Add phone'}</div>
+              <div class="detail-value editable" data-field="phone">
+                ${prospect.ph || 'Add phone'}
+                <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -2378,6 +2797,13 @@
             Map
           </button>
         </div>
+
+        <button class="add-to-route-btn" onclick="addProspectToRoute()">
+          <svg style="display:inline-block; width:16px; height:16px; margin-right:6px; vertical-align:middle;" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+          </svg>
+          Add to Route
+        </button>
       `;
 
       // Chuck AI Actions
@@ -2526,12 +2952,95 @@
       // Show panel
       document.getElementById('detailOverlay').classList.add('active');
       document.getElementById('detailPanel').classList.add('active');
+
+      // Attach edit handlers
+      makeFieldsEditable();
     }
 
     function closeDetail() {
       document.getElementById('detailOverlay').classList.remove('active');
       document.getElementById('detailPanel').classList.remove('active');
       currentProspect = null;
+    }
+
+    function makeFieldsEditable() {
+      const editableFields = document.querySelectorAll('.detail-value.editable');
+      editableFields.forEach(field => {
+        field.addEventListener('click', (e) => {
+          if (field.querySelector('input')) return; // Already in edit mode
+
+          const fieldName = field.dataset.field;
+          const currentValue = field.textContent.trim().replace(/[\r\n]+/g, ' ');
+          const displayText = (prospect, field) => {
+            if (field === 'contact_name') return prospect.cn || `${prospect.fn} ${prospect.ln}`.trim() || '';
+            if (field === 'title') return prospect.ti || '';
+            if (field === 'email') return prospect.em || '';
+            if (field === 'phone') return prospect.ph || '';
+            return '';
+          };
+          const actualValue = displayText(currentProspect, fieldName);
+
+          const inputType = fieldName === 'email' ? 'email' : fieldName === 'phone' ? 'tel' : 'text';
+          const input = document.createElement('input');
+          input.type = inputType;
+          input.value = actualValue;
+
+          // Clear the field and add input
+          const icon = field.querySelector('svg.edit-icon');
+          field.innerHTML = '';
+          field.appendChild(input);
+          if (icon) field.appendChild(icon);
+
+          input.focus();
+          input.select();
+
+          const saveEdit = () => {
+            const newValue = input.value.trim();
+            if (newValue && newValue !== actualValue) {
+              // Update currentProspect in memory
+              if (fieldName === 'contact_name') currentProspect.cn = newValue;
+              else if (fieldName === 'title') currentProspect.ti = newValue;
+              else if (fieldName === 'email') currentProspect.em = newValue;
+              else if (fieldName === 'phone') currentProspect.ph = newValue;
+
+              // Fire-and-forget POST to pie-contacts
+              const payload = {
+                prospect_id: currentProspect.id || `${currentProspect.co}-${currentProspect.cn}`,
+                field: fieldName,
+                value: newValue,
+                edited_by: selectedRep
+              };
+              fetch('/.netlify/functions/pie-contacts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              }).catch(err => console.error('Contact edit save failed:', err));
+
+              showToast('Contact info saved');
+            }
+
+            // Restore display text
+            const displayValue = displayText(currentProspect, fieldName) || `Add ${fieldName.replace('_', ' ')}`;
+            field.textContent = displayValue;
+            if (icon) {
+              const newIcon = document.createElement('svg');
+              newIcon.className = 'edit-icon';
+              newIcon.setAttribute('viewBox', '0 0 24 24');
+              newIcon.setAttribute('fill', 'none');
+              newIcon.setAttribute('stroke', 'currentColor');
+              newIcon.setAttribute('stroke-width', '2');
+              newIcon.innerHTML = '<path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>';
+              field.appendChild(newIcon);
+            }
+            makeFieldsEditable(); // Re-attach listeners
+          };
+
+          input.addEventListener('blur', saveEdit);
+          input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') saveEdit();
+          });
+        });
+      });
     }
 
     function callProspect() {
@@ -2561,6 +3070,355 @@
         const query = parts.join(' ').trim();
         if (query) window.open('https://www.google.com/maps/search/' + encodeURIComponent(query));
       }
+    }
+
+    // ============================================================
+    // PHASE 2B: Route Management + Mileage Tracking
+    // ============================================================
+
+    let routeData = [];
+    const IRS_MILEAGE_RATE = 0.70;
+
+    function initRoute() {
+      const key = `pie_route_${selectedRep}`;
+      const stored = localStorage.getItem(key);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          const age = Date.now() - (parsed.timestamp || 0);
+          if (age < 24 * 60 * 60 * 1000) { // 24 hours
+            routeData = parsed.stops || [];
+          } else {
+            routeData = [];
+          }
+        } catch (e) {
+          routeData = [];
+        }
+      }
+      updateRouteDisplay();
+    }
+
+    function addProspectToRoute() {
+      if (!currentProspect) return;
+      const prospectId = currentProspect.id || `${currentProspect.co}-${currentProspect.cn}`;
+      const existingIdx = routeData.findIndex(s => s.id === prospectId);
+      if (existingIdx >= 0) {
+        showToast('Already in route');
+        return;
+      }
+
+      routeData.push({
+        id: prospectId,
+        co: currentProspect.co || currentProspect.n || '',
+        cn: currentProspect.cn || `${currentProspect.fn} ${currentProspect.ln}`.trim() || '',
+        ph: currentProspect.ph || '',
+        em: currentProspect.em || '',
+        city: currentProspect.city || currentProspect.cty || '',
+        st: currentProspect.st || currentProspect.sta || '',
+        addr: currentProspect.addr || currentProspect.address || currentProspect.street || '',
+        lat: null,
+        lng: null,
+        checkedIn: false,
+        checkInTime: null,
+        checkOutTime: null
+      });
+
+      saveRoute();
+      updateRouteDisplay();
+      showToast('Added to route');
+    }
+
+    function saveRoute() {
+      const key = `pie_route_${selectedRep}`;
+      localStorage.setItem(key, JSON.stringify({ stops: routeData, timestamp: Date.now() }));
+    }
+
+    function clearRoute() {
+      if (confirm('Clear all route stops?')) {
+        routeData = [];
+        saveRoute();
+        updateRouteDisplay();
+        showToast('Route cleared');
+      }
+    }
+
+    function removeFromRoute(idx) {
+      const company = routeData[idx].co;
+      routeData.splice(idx, 1);
+      saveRoute();
+      updateRouteDisplay();
+      showToast(`Removed ${company}`);
+    }
+
+    function updateRouteDisplay() {
+      const countEl = document.getElementById('routeStopCount');
+      const container = document.getElementById('routeListContainer');
+      const mileageSection = document.getElementById('mileageSection');
+      const clearBtn = document.getElementById('routeClearBtn');
+      const startBtn = document.getElementById('routeStartBtn');
+
+      countEl.textContent = routeData.length;
+
+      if (routeData.length === 0) {
+        container.innerHTML = `
+          <div class="route-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <div class="route-empty-text">No stops planned</div>
+            <div class="route-empty-hint">Add prospects from the Prospects tab</div>
+          </div>
+        `;
+        mileageSection.style.display = 'none';
+        clearBtn.style.display = 'none';
+        startBtn.style.display = 'none';
+      } else {
+        const html = routeData.map((stop, idx) => {
+          const isCheckedIn = stop.checkedIn;
+          const checkInButtonText = isCheckedIn ? '✓ Checked In' : 'Check In';
+          const checkInButtonColor = isCheckedIn ? 'color: var(--success);' : '';
+
+          return `
+            <div class="route-card">
+              <div class="route-stop-number">${idx + 1}</div>
+              <div class="route-card-content">
+                <div class="route-card-company">${stop.co}</div>
+                <div class="route-card-contact">${stop.cn}${stop.ph ? ' · ' + stop.ph : ''}</div>
+                <div class="route-card-location">${stop.city}${stop.city && stop.st ? ', ' : ''}${stop.st}</div>
+                ${isCheckedIn ? '<div class="route-card-location" style="color: var(--success); margin-top: 4px;">Checked in at ' + (stop.checkInTime ? new Date(stop.checkInTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'unknown') + '</div>' : ''}
+              </div>
+              <div class="route-card-actions">
+                <button class="route-card-action" onclick="checkInRoute(${idx})" title="Check In" style="cursor:pointer; ${checkInButtonColor}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </button>
+                <button class="route-card-action" onclick="callRoute(${idx})" title="Call" style="cursor:pointer;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path>
+                  </svg>
+                </button>
+                <button class="route-card-action" onclick="navigateRoute(${idx})" title="Navigate" style="cursor:pointer;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </button>
+                <button class="route-card-action" onclick="removeFromRoute(${idx})" title="Remove" style="cursor:pointer; color:var(--danger);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        container.innerHTML = html;
+        mileageSection.style.display = 'block';
+        clearBtn.style.display = 'block';
+        startBtn.style.display = 'block';
+      }
+
+      updateMileageDisplay();
+    }
+
+    function callRoute(idx) {
+      const stop = routeData[idx];
+      if (stop.ph) {
+        const phone = stop.ph.replace(/\D/g, '');
+        window.location.href = `tel:+1${phone}`;
+      }
+    }
+
+    function navigateRoute(idx) {
+      const stop = routeData[idx];
+      const parts = [stop.co, stop.addr, stop.city, stop.st, stop.zip].filter(Boolean);
+      const query = parts.join(' ').trim();
+      if (query) window.open('https://www.google.com/maps/search/' + encodeURIComponent(query));
+    }
+
+    function startRoute() {
+      if (routeData.length === 0) {
+        showToast('No stops in route');
+        return;
+      }
+
+      const stops = routeData.map(s => encodeURIComponent(s.co + ' ' + (s.city || '')));
+      const url = 'https://www.google.com/maps/dir/' + stops.join('/');
+      window.open(url);
+    }
+
+    function checkInRoute(idx) {
+      const stop = routeData[idx];
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            stop.lat = position.coords.latitude;
+            stop.lng = position.coords.longitude;
+            stop.checkInTime = Date.now();
+            stop.checkedIn = true;
+
+            // Log mileage if we were previously checked in at another stop
+            if (idx > 0 && routeData[idx - 1].checkedIn && routeData[idx - 1].lat && routeData[idx - 1].lng) {
+              const dist = haversineDistance(routeData[idx - 1].lat, routeData[idx - 1].lng, stop.lat, stop.lng);
+              const miles = dist * 1.3; // road factor
+              logMileage(routeData[idx - 1], stop, miles);
+            }
+
+            saveRoute();
+            updateRouteDisplay();
+            showToast('Checked in at ' + stop.co);
+          },
+          (error) => {
+            showToast('GPS unavailable: ' + error.message);
+          }
+        );
+      } else {
+        showToast('Geolocation not supported');
+      }
+    }
+
+    function logMileage(fromStop, toStop, miles) {
+      const key = `pie_mileage_${selectedRep}`;
+      let entries = [];
+      const stored = localStorage.getItem(key);
+      if (stored) {
+        try {
+          entries = JSON.parse(stored);
+        } catch (e) {}
+      }
+
+      entries.push({
+        date: new Date().toISOString().split('T')[0],
+        from_name: fromStop.co,
+        from_addr: fromStop.addr,
+        to_name: toStop.co,
+        to_addr: toStop.addr,
+        miles: miles,
+        checked_in_at: fromStop.checkInTime ? new Date(fromStop.checkInTime).toLocaleTimeString() : '',
+        checked_out_at: toStop.checkInTime ? new Date(toStop.checkInTime).toLocaleTimeString() : ''
+      });
+
+      localStorage.setItem(key, JSON.stringify(entries));
+    }
+
+    function updateMileageDisplay() {
+      const totalMilesEl = document.getElementById('totalMiles');
+      const reimbourseEl = document.getElementById('mileageReimburse');
+
+      let totalMiles = 0;
+      for (let i = 0; i < routeData.length - 1; i++) {
+        const start = routeData[i];
+        const end = routeData[i + 1];
+        if (start.lat && start.lng && end.lat && end.lng) {
+          const dist = haversineDistance(start.lat, start.lng, end.lat, end.lng);
+          totalMiles += dist * 1.3; // road factor
+        }
+      }
+
+      totalMilesEl.textContent = totalMiles.toFixed(1);
+      reimbourseEl.textContent = '$' + (totalMiles * IRS_MILEAGE_RATE).toFixed(2);
+    }
+
+    function haversineDistance(lat1, lon1, lat2, lon2) {
+      const R = 3959; // Earth radius in miles
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    function loadMileageHistory() {
+      const key = `pie_mileage_${selectedRep}`;
+      const stored = localStorage.getItem(key);
+      let mileageEntries = [];
+      if (stored) {
+        try {
+          mileageEntries = JSON.parse(stored);
+        } catch (e) {}
+      }
+
+      if (mileageEntries.length === 0) {
+        document.getElementById('mileageHistory').style.display = 'none';
+        return;
+      }
+
+      // Group by date
+      const byDate = {};
+      mileageEntries.slice(-30).forEach(e => {
+        const date = e.date || 'Unknown';
+        if (!byDate[date]) byDate[date] = [];
+        byDate[date].push(e);
+      });
+
+      const html = Object.keys(byDate).reverse().map(date => {
+        const entries = byDate[date];
+        const dayTotal = entries.reduce((s, e) => s + (e.miles || 0), 0);
+        const dayReimburse = dayTotal * IRS_MILEAGE_RATE;
+
+        const entriesHtml = entries.map(e => `
+          <div class="mileage-entry">
+            <div class="mileage-entry-detail"><strong>${e.from_name}</strong> → <strong>${e.to_name}</strong></div>
+            <div class="mileage-entry-miles">${(e.miles || 0).toFixed(1)} mi @ $${IRS_MILEAGE_RATE}/mi</div>
+          </div>
+        `).join('');
+
+        return `
+          <div style="margin-bottom: 16px;">
+            <div class="mileage-entry-date">${new Date(date).toLocaleDateString()} · ${dayTotal.toFixed(1)} mi · $${dayReimburse.toFixed(2)}</div>
+            ${entriesHtml}
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('mileageHistoryBody').innerHTML = html;
+      document.getElementById('mileageHistory').style.display = 'block';
+    }
+
+    function exportMileageCSV() {
+      const key = `pie_mileage_${selectedRep}`;
+      const stored = localStorage.getItem(key);
+      let mileageEntries = [];
+      if (stored) {
+        try {
+          mileageEntries = JSON.parse(stored);
+        } catch (e) {}
+      }
+
+      if (mileageEntries.length === 0) {
+        showToast('No mileage data to export');
+        return;
+      }
+
+      const headers = ['Date', 'From', 'To', 'Miles', 'Business Purpose', 'Check-In Time', 'Check-Out Time'];
+      const rows = mileageEntries.map(e => [
+        e.date || '',
+        e.from_name || '',
+        e.to_name || '',
+        (e.miles || 0).toFixed(1),
+        'Prospect Visit',
+        e.checked_in_at || '',
+        e.checked_out_at || ''
+      ]);
+
+      let csv = headers.join(',') + '\n';
+      csv += rows.map(r => r.map(cell => `"${cell}"`).join(',')).join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `PIE_Mileage_${selectedRep}_${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+
+      showToast('Mileage exported');
     }
 
     // ============================================================
