@@ -239,7 +239,7 @@ Generate the ${action.replace('_', ' ')} now.`;
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: 'Something went wrong. Try again.' })
+            body: JSON.stringify({ error: 'Something went wrong. Try again.', debug: error.message || String(error) })
         };
     }
 }
