@@ -169,7 +169,7 @@ export async function handler(event) {
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify({ status: 'ok', actions: ['call_prep', 'follow_up', 'discovery_script'], hasKey: !!process.env.ANTHROPIC_API_KEY, keyPrefix: process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.substring(0, 10) : 'MISSING' })
+            body: JSON.stringify({ status: 'ok', actions: ['call_prep', 'follow_up', 'discovery_script'] })
         };
     }
 
@@ -239,7 +239,7 @@ Generate the ${action.replace('_', ' ')} now.`;
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: 'Something went wrong. Try again.', debug: error.message || String(error), type: error.constructor?.name })
+            body: JSON.stringify({ error: 'Something went wrong. Try again.' })
         };
     }
 }

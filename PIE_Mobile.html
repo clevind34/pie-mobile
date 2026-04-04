@@ -3074,6 +3074,9 @@
         }
       }
 
+      // Add customer_name from current prospect
+      customer.customer_name = currentProspect?.co || currentProspect?.n || 'Prospect';
+
       resultsEl.innerHTML = '<div class="chuck-shimmer"><div class="chuck-shimmer-line"></div><div class="chuck-shimmer-line"></div></div>';
       resultsEl.classList.add('visible');
 
@@ -3081,7 +3084,7 @@
         const resp = await fetch(REPRICE_ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ customer })
+          body: JSON.stringify(customer)
         });
 
         if (!resp.ok) throw new Error(`${resp.status}`);
