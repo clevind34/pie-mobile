@@ -1001,6 +1001,88 @@
     .pricing-metric-value.gm-warn { color: var(--warning); }
     .pricing-metric-value.gm-bad { color: var(--danger); }
 
+    .pricing-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0 4px;
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+
+    .pricing-toggle-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .pricing-toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 200ms ease;
+    }
+
+    .pricing-toggle-switch.active {
+      background: var(--accent);
+    }
+
+    .pricing-toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 200ms ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .pricing-toggle-switch.active::after {
+      transform: translateX(20px);
+    }
+
+    .pricing-actions {
+      display: flex;
+      gap: 8px;
+      padding-top: 8px;
+    }
+
+    .pricing-share-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px;
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      transition: all 150ms ease;
+      min-height: 44px;
+    }
+
+    .pricing-share-btn:active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .pricing-share-btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
     .disposition-section {
       padding-top: 16px;
       border-top: 1px solid var(--border);
@@ -3091,7 +3173,9 @@
         const data = await resp.json();
 
         if (data.tier_pricing) {
-          renderPricingResults(data.tier_pricing, data.current_state?.mrr);
+          window._lastPricingData = data;
+          window._pricingManagerMode = false;
+          renderPricingResults(data.tier_pricing, false);
         } else {
           resultsEl.innerHTML = '<div style="padding:12px; color:var(--danger); font-size:13px;">Unable to calculate. Try adjusting volumes.</div>';
         }
@@ -3100,21 +3184,29 @@
       }
     }
 
-    function renderPricingResults(tiers, currentPrice) {
+    function renderPricingResults(tiers, useManagerPrice) {
       const resultsEl = document.getElementById('pricingResults');
       if (!resultsEl) return;
 
       const tierOrder = ['Protect', 'Enrich', 'Elevate', 'Control'];
       let html = '';
+      let hasManagerDiff = false;
 
       for (const name of tierOrder) {
         const t = tiers[name.toLowerCase()] || tiers[name];
         if (!t) continue;
 
-        const price = t.recommended_price || t.list_price || t.price || 0;
+        // Check if manager price differs from recommended
+        const recPrice = t.recommended_price || t.list_price || 0;
+        const mgrPrice = t.manager_price || recPrice;
+        if (Math.abs(mgrPrice - recPrice) > 1) hasManagerDiff = true;
+
+        const price = useManagerPrice ? mgrPrice : recPrice;
         const cogs = t.cost || t.total_cogs || t.cogs || 0;
-        const gm = t.gm_at_recommended || (price > 0 ? ((price - cogs) / price * 100) : 0);
-        const isRecommended = gm >= 40 && gm <= 60; // Sweet spot
+        const gm = useManagerPrice
+          ? (t.gm_at_manager || (price > 0 ? ((price - cogs) / price * 100) : 0))
+          : (t.gm_at_recommended || (price > 0 ? ((price - cogs) / price * 100) : 0));
+        const isRecommended = gm >= 40 && gm <= 60;
 
         let gmClass = 'gm-good';
         if (gm < 30) gmClass = 'gm-bad';
@@ -3143,8 +3235,73 @@
           </div>`;
       }
 
+      // Manager threshold toggle (only show if manager price differs)
+      if (hasManagerDiff) {
+        html += `
+          <div class="pricing-toggle-row">
+            <span class="pricing-toggle-label">${useManagerPrice ? 'Manager Floor' : 'Recommended'} Pricing</span>
+            <div class="pricing-toggle-switch ${useManagerPrice ? 'active' : ''}" onclick="toggleManagerPricing()" role="switch" aria-checked="${useManagerPrice}" aria-label="Toggle manager threshold pricing"></div>
+          </div>`;
+      }
+
+      // Share button
+      html += `
+        <div class="pricing-actions">
+          <button class="pricing-share-btn" onclick="sharePricing()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            Share Pricing
+          </button>
+        </div>`;
+
       resultsEl.innerHTML = html;
       resultsEl.classList.add('visible');
+    }
+
+    function toggleManagerPricing() {
+      const data = window._lastPricingData;
+      if (!data?.tier_pricing) return;
+      window._pricingManagerMode = !window._pricingManagerMode;
+      renderPricingResults(data.tier_pricing, window._pricingManagerMode);
+    }
+
+    function sharePricing() {
+      const data = window._lastPricingData;
+      if (!data?.tier_pricing) return;
+
+      const useManager = window._pricingManagerMode;
+      const tierOrder = ['Protect', 'Enrich', 'Elevate', 'Control'];
+      const companyName = currentProspect?.co || currentProspect?.n || 'Prospect';
+      const hp = document.getElementById('sliderHp')?.value || '—';
+      const sp = document.getElementById('sliderSp')?.value || '—';
+      const vs = document.getElementById('sliderVs')?.value || '—';
+
+      let lines = [`Informativ Pricing — ${companyName}`, ''];
+      lines.push(`Based on ~${hp} hard pulls/mo, ~${sp} soft pulls/mo, ~${vs} vehicles sold/mo`);
+      lines.push(`Pricing: ${useManager ? 'Manager Floor' : 'Recommended'}`);
+      lines.push('');
+
+      for (const name of tierOrder) {
+        const t = data.tier_pricing[name.toLowerCase()] || data.tier_pricing[name];
+        if (!t) continue;
+        const price = useManager ? (t.manager_price || t.recommended_price) : (t.recommended_price || t.list_price);
+        const gm = useManager ? (t.gm_at_manager || 0) : (t.gm_at_recommended || 0);
+        lines.push(`${name}: $${Math.round(price).toLocaleString()}/mo (${gm.toFixed(1)}% GM)`);
+      }
+
+      const text = lines.join('\n');
+
+      // Try native share (mobile), fallback to clipboard + mailto
+      if (navigator.share) {
+        navigator.share({ title: `Informativ Pricing — ${companyName}`, text }).catch(() => {});
+      } else {
+        navigator.clipboard?.writeText(text).then(() => {
+          const btn = document.querySelector('.pricing-share-btn');
+          if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Share Pricing'; }, 2000); }
+        }).catch(() => {
+          // Final fallback: mailto
+          window.location.href = `mailto:?subject=${encodeURIComponent('Informativ Pricing — ' + companyName)}&body=${encodeURIComponent(text)}`;
+        });
+      }
     }
 
     // Service Worker registration
