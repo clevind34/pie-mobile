@@ -1783,10 +1783,7 @@
       flex-shrink: 0;
     }
 
-    .route-card-content {
-      flex: 1;
-      min-width: 0;
-    }
+
 
     .route-card-company {
       font-weight: 600;
@@ -1810,33 +1807,52 @@
     }
 
     .route-card-actions {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 6px;
       flex-shrink: 0;
     }
 
-    .route-card-action {
-      width: 36px;
-      height: 36px;
+    .route-action-btn {
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: none;
-      background: transparent;
-      color: var(--text-tertiary);
+      background: #f1f5f9;
+      color: var(--primary);
       cursor: pointer;
-      border-radius: 8px;
+      border-radius: 10px;
       transition: all 150ms ease;
+      -webkit-tap-highlight-color: rgba(102, 39, 232, 0.15);
     }
 
-    .route-card-action:active {
-      background: #f0f0f0;
-      color: var(--text-primary);
+    .route-action-btn:active {
+      background: #e2e8f0;
+      transform: scale(0.92);
     }
 
-    .route-card-action svg {
+    .route-action-btn svg {
       width: 18px;
       height: 18px;
+      pointer-events: none;
+    }
+
+    .route-remove-btn {
+      background: #fef2f2;
+      color: var(--danger);
+    }
+
+    .route-remove-btn:active {
+      background: #fee2e2;
+    }
+
+    .route-card-body {
+      flex: 1;
+      min-width: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: rgba(102, 39, 232, 0.1);
     }
 
     .route-empty {
@@ -2348,6 +2364,8 @@
       } else {
         renderProspects();
         setupEventListeners();
+        initRoute();
+        initRouteListeners();
       }
     }
 
@@ -2366,6 +2384,7 @@
       document.getElementById('repModal').classList.remove('active');
       loadSavedContacts(); // Load any previously saved contact edits
       initRoute(); // Load route for this rep
+      initRouteListeners(); // Attach route event delegation
       renderProspects();
       setupEventListeners();
     }
@@ -3138,6 +3157,9 @@
     function clearRoute() {
       routeData = [];
       saveRoute();
+      // Force immediate DOM update
+      const container = document.getElementById('routeListContainer');
+      if (container) container.innerHTML = '';
       updateRouteDisplay();
       loadMileageHistory();
       showToast('Route cleared');
@@ -3163,7 +3185,7 @@
       if (routeData.length === 0) {
         container.innerHTML = `
           <div class="route-empty">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:48px;height:48px;margin-bottom:12px;opacity:0.3;">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
@@ -3177,40 +3199,31 @@
       } else {
         const html = routeData.map((stop, idx) => {
           const isCheckedIn = stop.checkedIn;
-          const checkInButtonText = isCheckedIn ? '✓ Checked In' : 'Check In';
-          const checkInButtonColor = isCheckedIn ? 'color: var(--success);' : '';
+          const checkBadge = isCheckedIn
+            ? '<div style="font-size:10px;color:var(--success);margin-top:4px;font-weight:600;">✓ Checked in ' + (stop.checkInTime ? new Date(stop.checkInTime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '') + '</div>'
+            : '';
 
           return `
-            <div class="route-card">
+            <div class="route-card" data-route-idx="${idx}">
               <div class="route-stop-number">${idx + 1}</div>
-              <div class="route-card-content">
+              <div class="route-card-body" data-action="detail" data-idx="${idx}">
                 <div class="route-card-company">${stop.co}</div>
-                <div class="route-card-contact">${stop.cn}${stop.ph ? ' · ' + stop.ph : ''}</div>
+                <div class="route-card-contact">${stop.cn || ''}${stop.ph ? ' · ' + stop.ph : ''}</div>
                 <div class="route-card-location">${stop.city}${stop.city && stop.st ? ', ' : ''}${stop.st}</div>
-                ${isCheckedIn ? '<div class="route-card-location" style="color: var(--success); margin-top: 4px;">Checked in at ' + (stop.checkInTime ? new Date(stop.checkInTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'unknown') + '</div>' : ''}
+                ${checkBadge}
               </div>
               <div class="route-card-actions">
-                <button class="route-card-action" onclick="checkInRoute(${idx})" title="Check In" style="cursor:pointer; ${checkInButtonColor}">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
+                <button class="route-action-btn" data-action="call" data-idx="${idx}" title="Call">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg>
                 </button>
-                <button class="route-card-action" onclick="callRoute(${idx})" title="Call" style="cursor:pointer;">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path>
-                  </svg>
+                <button class="route-action-btn" data-action="text" data-idx="${idx}" title="Text">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg>
                 </button>
-                <button class="route-card-action" onclick="navigateRoute(${idx})" title="Navigate" style="cursor:pointer;">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
+                <button class="route-action-btn" data-action="navigate" data-idx="${idx}" title="Navigate">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
                 </button>
-                <button class="route-card-action" onclick="removeFromRoute(${idx})" title="Remove" style="cursor:pointer; color:var(--danger);">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 6L6 18M6 6l12 12"></path>
-                  </svg>
+                <button class="route-action-btn route-remove-btn" data-action="remove" data-idx="${idx}" title="Remove">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"></path></svg>
                 </button>
               </div>
             </div>
@@ -3226,22 +3239,78 @@
       updateMileageDisplay();
     }
 
-    function callRoute(idx) {
+    // ---- Route Event Delegation ----
+    // Single click handler on route container — resolves all button actions
+    function initRouteListeners() {
+      const container = document.getElementById('routeListContainer');
+      if (!container) return;
+      container.addEventListener('click', function(e) {
+        const actionEl = e.target.closest('[data-action]');
+        if (!actionEl) return;
+
+        const action = actionEl.dataset.action;
+        const idx = parseInt(actionEl.dataset.idx, 10);
+        if (isNaN(idx) || idx < 0 || idx >= routeData.length) return;
+
+        e.stopPropagation();
+
+        switch (action) {
+          case 'call':
+            routeCall(idx);
+            break;
+          case 'text':
+            routeText(idx);
+            break;
+          case 'navigate':
+            navigateRoute(idx);
+            break;
+          case 'remove':
+            removeFromRoute(idx);
+            break;
+          case 'detail':
+            openRouteDetail(idx);
+            break;
+          case 'checkin':
+            checkInRoute(idx);
+            break;
+        }
+      });
+    }
+
+    function routeCall(idx) {
       const stop = routeData[idx];
       if (stop.ph) {
         const phone = stop.ph.replace(/\D/g, '');
-        window.location.href = `tel:+1${phone}`;
+        window.location.href = 'tel:+1' + phone;
+      } else {
+        showToast('No phone number');
       }
     }
 
-    function navigateRoute(idx) {
+    function routeText(idx) {
       const stop = routeData[idx];
-      const parts = [stop.co, stop.addr, stop.city, stop.st].filter(Boolean);
-      const destination = parts.join(' ').trim();
-      if (!destination) return;
+      if (stop.ph) {
+        const phone = stop.ph.replace(/\D/g, '');
+        window.location.href = 'sms:+1' + phone;
+      } else {
+        showToast('No phone number');
+      }
+    }
 
-      // location.href avoids Safari popup blocker. Google Maps handles My+Location.
-      window.location.href = 'https://www.google.com/maps/dir/My+Location/' + encodeURIComponent(destination);
+    function openRouteDetail(idx) {
+      const stop = routeData[idx];
+      // Find the full prospect record from PIE data
+      const allProspects = [...(PIE_NN || []), ...(PIE_CS || []), ...(AFFILIATE_RAW || [])];
+      const prospect = allProspects.find(p => {
+        const pid = p.id || (p.co || p.n || '') + '-' + (p.cn || '');
+        return pid === stop.id;
+      });
+      if (prospect) {
+        openDetail(prospect);
+      } else {
+        // Build a minimal prospect from route data
+        openDetail({ co: stop.co, cn: stop.cn, ph: stop.ph, em: stop.em, city: stop.city, st: stop.st, id: stop.id });
+      }
     }
 
     function startRoute() {
