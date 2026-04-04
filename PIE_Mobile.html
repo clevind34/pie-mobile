@@ -2403,7 +2403,7 @@
         .then(data => {
           if (data.contacts && typeof data.contacts === 'object') {
             // Apply edits to all prospect arrays
-            [PIE_NN, PIE_CS, AFFILIATE_RAW].forEach(arr => {
+            [typeof PIE_NN !== 'undefined' ? PIE_NN : null, typeof PIE_CS !== 'undefined' ? PIE_CS : null, typeof AFFILIATE_RAW !== 'undefined' ? AFFILIATE_RAW : null].forEach(arr => {
               if (!Array.isArray(arr)) return;
               arr.forEach(prospect => {
                 const prospectId = prospect.id || `${prospect.co}-${prospect.cn}`;
@@ -3275,7 +3275,7 @@
     function openRouteDetail(idx) {
       const stop = routeData[idx];
       // Find the full prospect record from PIE data
-      const allProspects = [...(PIE_NN || []), ...(PIE_CS || []), ...(AFFILIATE_RAW || [])];
+      const allProspects = [...(typeof PIE_NN !== 'undefined' ? PIE_NN : []), ...(typeof PIE_CS !== 'undefined' ? PIE_CS : []), ...(typeof AFFILIATE_RAW !== 'undefined' ? AFFILIATE_RAW : [])];
       const prospect = allProspects.find(p => {
         const pid = p.id || (p.co || p.n || '') + '-' + (p.cn || '');
         return pid === stop.id;
