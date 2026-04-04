@@ -3090,8 +3090,8 @@
         if (!resp.ok) throw new Error(`${resp.status}`);
         const data = await resp.json();
 
-        if (data.tiers) {
-          renderPricingResults(data.tiers, data.current_price);
+        if (data.tier_pricing) {
+          renderPricingResults(data.tier_pricing, data.current_state?.mrr);
         } else {
           resultsEl.innerHTML = '<div style="padding:12px; color:var(--danger); font-size:13px;">Unable to calculate. Try adjusting volumes.</div>';
         }
@@ -3111,9 +3111,9 @@
         const t = tiers[name.toLowerCase()] || tiers[name];
         if (!t) continue;
 
-        const price = t.recommended_price || t.price || 0;
-        const cogs = t.total_cogs || t.cogs || 0;
-        const gm = price > 0 ? ((price - cogs) / price * 100) : 0;
+        const price = t.recommended_price || t.list_price || t.price || 0;
+        const cogs = t.cost || t.total_cogs || t.cogs || 0;
+        const gm = t.gm_at_recommended || (price > 0 ? ((price - cogs) / price * 100) : 0);
         const isRecommended = gm >= 40 && gm <= 60; // Sweet spot
 
         let gmClass = 'gm-good';
