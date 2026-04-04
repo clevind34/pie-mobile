@@ -25,8 +25,29 @@
       "dealer_intel": null,
       "source": "pie_mobile",
       "timestamp": "2026-04-04T10:01:45.468Z"
+    },
+    {
+      "id": "bb3b0d94-ca25-4624-bd9f-52a0448c5a39",
+      "rep": "Trish Smith",
+      "prospect_id": null,
+      "prospect_name": null,
+      "prospect_type": "net_new",
+      "activity_type": "visit",
+      "outcome": "interested",
+      "notes": "Site visit with dealer intel test",
+      "dealer_intel": {
+        "vehicles_sold": 200,
+        "inventory": 500,
+        "hard_pulls": 400,
+        "crm": "VinSolutions",
+        "dms": "CDK/ADP",
+        "credit_provider": "700Credit",
+        "los": "RouteOne"
+      },
+      "source": "pie_mobile",
+      "timestamp": "2026-04-04T10:02:30.882Z"
     }
   ],
   "schema_version": "1.0",
-  "last_updated": "2026-04-04T10:01:45.669Z"
+  "last_updated": "2026-04-04T10:02:31.300Z"
 }
