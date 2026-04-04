@@ -2178,7 +2178,9 @@
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           const action = btn.dataset.action;
-          const prospect = prospects[Array.from(list.querySelectorAll('.action-btn')).indexOf(btn) % prospects.length];
+          const card = btn.closest('.prospect-card');
+          const cardIdx = Array.from(list.querySelectorAll('.prospect-card')).indexOf(card);
+          const prospect = prospects[cardIdx];
 
           if (action === 'call') {
             const phone = (prospect.ph || '').replace(/\D/g, '');
