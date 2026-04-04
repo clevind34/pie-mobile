@@ -3231,6 +3231,8 @@
         }).join('');
 
         container.innerHTML = html;
+        // Attach direct click handlers to every button and card body
+        bindRouteCardHandlers(container);
         mileageSection.style.display = 'block';
         clearBtn.style.display = 'block';
         startBtn.style.display = 'block';
@@ -3239,43 +3241,33 @@
       updateMileageDisplay();
     }
 
-    // ---- Route Event Delegation ----
-    // Single click handler on route container — resolves all button actions
-    function initRouteListeners() {
-      const container = document.getElementById('routeListContainer');
-      if (!container) return;
-      container.addEventListener('click', function(e) {
-        const actionEl = e.target.closest('[data-action]');
-        if (!actionEl) return;
-
-        const action = actionEl.dataset.action;
-        const idx = parseInt(actionEl.dataset.idx, 10);
-        if (isNaN(idx) || idx < 0 || idx >= routeData.length) return;
-
-        e.stopPropagation();
-
-        switch (action) {
-          case 'call':
-            routeCall(idx);
-            break;
-          case 'text':
-            routeText(idx);
-            break;
-          case 'navigate':
-            navigateRoute(idx);
-            break;
-          case 'remove':
-            removeFromRoute(idx);
-            break;
-          case 'detail':
-            openRouteDetail(idx);
-            break;
-          case 'checkin':
-            checkInRoute(idx);
-            break;
+    // ---- Direct Route Card Handlers ----
+    // Attaches individual click+touchend handlers to each button after innerHTML render.
+    // More reliable on mobile Safari than event delegation.
+    function bindRouteCardHandlers(container) {
+      // Bind action buttons (call, text, navigate, remove, checkin)
+      container.querySelectorAll('[data-action]').forEach(function(el) {
+        var action = el.dataset.action;
+        var idx = parseInt(el.dataset.idx, 10);
+        function handler(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (isNaN(idx) || idx < 0 || idx >= routeData.length) return;
+          switch (action) {
+            case 'call': routeCall(idx); break;
+            case 'text': routeText(idx); break;
+            case 'navigate': navigateRoute(idx); break;
+            case 'remove': removeFromRoute(idx); break;
+            case 'detail': openRouteDetail(idx); break;
+            case 'checkin': checkInRoute(idx); break;
+          }
         }
+        el.addEventListener('click', handler);
       });
     }
+
+    // Legacy stub — no longer needed, handlers bound directly in updateRouteDisplay
+    function initRouteListeners() { }
 
     function routeCall(idx) {
       const stop = routeData[idx];
@@ -3295,6 +3287,13 @@
       } else {
         showToast('No phone number');
       }
+    }
+
+    function navigateRoute(idx) {
+      const stop = routeData[idx];
+      const parts = [stop.co, stop.addr, stop.city, stop.st].filter(Boolean);
+      const dest = encodeURIComponent(parts.join(' '));
+      window.location.href = 'https://www.google.com/maps/dir/My+Location/' + dest;
     }
 
     function openRouteDetail(idx) {
