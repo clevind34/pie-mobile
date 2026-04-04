@@ -693,6 +693,314 @@
       height: 20px;
     }
 
+    /* ── Phase 3: Chuck AI ── */
+    .chuck-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .chuck-btn {
+      padding: 12px 8px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6627E8, #8B5CF6);
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      min-height: 52px;
+      justify-content: center;
+      transition: all 150ms ease;
+      letter-spacing: 0.02em;
+    }
+
+    .chuck-btn:active {
+      transform: scale(0.96);
+      background: linear-gradient(135deg, #5320C0, #7C3AED);
+    }
+
+    .chuck-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .chuck-btn.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .chuck-response {
+      background: #F5F3FF;
+      border: 1px solid #E0D9FC;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-primary);
+      position: relative;
+      max-height: 400px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .chuck-response-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #E0D9FC;
+    }
+
+    .chuck-response-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+
+    .chuck-response-close {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-tertiary);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chuck-response-body {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .chuck-response-body strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .chuck-response-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 10px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #E0D9FC;
+      background: white;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .chuck-response-copy:active {
+      background: #F5F3FF;
+    }
+
+    .chuck-shimmer {
+      background: #F5F3FF;
+      border: 1px solid #E0D9FC;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .chuck-shimmer-line {
+      height: 12px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #E0D9FC 25%, #F0ECFF 50%, #E0D9FC 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease-in-out infinite;
+      margin-bottom: 8px;
+    }
+
+    .chuck-shimmer-line:nth-child(2) { width: 85%; }
+    .chuck-shimmer-line:nth-child(3) { width: 70%; }
+    .chuck-shimmer-line:nth-child(4) { width: 90%; margin-bottom: 0; }
+
+    /* ── Phase 3: Pricing Calculator ── */
+    .pricing-section {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      margin-top: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pricing-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      cursor: pointer;
+    }
+
+    .pricing-toggle-label {
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pricing-toggle-label svg {
+      width: 18px;
+      height: 18px;
+      color: var(--accent);
+    }
+
+    .pricing-toggle-arrow {
+      font-size: 18px;
+      color: var(--text-tertiary);
+      transition: transform 200ms ease;
+    }
+
+    .pricing-toggle-arrow.open {
+      transform: rotate(180deg);
+    }
+
+    .pricing-form {
+      display: none;
+    }
+
+    .pricing-form.open {
+      display: block;
+    }
+
+    .pricing-slider-group {
+      margin-bottom: 14px;
+    }
+
+    .pricing-slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .pricing-slider-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .pricing-slider-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pricing-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      outline: none;
+    }
+
+    .pricing-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(102, 39, 232, 0.3);
+    }
+
+    .pricing-results {
+      display: none;
+    }
+
+    .pricing-results.visible {
+      display: block;
+    }
+
+    .pricing-tier-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+      transition: border-color 150ms ease;
+    }
+
+    .pricing-tier-card.recommended {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .pricing-tier-name {
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .pricing-tier-badge {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--accent);
+      color: white;
+    }
+
+    .pricing-tier-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      text-align: center;
+    }
+
+    .pricing-metric-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      margin-bottom: 2px;
+    }
+
+    .pricing-metric-value {
+      font-size: 16px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pricing-metric-value.gm-good { color: var(--success); }
+    .pricing-metric-value.gm-warn { color: var(--warning); }
+    .pricing-metric-value.gm-bad { color: var(--danger); }
+
     .disposition-section {
       padding-top: 16px;
       border-top: 1px solid var(--border);
@@ -1984,6 +2292,25 @@
         </div>
       `;
 
+      // Chuck AI Actions
+      content += `
+        <div class="chuck-actions">
+          <button class="chuck-btn" onclick="chuckAction('call_prep')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"></path><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"></path></svg>
+            Prep Call
+          </button>
+          <button class="chuck-btn" onclick="chuckAction('follow_up')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg>
+            Follow Up
+          </button>
+          <button class="chuck-btn" onclick="chuckAction('discovery_script')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            Discovery
+          </button>
+        </div>
+        <div id="chuckResponse"></div>
+      `;
+
       if (type === 'cross-sell') {
         content += `
           <div class="detail-section">
@@ -2019,6 +2346,48 @@
       // Activity history for this prospect
       const pId = prospect.id || `${prospect.co || prospect.n}-${prospect.cn || ''}`;
       content += buildActivityHistory(pId);
+
+      // Pricing Calculator
+      const estVehicles = prospect.vs || prospect.vehicles_sold || 0;
+      const estHardPulls = prospect.hp_est || Math.round((estVehicles || 150) * 1.5);
+      const estSoftPulls = prospect.sp_est || Math.round((estVehicles || 150) * 3);
+
+      content += `
+        <div class="pricing-section">
+          <div class="pricing-toggle" onclick="togglePricing()">
+            <div class="pricing-toggle-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+              Run Pricing
+            </div>
+            <span class="pricing-toggle-arrow" id="pricingArrow">▾</span>
+          </div>
+          <div class="pricing-form" id="pricingForm">
+            <div class="pricing-slider-group">
+              <div class="pricing-slider-header">
+                <span class="pricing-slider-label">Hard Pulls / mo</span>
+                <span class="pricing-slider-value" id="sliderHpVal">${estHardPulls}</span>
+              </div>
+              <input type="range" class="pricing-slider" id="sliderHp" min="0" max="2000" value="${estHardPulls}" oninput="updateSlider('Hp')">
+            </div>
+            <div class="pricing-slider-group">
+              <div class="pricing-slider-header">
+                <span class="pricing-slider-label">Soft Pulls / mo</span>
+                <span class="pricing-slider-value" id="sliderSpVal">${estSoftPulls}</span>
+              </div>
+              <input type="range" class="pricing-slider" id="sliderSp" min="0" max="5000" value="${estSoftPulls}" oninput="updateSlider('Sp')">
+            </div>
+            <div class="pricing-slider-group">
+              <div class="pricing-slider-header">
+                <span class="pricing-slider-label">Vehicles Sold / mo</span>
+                <span class="pricing-slider-value" id="sliderVsVal">${estVehicles || 150}</span>
+              </div>
+              <input type="range" class="pricing-slider" id="sliderVs" min="0" max="1500" value="${estVehicles || 150}" oninput="updateSlider('Vs')">
+            </div>
+            <button class="disposition-save" style="background:var(--accent); margin-top:4px;" onclick="runPricing()">Calculate Pricing</button>
+            <div id="pricingResults" class="pricing-results"></div>
+          </div>
+        </div>
+      `;
 
       content += `
         <div class="disposition-section">
@@ -2518,6 +2887,261 @@
       toast.textContent = message;
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // ============================================================
+    // PHASE 3: Chuck AI + Pricing Calculator
+    // ============================================================
+
+    const CHUCK_ENDPOINT = '/.netlify/functions/chuck-api';
+    const REPRICE_ENDPOINT = '/.netlify/functions/reprice-pricing';
+
+    // ── Chuck AI ──
+    function buildProspectPayload() {
+      if (!currentProspect) return {};
+      const p = currentProspect;
+      const type = currentSubTab;
+
+      // Build from whatever fields we have (NN/CS/AFF have different field names)
+      const payload = {
+        company: p.co || p.n || '',
+        contact: p.cn || `${p.fn || ''} ${p.ln || ''}`.trim() || '',
+        title: p.ti || '',
+        city: p.city || p.cty || '',
+        state: p.st || p.sta || '',
+        type: type === 'cross-sell' ? 'Existing Customer (Cross-Sell)' : (type === 'affiliate' ? 'Affiliate Lead' : 'Net New Prospect')
+      };
+
+      // ICP / scoring
+      if (p.icp) payload.icp_score = p.icp;
+      if (p.hs) payload.health_score = p.hs;
+      if (p.oem) payload.oem = p.oem;
+
+      // Volume estimates
+      if (p.vs) payload.vehicles_sold = p.vs;
+      if (p.ap) payload.products = p.ap;
+      if (p.mrr) payload.mrr = '$' + p.mrr.toLocaleString();
+
+      // Last activity from cache
+      const pId = p.id || `${p.co || p.n}-${p.cn || ''}`;
+      const lastAct = activityCache.find(a => a.prospect_id === pId);
+      if (lastAct) {
+        payload.last_activity = lastAct.activity_type;
+        payload.last_outcome = lastAct.outcome || '';
+        payload.last_notes = lastAct.notes || '';
+      }
+
+      // Dealer intel from activities
+      const diAct = activityCache.find(a => a.prospect_id === pId && a.dealer_intel);
+      if (diAct && diAct.dealer_intel) {
+        payload.dealer_intel = diAct.dealer_intel;
+        if (diAct.dealer_intel.vehicles) payload.vehicles_sold = diAct.dealer_intel.vehicles;
+      }
+
+      return payload;
+    }
+
+    async function chuckAction(action) {
+      if (!currentProspect) return;
+
+      const labels = { call_prep: 'Call Prep', follow_up: 'Follow-Up Email', discovery_script: 'Discovery Script' };
+      const container = document.getElementById('chuckResponse');
+
+      // Show loading shimmer
+      container.innerHTML = `
+        <div class="chuck-shimmer">
+          <div class="chuck-shimmer-line" style="width:60%"></div>
+          <div class="chuck-shimmer-line"></div>
+          <div class="chuck-shimmer-line"></div>
+          <div class="chuck-shimmer-line"></div>
+        </div>`;
+
+      // Disable buttons during load
+      document.querySelectorAll('.chuck-btn').forEach(b => b.classList.add('loading'));
+
+      try {
+        const resp = await fetch(CHUCK_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: action,
+            prospect: buildProspectPayload(),
+            repName: currentRep
+          })
+        });
+
+        if (!resp.ok) throw new Error(`${resp.status}`);
+        const data = await resp.json();
+
+        // Format markdown-style bold
+        let formatted = (data.response || 'No response.')
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n/g, '<br>');
+
+        const showCopy = action === 'follow_up';
+        container.innerHTML = `
+          <div class="chuck-response">
+            <div class="chuck-response-header">
+              <span class="chuck-response-label">Chuck — ${labels[action]}</span>
+              <button class="chuck-response-close" onclick="document.getElementById('chuckResponse').innerHTML=''">&times;</button>
+            </div>
+            <div class="chuck-response-body">${formatted}</div>
+            ${showCopy ? '<button class="chuck-response-copy" onclick="copyChuckResponse()">📋 Copy Email</button>' : ''}
+          </div>`;
+
+      } catch (err) {
+        container.innerHTML = `
+          <div class="chuck-response" style="border-color: #FECACA; background: #FFF5F5;">
+            <div class="chuck-response-body" style="color: var(--danger);">
+              Chuck couldn't generate a response. Check your connection and try again.
+            </div>
+          </div>`;
+      }
+
+      document.querySelectorAll('.chuck-btn').forEach(b => b.classList.remove('loading'));
+    }
+
+    function copyChuckResponse() {
+      const body = document.querySelector('.chuck-response-body');
+      if (!body) return;
+      // Strip HTML tags for clipboard
+      const text = body.innerHTML
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<strong>(.*?)<\/strong>/gi, '$1')
+        .replace(/<[^>]+>/g, '');
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✓ Copied to clipboard');
+      }).catch(() => {
+        // Fallback: select text
+        const range = document.createRange();
+        range.selectNodeContents(body);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        showToast('Text selected — copy manually');
+      });
+    }
+
+    // ── Pricing Calculator ──
+    function togglePricing() {
+      const form = document.getElementById('pricingForm');
+      const arrow = document.getElementById('pricingArrow');
+      if (!form || !arrow) return;
+      const isOpen = form.classList.toggle('open');
+      arrow.classList.toggle('open', isOpen);
+    }
+
+    function updateSlider(type) {
+      const slider = document.getElementById('slider' + type);
+      const display = document.getElementById('slider' + type + 'Val');
+      if (slider && display) {
+        display.textContent = parseInt(slider.value).toLocaleString();
+        // Auto-recalc if results visible
+        if (document.getElementById('pricingResults')?.classList.contains('visible')) {
+          runPricing();
+        }
+      }
+    }
+
+    async function runPricing() {
+      const hp = parseInt(document.getElementById('sliderHp')?.value) || 0;
+      const sp = parseInt(document.getElementById('sliderSp')?.value) || 0;
+      const vs = parseInt(document.getElementById('sliderVs')?.value) || 0;
+
+      const resultsEl = document.getElementById('pricingResults');
+      if (!resultsEl) return;
+
+      // Distribute HP/SP across bureaus (assume 2-bureau typical: EFX + EXP)
+      const customer = {
+        efx_hp: Math.round(hp * 0.5),
+        exp_hp: Math.round(hp * 0.5),
+        tu_hp: 0,
+        efx_sp: Math.round(sp * 0.5),
+        exp_sp: Math.round(sp * 0.5),
+        tu_sp: 0,
+        vehicles_sold: vs,
+        has_dealertrack: true
+      };
+
+      // Check for dealer intel overrides on bureau distribution
+      if (currentProspect) {
+        const pId = currentProspect.id || `${currentProspect.co || currentProspect.n}-${currentProspect.cn || ''}`;
+        const diAct = activityCache.find(a => a.prospect_id === pId && a.dealer_intel);
+        if (diAct?.dealer_intel?.hard_pulls) {
+          // Rep entered actual hard pulls — override
+          const totalHp = diAct.dealer_intel.hard_pulls;
+          customer.efx_hp = Math.round(totalHp * 0.5);
+          customer.exp_hp = Math.round(totalHp * 0.5);
+        }
+      }
+
+      resultsEl.innerHTML = '<div class="chuck-shimmer"><div class="chuck-shimmer-line"></div><div class="chuck-shimmer-line"></div></div>';
+      resultsEl.classList.add('visible');
+
+      try {
+        const resp = await fetch(REPRICE_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ customer })
+        });
+
+        if (!resp.ok) throw new Error(`${resp.status}`);
+        const data = await resp.json();
+
+        if (data.tiers) {
+          renderPricingResults(data.tiers, data.current_price);
+        } else {
+          resultsEl.innerHTML = '<div style="padding:12px; color:var(--danger); font-size:13px;">Unable to calculate. Try adjusting volumes.</div>';
+        }
+      } catch (err) {
+        resultsEl.innerHTML = '<div style="padding:12px; color:var(--danger); font-size:13px;">Pricing service unavailable. Try again.</div>';
+      }
+    }
+
+    function renderPricingResults(tiers, currentPrice) {
+      const resultsEl = document.getElementById('pricingResults');
+      if (!resultsEl) return;
+
+      const tierOrder = ['Protect', 'Enrich', 'Elevate', 'Control'];
+      let html = '';
+
+      for (const name of tierOrder) {
+        const t = tiers[name.toLowerCase()] || tiers[name];
+        if (!t) continue;
+
+        const price = t.recommended_price || t.price || 0;
+        const cogs = t.total_cogs || t.cogs || 0;
+        const gm = price > 0 ? ((price - cogs) / price * 100) : 0;
+        const isRecommended = gm >= 40 && gm <= 60; // Sweet spot
+
+        let gmClass = 'gm-good';
+        if (gm < 30) gmClass = 'gm-bad';
+        else if (gm < 40) gmClass = 'gm-warn';
+
+        html += `
+          <div class="pricing-tier-card ${isRecommended ? 'recommended' : ''}">
+            <div class="pricing-tier-name">
+              ${name}
+              ${isRecommended ? '<span class="pricing-tier-badge">Recommended</span>' : ''}
+            </div>
+            <div class="pricing-tier-grid">
+              <div>
+                <div class="pricing-metric-label">Price</div>
+                <div class="pricing-metric-value">$${Math.round(price).toLocaleString()}</div>
+              </div>
+              <div>
+                <div class="pricing-metric-label">COGS</div>
+                <div class="pricing-metric-value">$${Math.round(cogs).toLocaleString()}</div>
+              </div>
+              <div>
+                <div class="pricing-metric-label">GM%</div>
+                <div class="pricing-metric-value ${gmClass}">${gm.toFixed(1)}%</div>
+              </div>
+            </div>
+          </div>`;
+      }
+
+      resultsEl.innerHTML = html;
+      resultsEl.classList.add('visible');
     }
 
     // Service Worker registration
