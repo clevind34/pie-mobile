@@ -1,6 +1,14 @@
 [build]
+  command = "npm install"
   publish = "."
   functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["mobile-knowledge-base.json", "cogs-rates.json"]
 
 [[headers]]
   for = "/*.html"
@@ -8,7 +16,7 @@
     Cache-Control = "no-cache"
 
 [[headers]]
-  for = "/netlify/functions/*"
+  for = "/.netlify/functions/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Headers = "Content-Type"
