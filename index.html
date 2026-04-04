@@ -2048,8 +2048,8 @@
               <div class="route-subtext">stops today</div>
             </div>
             <div class="route-actions">
-              <button class="route-btn route-btn-danger" id="routeClearBtn" style="display:none;">Clear</button>
-              <button class="route-btn route-btn-primary" id="routeStartBtn" style="display:none;">Start</button>
+              <button class="route-btn route-btn-danger" id="routeClearBtn" onclick="setTimeout(clearRoute,0)" style="display:none;">Clear</button>
+              <button class="route-btn route-btn-primary" id="routeStartBtn" onclick="startRoute()" style="display:none;">Start</button>
             </div>
           </div>
 
@@ -3116,9 +3116,6 @@
         }
       }
       updateRouteDisplay();
-      // Bind Clear/Start buttons with onTap (touchend + click) for iOS Safari
-      onTap(document.getElementById('routeClearBtn'), clearRoute);
-      onTap(document.getElementById('routeStartBtn'), startRoute);
     }
 
     function addProspectToRoute() {
@@ -3178,14 +3175,6 @@
       showToast(company ? 'Removed ' + company : 'Removed');
     }
 
-    // iOS Safari sometimes skips repaint after innerHTML replacement.
-    // Toggle display to force the browser to re-render the container.
-    function forceRepaint(el) {
-      if (!el) return;
-      el.style.display = 'none';
-      void el.offsetHeight;
-      el.style.display = '';
-    }
 
     function updateRouteDisplay() {
       const countEl = document.getElementById('routeStopCount');
@@ -3227,15 +3216,15 @@
             '<button class="route-action-btn route-remove-btn" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>' +
             '</div>';
 
-          // Bind both click + touchend to ensure iOS Safari fires actions
+          // Direct click handlers — setTimeout(0) decouples DOM mutation from iOS Safari touch chain
           var body = card.querySelector('.route-card-body');
           var btns = card.querySelectorAll('.route-action-btn');
 
-          onTap(body, function() { openRouteDetail(idx); });
-          onTap(btns[0], function() { routeCall(idx); });
-          onTap(btns[1], function() { routeText(idx); });
-          onTap(btns[2], function() { navigateRoute(idx); });
-          onTap(btns[3], function() { removeFromRoute(idx); });
+          body.addEventListener('click', function(e) { e.stopPropagation(); setTimeout(function() { openRouteDetail(idx); }, 0); });
+          btns[0].addEventListener('click', function(e) { e.stopPropagation(); routeCall(idx); });
+          btns[1].addEventListener('click', function(e) { e.stopPropagation(); routeText(idx); });
+          btns[2].addEventListener('click', function(e) { e.stopPropagation(); navigateRoute(idx); });
+          btns[3].addEventListener('click', function(e) { e.stopPropagation(); setTimeout(function() { removeFromRoute(idx); }, 0); });
 
           container.appendChild(card);
         });
@@ -3245,30 +3234,9 @@
         startBtn.style.display = 'block';
       }
 
-      // Force iOS Safari repaint
-      forceRepaint(container);
       updateMileageDisplay();
     }
 
-    // iOS Safari tap utility — binds both touchend and click with 400ms dedup.
-    // touchend fires reliably on iOS even when click synthesis fails (e.g. cursor:grab parent,
-    // dynamically-shown buttons, or scroll containers intercepting touch events).
-    function onTap(el, fn) {
-      if (!el) return;
-      var lastFired = 0;
-      function handler(e) {
-        var now = Date.now();
-        if (now - lastFired < 400) return; // dedup touchend + click
-        lastFired = now;
-        e.stopPropagation();
-        e.preventDefault();
-        fn();
-      }
-      el.addEventListener('touchend', handler, { passive: false });
-      el.addEventListener('click', handler);
-    }
-
-    // Legacy stub — handlers now bound directly in updateRouteDisplay via onTap
     function initRouteListeners() { }
 
     function routeCall(idx) {
