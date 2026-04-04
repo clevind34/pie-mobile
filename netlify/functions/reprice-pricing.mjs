@@ -225,6 +225,33 @@ function optimizeRepricePricing(customer, tierCosts) {
 
     result.recommended = recommended;
 
+    // ── Price hierarchy enforcement ──
+    // Elevate (soft-pull only) should NEVER exceed Control (hard + soft + SmartPencil).
+    // If the higher GM target on Elevate pushes its price above Control, cap it.
+    if (result.Elevate && result.Control) {
+        if (result.Elevate.recommended_price > result.Control.recommended_price) {
+            result.Elevate.recommended_price = result.Control.recommended_price;
+            result.Elevate.gm_at_recommended = result.Elevate.cost > 0
+                ? Math.round((1 - result.Elevate.cost / result.Elevate.recommended_price) * 1000) / 10
+                : 0;
+        }
+        if (result.Elevate.manager_price > result.Control.manager_price) {
+            result.Elevate.manager_price = result.Control.manager_price;
+            result.Elevate.gm_at_manager = result.Elevate.cost > 0
+                ? Math.round((1 - result.Elevate.cost / result.Elevate.manager_price) * 1000) / 10
+                : 0;
+        }
+        if (result.Elevate.deal_desk_price > result.Control.deal_desk_price) {
+            result.Elevate.deal_desk_price = result.Control.deal_desk_price;
+        }
+        if (result.Elevate.list_price > result.Control.list_price) {
+            result.Elevate.list_price = result.Control.list_price;
+            result.Elevate.gm_at_list = result.Elevate.cost > 0
+                ? Math.round((1 - result.Elevate.cost / result.Elevate.list_price) * 1000) / 10
+                : 0;
+        }
+    }
+
     return result;
 }
 
