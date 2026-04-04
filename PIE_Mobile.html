@@ -1744,6 +1744,14 @@
       background: rgba(255, 255, 255, 0.3);
     }
 
+    /* Force routeListContainer onto its own GPU compositing layer so JS DOM
+       mutations repaint independently of the -webkit-overflow-scrolling:touch
+       parent layer. Without this, iOS Safari swallows visual updates. */
+    #routeListContainer {
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
     .route-list {
       display: flex;
       flex-direction: column;
@@ -2048,7 +2056,7 @@
               <div class="route-subtext">stops today</div>
             </div>
             <div class="route-actions">
-              <button class="route-btn route-btn-danger" id="routeClearBtn" onclick="setTimeout(clearRoute,0)" style="display:none;">Clear</button>
+              <button class="route-btn route-btn-danger" id="routeClearBtn" onclick="clearRoute()" style="display:none;">Clear</button>
               <button class="route-btn route-btn-primary" id="routeStartBtn" onclick="startRoute()" style="display:none;">Start</button>
             </div>
           </div>
@@ -3156,23 +3164,21 @@
     function clearRoute() {
       routeData = [];
       saveRoute();
-      // Force immediate DOM update — iOS Safari needs aggressive reflow
-      var container = document.getElementById('routeListContainer');
-      if (container) {
-        while (container.firstChild) container.removeChild(container.firstChild);
-      }
-      updateRouteDisplay();
-      forceRepaint(container);
-      loadMileageHistory();
-      showToast('Route cleared');
+      scheduleRepaint(function() {
+        updateRouteDisplay();
+        loadMileageHistory();
+        showToast('Route cleared');
+      });
     }
 
     function removeFromRoute(idx) {
       var company = routeData[idx] ? routeData[idx].co : '';
       routeData.splice(idx, 1);
       saveRoute();
-      updateRouteDisplay();
-      showToast(company ? 'Removed ' + company : 'Removed');
+      scheduleRepaint(function() {
+        updateRouteDisplay();
+        showToast(company ? 'Removed ' + company : 'Removed');
+      });
     }
 
 
@@ -3220,11 +3226,11 @@
           var body = card.querySelector('.route-card-body');
           var btns = card.querySelectorAll('.route-action-btn');
 
-          body.addEventListener('click', function(e) { e.stopPropagation(); setTimeout(function() { openRouteDetail(idx); }, 0); });
+          body.addEventListener('click', function(e) { e.stopPropagation(); openRouteDetail(idx); });
           btns[0].addEventListener('click', function(e) { e.stopPropagation(); routeCall(idx); });
           btns[1].addEventListener('click', function(e) { e.stopPropagation(); routeText(idx); });
           btns[2].addEventListener('click', function(e) { e.stopPropagation(); navigateRoute(idx); });
-          btns[3].addEventListener('click', function(e) { e.stopPropagation(); setTimeout(function() { removeFromRoute(idx); }, 0); });
+          btns[3].addEventListener('click', function(e) { e.stopPropagation(); removeFromRoute(idx); });
 
           container.appendChild(card);
         });
@@ -3274,12 +3280,13 @@
         const pid = p.id || (p.co || p.n || '') + '-' + (p.cn || '');
         return pid === stop.id;
       });
-      if (prospect) {
-        openDetail(prospect);
-      } else {
-        // Build a minimal prospect from route data
-        openDetail({ co: stop.co, cn: stop.cn, ph: stop.ph, em: stop.em, city: stop.city, st: stop.st, id: stop.id });
-      }
+      scheduleRepaint(function() {
+        if (prospect) {
+          openDetail(prospect);
+        } else {
+          openDetail({ co: stop.co, cn: stop.cn, ph: stop.ph, em: stop.em, city: stop.city, st: stop.st, id: stop.id });
+        }
+      });
     }
 
     function startRoute() {
@@ -3879,6 +3886,23 @@
 
       showToast('✓ Disposition saved');
       closeDetail();
+    }
+
+    // iOS Safari compositing fix: -webkit-overflow-scrolling:touch creates a
+    // separate GPU layer. DOM mutations from touch-click handlers don't repaint
+    // that layer. Double-rAF ensures the mutation lands in a fresh paint frame,
+    // and reading offsetHeight forces synchronous layout before the next composite.
+    function scheduleRepaint(fn) {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          fn();
+          // Force synchronous reflow so the compositor sees the change
+          var c = document.getElementById('routeListContainer');
+          if (c) { void c.offsetHeight; }
+          var d = document.getElementById('detailPanel');
+          if (d) { void d.offsetHeight; }
+        });
+      });
     }
 
     function showToast(message) {
