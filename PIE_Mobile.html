@@ -2877,10 +2877,22 @@
             </div>
             <div class="detail-field">
               <div>
-                <div class="detail-label">Products</div>
-                <div class="detail-value">${prospect.ap || 'N/A'}</div>
+                <div class="detail-label">Current Product</div>
+                <div class="detail-value">${(prospect.ap && prospect.ap.length ? prospect.ap.join(', ') : null) || prospect.pp || 'Credit Solutions'}</div>
               </div>
             </div>
+            <div class="detail-field">
+              <div>
+                <div class="detail-label">Recommended Tier</div>
+                <div class="detail-value" style="color: var(--accent); font-weight: 600">${prospect.tier || 'N/A'}</div>
+              </div>
+            </div>
+            ${prospect.sav ? `<div class="detail-field">
+              <div>
+                <div class="detail-label">Potential Savings</div>
+                <div class="detail-value" style="color: var(--success)">$${prospect.sav.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}/yr</div>
+              </div>
+            </div>` : ''}
           </div>
         `;
       }
