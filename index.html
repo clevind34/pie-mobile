@@ -3475,6 +3475,7 @@
     const IRS_MILEAGE_RATE = 0.70;
 
     function initRoute() {
+      if (typeof selectedRep === 'undefined' || !selectedRep) { routeData = []; return; }
       const key = `pie_route_${selectedRep}`;
       const stored = localStorage.getItem(key);
       if (stored) {
