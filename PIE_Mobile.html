@@ -2757,7 +2757,7 @@
             <div>
               <div class="detail-label">Contact</div>
               <div class="detail-value editable" data-field="contact_name">
-                ${(prospect.cn || `${prospect.fn} ${prospect.ln}`.trim()) || 'Add name'}
+                ${prospect.cn || ((prospect.fn || prospect.ln) ? `${prospect.fn || ''} ${prospect.ln || ''}`.trim() : '') || 'Add name'}
                 <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                 </svg>
@@ -3012,7 +3012,7 @@
           const fieldName = field.dataset.field;
           const currentValue = field.textContent.trim().replace(/[\r\n]+/g, ' ');
           const displayText = (prospect, field) => {
-            if (field === 'contact_name') return prospect.cn || `${prospect.fn} ${prospect.ln}`.trim() || '';
+            if (field === 'contact_name') return prospect.cn || ((prospect.fn || prospect.ln) ? `${prospect.fn || ''} ${prospect.ln || ''}`.trim() : '') || '';
             if (field === 'title') return prospect.ti || '';
             if (field === 'email') return prospect.em || '';
             if (field === 'phone') return prospect.ph || '';
@@ -3150,7 +3150,7 @@
       routeData.push({
         id: prospectId,
         co: currentProspect.co || currentProspect.n || '',
-        cn: currentProspect.cn || `${currentProspect.fn} ${currentProspect.ln}`.trim() || '',
+        cn: currentProspect.cn || ((currentProspect.fn || currentProspect.ln) ? `${currentProspect.fn || ''} ${currentProspect.ln || ''}`.trim() : '') || '',
         ph: currentProspect.ph || '',
         em: currentProspect.em || '',
         city: currentProspect.city || currentProspect.cty || '',
