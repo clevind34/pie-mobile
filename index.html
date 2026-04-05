@@ -1610,6 +1610,299 @@
       font-weight: 600;
     }
 
+    /* Manager View */
+    .mgr-pin-gate {
+      padding: 32px 16px;
+      text-align: center;
+    }
+    .mgr-pin-gate h3 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .mgr-pin-gate p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .mgr-pin-input {
+      width: 160px;
+      padding: 14px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 8px;
+      color: var(--primary);
+      background: var(--surface);
+      transition: border-color 200ms ease;
+      -webkit-text-security: disc;
+    }
+    .mgr-pin-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .mgr-pin-input.error {
+      border-color: var(--danger);
+      animation: shake 300ms ease;
+    }
+    @keyframes shake {
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-2px); }
+    }
+    .mgr-unlocked {
+      padding: 16px;
+    }
+    .mgr-kpi-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .mgr-kpi {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .mgr-kpi-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .mgr-kpi-value {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+    .mgr-kpi-context {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .mgr-section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--primary);
+      margin: 20px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mgr-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      font-size: 13px;
+    }
+    .mgr-table th {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .mgr-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .mgr-table tr:last-child td {
+      border-bottom: none;
+    }
+    .mgr-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .mgr-badge.active { background: #D1FAE5; color: #065F46; }
+    .mgr-badge.inactive { background: #FEF3C7; color: #92400E; }
+    .mgr-badge.never { background: #FEE2E2; color: #991B1B; }
+    .mgr-adoption-bar {
+      display: flex;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--border);
+      margin-top: 6px;
+    }
+    .mgr-adoption-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 400ms ease;
+    }
+
+    /* Daily Briefing */
+    .briefing-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease;
+    }
+    .briefing-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .briefing-card {
+      background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-width: 480px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 24px 20px 32px;
+      transform: translateY(100%);
+      transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .briefing-overlay.active .briefing-card {
+      transform: translateY(0);
+    }
+    .briefing-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .briefing-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--primary);
+    }
+    .briefing-date {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .briefing-section {
+      margin-bottom: 16px;
+    }
+    .briefing-section-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .briefing-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--bg);
+      border-radius: 10px;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    .briefing-item .num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--accent);
+      min-width: 36px;
+    }
+    .briefing-item .num.warn { color: var(--warning); }
+    .briefing-item .num.danger { color: var(--danger); }
+    .briefing-dismiss {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .briefing-dismiss:active {
+      opacity: 0.9;
+    }
+
+    /* Offline indicator */
+    .offline-pill {
+      position: fixed;
+      top: 8px;
+      right: 8px;
+      z-index: 1000;
+      background: var(--warning);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 200ms ease;
+      pointer-events: none;
+    }
+    .offline-pill.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .offline-pill .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fff;
+      animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .sync-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--warning);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+
     /* Loading Spinner */
     .loading {
       display: flex;
@@ -2056,6 +2349,7 @@
               <div class="route-subtext">stops today</div>
             </div>
             <div class="route-actions">
+              <button class="route-btn" id="routeOptimizeBtn" onclick="optimizeRoute()" style="display:none;background:var(--bg);border:1px solid var(--accent);color:var(--accent);font-weight:700;font-size:12px;">Optimize</button>
               <button class="route-btn route-btn-danger" id="routeClearBtn" onclick="clearRoute()" style="display:none;">Clear</button>
               <button class="route-btn route-btn-primary" id="routeStartBtn" onclick="startRoute()" style="display:none;">Start</button>
             </div>
@@ -2091,19 +2385,54 @@
         <div class="more-content">
           <div class="more-section">
             <button class="more-btn" id="changeRepBtn">
-              👤 Change Rep
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="vertical-align:-3px;margin-right:6px;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              Change Rep
             </button>
+          </div>
+
+          <!-- Manager Dashboard Section -->
+          <div class="more-section" id="mgrSection">
+            <div class="mgr-pin-gate" id="mgrPinGate">
+              <h3>Manager Dashboard</h3>
+              <p>Enter PIN to access team analytics</p>
+              <input type="tel" class="mgr-pin-input" id="mgrPinInput" maxlength="4" inputmode="numeric" pattern="[0-9]*" aria-label="Manager PIN">
+            </div>
+            <div class="mgr-unlocked" id="mgrUnlocked" style="display:none;">
+              <div class="mgr-kpi-strip" id="mgrKpiStrip"></div>
+              <div class="mgr-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" width="16" height="16"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 00-3-3.87"></path><path d="M16 3.13a4 4 0 010 7.75"></path></svg>
+                Rep Accountability
+              </div>
+              <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+                <table class="mgr-table" id="mgrRepTable">
+                  <thead><tr>
+                    <th>Rep</th>
+                    <th>7d</th>
+                    <th>30d</th>
+                    <th>Disp</th>
+                    <th>Last Active</th>
+                    <th>Status</th>
+                  </tr></thead>
+                  <tbody id="mgrRepBody"></tbody>
+                </table>
+              </div>
+              <div class="mgr-section-title" style="margin-top:24px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" width="16" height="16"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Adoption Scorecard
+              </div>
+              <div id="mgrAdoptionCard" style="background:var(--surface);border-radius:12px;padding:16px;box-shadow:var(--shadow-sm);"></div>
+            </div>
           </div>
 
           <div class="more-section">
             <div class="more-info">
-              <strong>PIE Mobile v1.0</strong><br>
+              <strong>PIE Mobile v2.0</strong><br>
               Informativ Field Sales Tool
             </div>
           </div>
 
           <div class="more-section">
-            <a href="#" class="more-link" style="display: block; text-align: center;">Open Full Dashboard →</a>
+            <a href="https://prospecting-intelligence.netlify.app" class="more-link" style="display: block; text-align: center;" target="_blank" rel="noopener">Open Full Dashboard →</a>
           </div>
         </div>
       </div>
@@ -2135,15 +2464,38 @@
         Route
       </button>
 
-      <button class="nav-item" data-tab="moreTab" aria-selected="false" role="tab" aria-label="More">
+      <button class="nav-item" data-tab="moreTab" aria-selected="false" role="tab" aria-label="More" style="position:relative;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="1"></circle>
           <circle cx="19" cy="12" r="1"></circle>
           <circle cx="5" cy="12" r="1"></circle>
         </svg>
         More
+        <span class="sync-badge" id="syncBadge">0</span>
       </button>
     </nav>
+  </div>
+
+  <!-- Offline Indicator -->
+  <div class="offline-pill" id="offlinePill" aria-live="polite">
+    <span class="dot"></span> Offline
+  </div>
+
+  <!-- Daily Briefing Overlay -->
+  <div class="briefing-overlay" id="briefingOverlay" role="dialog" aria-modal="true" aria-label="Daily Briefing">
+    <div class="briefing-card">
+      <div class="briefing-header">
+        <div>
+          <div class="briefing-title">Good Morning</div>
+          <div class="briefing-date" id="briefingDate"></div>
+        </div>
+        <button onclick="dismissBriefing()" style="background:none;border:none;padding:8px;cursor:pointer;" aria-label="Close briefing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" width="20" height="20"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div id="briefingBody"></div>
+      <button class="briefing-dismiss" onclick="dismissBriefing()">Let's Go</button>
+    </div>
   </div>
 
   <!-- FAB -->
@@ -4259,9 +4611,597 @@
       }
     }
 
-    // Service Worker registration
+    // ============================================================
+    // PHASE 4A: MANAGER VIEW (PIN 4607)
+    // ============================================================
+
+    let _mgrUnlocked = false;
+
+    (function initManagerView() {
+      const pinInput = document.getElementById('mgrPinInput');
+      if (!pinInput) return;
+      pinInput.addEventListener('input', function() {
+        this.classList.remove('error');
+        if (this.value.length === 4) {
+          if (this.value === '4607') {
+            _mgrUnlocked = true;
+            document.getElementById('mgrPinGate').style.display = 'none';
+            document.getElementById('mgrUnlocked').style.display = 'block';
+            renderManagerDashboard();
+          } else {
+            this.classList.add('error');
+            setTimeout(() => { this.value = ''; this.classList.remove('error'); }, 400);
+          }
+        }
+      });
+    })();
+
+    async function renderManagerDashboard() {
+      // Gather activity data across ALL reps
+      let allActivities = [];
+      try {
+        const resp = await fetch(`${ACTIVITY_ENDPOINT}?all=true&days=30`);
+        if (resp.ok) {
+          const data = await resp.json();
+          allActivities = data.activities || [];
+        }
+      } catch (e) {}
+
+      // Fallback: use local cache if server returned nothing
+      if (allActivities.length === 0) {
+        try { allActivities = JSON.parse(localStorage.getItem('activityCache') || '[]'); } catch(e) { allActivities = []; }
+      }
+
+      const now = Date.now();
+      const day7 = 7 * 86400000;
+      const day30 = 30 * 86400000;
+
+      // Build per-rep stats
+      const repStats = {};
+      REPS.forEach(rep => {
+        repStats[rep] = { act7: 0, act30: 0, dispositions: 0, lastActive: null, prospects: new Set() };
+      });
+
+      allActivities.forEach(a => {
+        const rep = a.rep || a.edited_by || '';
+        const ts = new Date(a.timestamp || a.created_at || 0).getTime();
+        const age = now - ts;
+        if (!repStats[rep]) repStats[rep] = { act7: 0, act30: 0, dispositions: 0, lastActive: null, prospects: new Set() };
+        if (age <= day7) repStats[rep].act7++;
+        if (age <= day30) repStats[rep].act30++;
+        if (a.type === 'disposition' || a.disposition) repStats[rep].dispositions++;
+        if (a.prospect_id) repStats[rep].prospects.add(a.prospect_id);
+        const aDate = new Date(a.timestamp || a.created_at || 0);
+        if (!repStats[rep].lastActive || aDate > repStats[rep].lastActive) repStats[rep].lastActive = aDate;
+      });
+
+      // Also count localStorage dispositions per rep
+      const dispData = JSON.parse(localStorage.getItem('dispositions') || '{}');
+
+      // KPI calculations
+      const totalAct7 = Object.values(repStats).reduce((s, r) => s + r.act7, 0);
+      const activeReps7 = Object.values(repStats).filter(r => r.act7 > 0).length;
+      const totalProspects = Object.values(repStats).reduce((s, r) => s + r.prospects.size, 0);
+      const totalDisp30 = Object.values(repStats).reduce((s, r) => s + r.dispositions, 0);
+
+      // Render KPI strip
+      document.getElementById('mgrKpiStrip').innerHTML = `
+        <div class="mgr-kpi">
+          <div class="mgr-kpi-label">Activities (7d)</div>
+          <div class="mgr-kpi-value">${totalAct7}</div>
+          <div class="mgr-kpi-context">Across all reps</div>
+        </div>
+        <div class="mgr-kpi">
+          <div class="mgr-kpi-label">Active Reps (7d)</div>
+          <div class="mgr-kpi-value">${activeReps7}<span style="font-size:16px;color:var(--text-tertiary);">/${REPS.length}</span></div>
+          <div class="mgr-kpi-context">${REPS.length - activeReps7 > 0 ? `<span style="color:var(--danger);">${REPS.length - activeReps7} inactive</span>` : '<span style="color:var(--success);">All active</span>'}</div>
+        </div>
+        <div class="mgr-kpi">
+          <div class="mgr-kpi-label">Prospects Touched</div>
+          <div class="mgr-kpi-value">${totalProspects}</div>
+          <div class="mgr-kpi-context">Unique (30d)</div>
+        </div>
+        <div class="mgr-kpi">
+          <div class="mgr-kpi-label">Dispositions (30d)</div>
+          <div class="mgr-kpi-value">${totalDisp30 + Object.keys(dispData).length}</div>
+          <div class="mgr-kpi-context">Filed across team</div>
+        </div>
+      `;
+
+      // Render rep accountability table
+      const sortedReps = REPS.map(rep => ({ name: rep, ...repStats[rep] }))
+        .sort((a, b) => b.act7 - a.act7);
+
+      document.getElementById('mgrRepBody').innerHTML = sortedReps.map(r => {
+        let status, badge;
+        if (r.act7 > 0) { status = 'Active'; badge = 'active'; }
+        else if (r.lastActive) { status = 'Inactive'; badge = 'inactive'; }
+        else { status = 'Never Used'; badge = 'never'; }
+
+        const lastStr = r.lastActive ? _formatRelativeDate(r.lastActive) : '—';
+        return `<tr>
+          <td style="font-weight:600;white-space:nowrap;">${r.name.split(' ')[0]}</td>
+          <td style="font-variant-numeric:tabular-nums;text-align:center;">${r.act7}</td>
+          <td style="font-variant-numeric:tabular-nums;text-align:center;">${r.act30}</td>
+          <td style="font-variant-numeric:tabular-nums;text-align:center;">${r.dispositions}</td>
+          <td style="font-size:11px;color:var(--text-secondary);">${lastStr}</td>
+          <td><span class="mgr-badge ${badge}">${status}</span></td>
+        </tr>`;
+      }).join('');
+
+      // Render adoption scorecard
+      const adoptionPct = Math.round((activeReps7 / REPS.length) * 100);
+      const neverUsed = sortedReps.filter(r => !r.lastActive);
+      const totalAssigned = (typeof PIE_NN !== 'undefined' ? PIE_NN.length : 0) + (typeof PIE_CS !== 'undefined' ? PIE_CS.length : 0);
+      const touchedPct = totalAssigned > 0 ? Math.round((totalProspects / totalAssigned) * 100) : 0;
+
+      document.getElementById('mgrAdoptionCard').innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:600;color:var(--text-primary);">Rep Adoption (7d)</span>
+          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:20px;color:${adoptionPct >= 75 ? 'var(--success)' : adoptionPct >= 50 ? 'var(--warning)' : 'var(--danger)'};">${adoptionPct}%</span>
+        </div>
+        <div class="mgr-adoption-bar">
+          <div class="mgr-adoption-fill" style="width:${adoptionPct}%;background:${adoptionPct >= 75 ? 'var(--success)' : adoptionPct >= 50 ? 'var(--warning)' : 'var(--danger)'};"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:600;color:var(--text-primary);">Prospect Coverage</span>
+          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:20px;color:${touchedPct >= 20 ? 'var(--success)' : touchedPct >= 10 ? 'var(--warning)' : 'var(--danger)'};">${touchedPct}%</span>
+        </div>
+        <div class="mgr-adoption-bar">
+          <div class="mgr-adoption-fill" style="width:${Math.min(touchedPct, 100)}%;background:${touchedPct >= 20 ? 'var(--success)' : touchedPct >= 10 ? 'var(--warning)' : 'var(--danger)'};"></div>
+        </div>
+        ${neverUsed.length > 0 ? `
+          <div style="margin-top:16px;padding:12px;background:#FEE2E2;border-radius:10px;">
+            <div style="font-size:11px;font-weight:700;color:#991B1B;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Never Logged In</div>
+            <div style="font-size:13px;color:#7F1D1D;font-weight:600;">${neverUsed.map(r => r.name).join(', ')}</div>
+          </div>
+        ` : `
+          <div style="margin-top:16px;padding:12px;background:#D1FAE5;border-radius:10px;">
+            <div style="font-size:13px;font-weight:600;color:#065F46;">All reps have logged activity</div>
+          </div>
+        `}
+      `;
+    }
+
+    function _formatRelativeDate(date) {
+      const diff = Date.now() - date.getTime();
+      const days = Math.floor(diff / 86400000);
+      if (days === 0) return 'Today';
+      if (days === 1) return 'Yesterday';
+      if (days < 7) return `${days}d ago`;
+      if (days < 30) return `${Math.floor(days / 7)}w ago`;
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    // ============================================================
+    // PHASE 4B: ROUTE OPTIMIZATION (Nearest-Neighbor)
+    // ============================================================
+
+    function optimizeRoute() {
+      const routeKey = `pie_route_${currentRep || selectedRep}`;
+      let stops;
+      try { stops = JSON.parse(localStorage.getItem(routeKey) || '[]'); } catch(e) { stops = []; }
+      if (stops.length < 3) {
+        showToast('Need 3+ stops to optimize');
+        return;
+      }
+
+      // Calculate total distance before optimization
+      const distBefore = _totalRouteDistance(stops);
+
+      // Nearest-neighbor greedy from first stop
+      const optimized = [stops[0]];
+      const remaining = stops.slice(1);
+
+      while (remaining.length > 0) {
+        const last = optimized[optimized.length - 1];
+        let bestIdx = 0;
+        let bestDist = Infinity;
+        for (let i = 0; i < remaining.length; i++) {
+          const d = haversineDistance(
+            last.lat || 0, last.lng || 0,
+            remaining[i].lat || 0, remaining[i].lng || 0
+          );
+          if (d < bestDist) { bestDist = d; bestIdx = i; }
+        }
+        optimized.push(remaining.splice(bestIdx, 1)[0]);
+      }
+
+      const distAfter = _totalRouteDistance(optimized);
+      const saved = distBefore - distAfter;
+
+      // Save and re-render
+      localStorage.setItem(routeKey, JSON.stringify(optimized));
+
+      // Use scheduleRepaint for iOS Safari
+      const container = document.getElementById('routeListContainer');
+      if (typeof scheduleRepaint === 'function') {
+        scheduleRepaint(() => {
+          updateRouteDisplay();
+          showToast(saved > 0.5 ? `Optimized — saved ~${saved.toFixed(1)} mi` : 'Route optimized');
+        });
+      } else {
+        updateRouteDisplay();
+        showToast(saved > 0.5 ? `Optimized — saved ~${saved.toFixed(1)} mi` : 'Route optimized');
+      }
+    }
+
+    function _totalRouteDistance(stops) {
+      let total = 0;
+      for (let i = 1; i < stops.length; i++) {
+        total += haversineDistance(
+          stops[i-1].lat || 0, stops[i-1].lng || 0,
+          stops[i].lat || 0, stops[i].lng || 0
+        );
+      }
+      return total;
+    }
+
+    // Show Optimize button when 3+ stops
+    const _origUpdateRouteDisplay = typeof updateRouteDisplay === 'function' ? updateRouteDisplay : null;
+    if (_origUpdateRouteDisplay) {
+      const _wrappedUpdate = updateRouteDisplay;
+      updateRouteDisplay = function() {
+        _wrappedUpdate();
+        const routeKey = `pie_route_${currentRep || selectedRep}`;
+        let stops;
+        try { stops = JSON.parse(localStorage.getItem(routeKey) || '[]'); } catch(e) { stops = []; }
+        const optBtn = document.getElementById('routeOptimizeBtn');
+        if (optBtn) optBtn.style.display = stops.length >= 3 ? '' : 'none';
+      };
+    }
+
+    // ============================================================
+    // PHASE 4C: DAILY BRIEFING
+    // ============================================================
+
+    function showDailyBriefing() {
+      const today = new Date().toDateString();
+      const lastShown = localStorage.getItem('pie_briefing_date');
+      if (lastShown === today) return;
+
+      // Only show if rep is selected
+      if (!currentRep) return;
+
+      // Build briefing content
+      const briefingDate = document.getElementById('briefingDate');
+      if (briefingDate) {
+        briefingDate.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      }
+
+      let html = '';
+
+      // Route info
+      const routeKey = `pie_route_${currentRep}`;
+      let routeStops = [];
+      try { routeStops = JSON.parse(localStorage.getItem(routeKey) || '[]'); } catch(e) {}
+      if (routeStops.length > 0) {
+        const names = routeStops.slice(0, 3).map(s => s.company || s.co || 'Stop').join(', ');
+        const more = routeStops.length > 3 ? ` +${routeStops.length - 3} more` : '';
+        html += `
+          <div class="briefing-section">
+            <div class="briefing-section-label">Today's Route</div>
+            <div class="briefing-item">
+              <div class="num">${routeStops.length}</div>
+              <div>
+                <div style="font-weight:600;">Stops planned</div>
+                <div style="font-size:12px;color:var(--text-secondary);">${names}${more}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Overdue dispositions — prospects assigned but no disposition in 14+ days
+      const allProspects = [];
+      if (typeof PIE_NN !== 'undefined' && PIE_NN) allProspects.push(...PIE_NN.filter(p => (p.rep || p.ter) === currentRep));
+      if (typeof PIE_CS !== 'undefined' && PIE_CS) allProspects.push(...PIE_CS.filter(p => (p.rep || p.ter) === currentRep));
+      if (typeof AFFILIATE_RAW !== 'undefined' && AFFILIATE_RAW) allProspects.push(...AFFILIATE_RAW.filter(p => (p.own || p.rep) === currentRep));
+
+      const overdueCount = allProspects.filter(p => {
+        const pId = p.id || `${p.co || p.n}-${p.cn || ''}`;
+        const disp = dispositions[pId];
+        if (disp) {
+          const dispAge = Date.now() - new Date(disp.timestamp || disp.date || 0).getTime();
+          return dispAge > 14 * 86400000; // 14 days stale
+        }
+        return true; // No disposition at all
+      }).length;
+
+      if (overdueCount > 0) {
+        html += `
+          <div class="briefing-section">
+            <div class="briefing-section-label">Needs Attention</div>
+            <div class="briefing-item">
+              <div class="num ${overdueCount > 20 ? 'danger' : 'warn'}">${overdueCount}</div>
+              <div>
+                <div style="font-weight:600;">Prospects need follow-up</div>
+                <div style="font-size:12px;color:var(--text-secondary);">No disposition in 14+ days</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Top priority prospects (highest ICP score, no recent activity)
+      const topPriority = allProspects
+        .filter(p => {
+          const pId = p.id || `${p.co || p.n}-${p.cn || ''}`;
+          const disp = dispositions[pId];
+          return !disp; // Never actioned
+        })
+        .sort((a, b) => (b.sc || b.hs || 0) - (a.sc || a.hs || 0))
+        .slice(0, 3);
+
+      if (topPriority.length > 0) {
+        html += `
+          <div class="briefing-section">
+            <div class="briefing-section-label">Top Priority</div>
+            ${topPriority.map(p => `
+              <div class="briefing-item">
+                <div class="num" style="font-size:16px;">${p.sc || p.hs || '—'}</div>
+                <div>
+                  <div style="font-weight:600;">${p.co || p.n || 'Unknown'}</div>
+                  <div style="font-size:12px;color:var(--text-secondary);">${p.city || p.cty || ''}${p.st || p.sta ? ', ' + (p.st || p.sta) : ''} · Never contacted</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      // Yesterday's activity summary
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      const yesterdayActs = (activityCache || []).filter(a => {
+        const aDate = new Date(a.timestamp || a.created_at || 0).toDateString();
+        return aDate === yesterday;
+      });
+      if (yesterdayActs.length > 0) {
+        html += `
+          <div class="briefing-section">
+            <div class="briefing-section-label">Yesterday's Activity</div>
+            <div class="briefing-item">
+              <div class="num">${yesterdayActs.length}</div>
+              <div>
+                <div style="font-weight:600;">Activities logged</div>
+                <div style="font-size:12px;color:var(--text-secondary);">Keep the momentum going</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // If no meaningful content, skip the briefing
+      if (!html) return;
+
+      document.getElementById('briefingBody').innerHTML = html;
+      document.getElementById('briefingOverlay').classList.add('active');
+    }
+
+    function dismissBriefing() {
+      localStorage.setItem('pie_briefing_date', new Date().toDateString());
+      document.getElementById('briefingOverlay').classList.remove('active');
+    }
+
+    // ============================================================
+    // PHASE 4D: OFFLINE MODE (IndexedDB + Service Worker)
+    // ============================================================
+
+    // --- IndexedDB Offline Queue ---
+    const DB_NAME = 'pie_mobile_offline';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'sync_queue';
+    let _offlineDb = null;
+
+    function openOfflineDb() {
+      return new Promise((resolve, reject) => {
+        if (_offlineDb) return resolve(_offlineDb);
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+          }
+        };
+        req.onsuccess = (e) => { _offlineDb = e.target.result; resolve(_offlineDb); };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function queueOfflineAction(action) {
+      try {
+        const db = await openOfflineDb();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).add({
+          ...action,
+          queued_at: new Date().toISOString()
+        });
+        await new Promise((res, rej) => { tx.oncomplete = res; tx.onerror = rej; });
+        _updateSyncBadge();
+      } catch (e) {
+        console.warn('IndexedDB queue failed, using localStorage fallback', e);
+        const fallback = JSON.parse(localStorage.getItem('pie_offline_queue') || '[]');
+        fallback.push({ ...action, queued_at: new Date().toISOString() });
+        localStorage.setItem('pie_offline_queue', JSON.stringify(fallback));
+      }
+    }
+
+    async function getOfflineQueueCount() {
+      try {
+        const db = await openOfflineDb();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        return new Promise((res) => {
+          const req = store.count();
+          req.onsuccess = () => res(req.result);
+          req.onerror = () => res(0);
+        });
+      } catch (e) {
+        const fallback = JSON.parse(localStorage.getItem('pie_offline_queue') || '[]');
+        return fallback.length;
+      }
+    }
+
+    async function flushOfflineQueue() {
+      if (!navigator.onLine) return;
+
+      try {
+        const db = await openOfflineDb();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const items = await new Promise((res) => {
+          const req = store.getAll();
+          req.onsuccess = () => res(req.result);
+          req.onerror = () => res([]);
+        });
+
+        if (items.length === 0) {
+          // Also check localStorage fallback
+          const lsFallback = JSON.parse(localStorage.getItem('pie_offline_queue') || '[]');
+          if (lsFallback.length === 0) return;
+          // Flush localStorage items
+          for (const item of lsFallback) {
+            await _sendQueuedItem(item);
+          }
+          localStorage.setItem('pie_offline_queue', '[]');
+          _updateSyncBadge();
+          showToast(`Synced ${lsFallback.length} queued ${lsFallback.length === 1 ? 'action' : 'actions'}`);
+          return;
+        }
+
+        let synced = 0;
+        for (const item of items) {
+          const ok = await _sendQueuedItem(item);
+          if (ok) {
+            const delTx = db.transaction(STORE_NAME, 'readwrite');
+            delTx.objectStore(STORE_NAME).delete(item.id);
+            await new Promise((res) => { delTx.oncomplete = res; delTx.onerror = res; });
+            synced++;
+          }
+        }
+
+        _updateSyncBadge();
+        if (synced > 0) showToast(`Synced ${synced} queued ${synced === 1 ? 'action' : 'actions'}`);
+      } catch (e) {
+        console.warn('Flush offline queue failed:', e);
+      }
+    }
+
+    async function _sendQueuedItem(item) {
+      try {
+        const endpoint = item.endpoint || ACTIVITY_ENDPOINT;
+        const resp = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item.payload || item)
+        });
+        return resp.ok;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function _updateSyncBadge() {
+      const count = await getOfflineQueueCount();
+      const badge = document.getElementById('syncBadge');
+      if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+      }
+    }
+
+    // --- Online/Offline Listeners ---
+    function _updateOfflineIndicator() {
+      const pill = document.getElementById('offlinePill');
+      if (pill) {
+        pill.classList.toggle('visible', !navigator.onLine);
+      }
+    }
+
+    window.addEventListener('online', () => {
+      _updateOfflineIndicator();
+      // Auto-flush queue on reconnect
+      setTimeout(flushOfflineQueue, 1000);
+    });
+    window.addEventListener('offline', _updateOfflineIndicator);
+
+    // Patch existing activity POST to use offline queue when offline
+    const _origLogActivity = typeof logActivity === 'function' ? logActivity : null;
+
+    // Initialize offline state on load
+    document.addEventListener('DOMContentLoaded', () => {
+      _updateOfflineIndicator();
+      _updateSyncBadge();
+      // Attempt flush on load if online
+      if (navigator.onLine) setTimeout(flushOfflineQueue, 2000);
+    });
+
+    // Hook into switchTab to render manager dashboard on More tab open
+    const _origSwitchTabP4 = switchTab;
+    switchTab = function(tabId) {
+      _origSwitchTabP4(tabId);
+      if (tabId === 'moreTab' && _mgrUnlocked) {
+        renderManagerDashboard();
+      }
+    };
+
+    // Show daily briefing after app init (delayed to let data load)
+    const _origInitApp = initApp;
+    initApp = function() {
+      _origInitApp();
+      setTimeout(showDailyBriefing, 800);
+    };
+
+    // ============================================================
+    // SERVICE WORKER — Real Implementation
+    // ============================================================
+
+    const SW_CODE = `
+      const CACHE_NAME = 'pie-mobile-v2';
+      const SHELL_URLS = ['/'];
+
+      self.addEventListener('install', (event) => {
+        event.waitUntil(
+          caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL_URLS)).then(() => self.skipWaiting())
+        );
+      });
+
+      self.addEventListener('activate', (event) => {
+        event.waitUntil(
+          caches.keys().then(keys =>
+            Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+          ).then(() => self.clients.claim())
+        );
+      });
+
+      self.addEventListener('fetch', (event) => {
+        const url = new URL(event.request.url);
+        // Only cache same-origin navigation and static assets
+        if (event.request.method !== 'GET') return;
+        if (url.pathname.startsWith('/.netlify/functions/')) return; // Don't cache API calls
+
+        event.respondWith(
+          caches.match(event.request).then(cached => {
+            const fetchPromise = fetch(event.request).then(response => {
+              if (response.ok) {
+                const clone = response.clone();
+                caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+              }
+              return response;
+            }).catch(() => cached);
+            return cached || fetchPromise;
+          })
+        );
+      });
+    `;
+
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('data:text/javascript,').catch(() => {});
+      const swBlob = new Blob([SW_CODE], { type: 'text/javascript' });
+      const swUrl = URL.createObjectURL(swBlob);
+      navigator.serviceWorker.register(swUrl).then(reg => {
+        // Check for updates periodically
+        setInterval(() => reg.update(), 3600000); // hourly
+      }).catch(() => {});
     }
   </script>
 </body>
