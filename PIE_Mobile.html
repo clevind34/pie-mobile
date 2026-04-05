@@ -3406,7 +3406,10 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
-              }).catch(err => console.error('Contact edit save failed:', err));
+              }).catch(err => {
+                console.warn('Contact edit save failed, queuing offline:', err);
+                queueOfflineAction({ endpoint: '/.netlify/functions/pie-contacts', payload: payload });
+              });
 
               showToast('Contact info saved');
             }
@@ -3966,7 +3969,7 @@
       activityCache.unshift(activity);
       localStorage.setItem('activityCache', JSON.stringify(activityCache));
 
-      // Fire to server (non-blocking toast on failure)
+      // Fire to server — queue offline if it fails
       try {
         const resp = await fetch(ACTIVITY_ENDPOINT, {
           method: 'POST',
@@ -3975,7 +3978,8 @@
         });
         if (!resp.ok) throw new Error('Server error');
       } catch (e) {
-        console.warn('Activity sync failed, saved locally:', e);
+        console.warn('Activity sync failed, queuing offline:', e);
+        queueOfflineAction({ endpoint: ACTIVITY_ENDPOINT, payload: activity });
       }
 
       btn.disabled = false;
@@ -4241,12 +4245,14 @@
       activityCache.unshift(activity);
       localStorage.setItem('activityCache', JSON.stringify(activityCache));
 
-      // Fire to server (non-blocking)
+      // Fire to server — queue offline if it fails
       fetch(ACTIVITY_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(activity)
-      }).catch(() => {});
+      }).catch(() => {
+        queueOfflineAction({ endpoint: ACTIVITY_ENDPOINT, payload: activity });
+      });
 
       showToast('✓ Disposition saved');
       closeDetail();
