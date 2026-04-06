@@ -2750,7 +2750,7 @@
 
     function loadSavedContacts() {
       // Load saved contact edits from pie-contacts API
-      fetch(`${API_GATEWAY}/api/cs/contacts`, { method: 'GET', headers: { 'X-API-Key': API_HEADERS['X-API-Key'] } })
+      fetch('/.netlify/functions/pie-contacts', { method: 'GET' })
         .then(r => r.json())
         .then(data => {
           if (data.contacts && typeof data.contacts === 'object') {
@@ -2964,6 +2964,9 @@
           if (action === 'call') {
             const phone = (prospect.ph || '').replace(/\D/g, '');
             if (phone) window.location.href = 'tel:+1' + phone;
+          } else if (action === 'text') {
+            const phone = (prospect.ph || '').replace(/\D/g, '');
+            if (phone) window.location.href = 'sms:+1' + phone;
           } else if (action === 'email') {
             if (prospect.em) window.location.href = 'mailto:' + prospect.em;
           } else if (action === 'map') {
@@ -3045,6 +3048,11 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="2" y="4" width="20" height="16" rx="2"></rect>
                   <path d="m22 7-10 5L2 7"></path>
+                </svg>
+              </button>
+              <button class="action-btn" data-action="text" title="Text">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path>
                 </svg>
               </button>
               <button class="action-btn" data-action="map" title="Navigate">
@@ -3402,13 +3410,13 @@
                 value: newValue,
                 edited_by: selectedRep
               };
-              fetch(`${API_GATEWAY}/api/cs/contacts`, {
+              fetch('/.netlify/functions/pie-contacts', {
                 method: 'POST',
-                headers: API_HEADERS,
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
               }).catch(err => {
                 console.warn('Contact edit save failed, queuing offline:', err);
-                queueOfflineAction({ endpoint: `${API_GATEWAY}/api/cs/contacts`, payload: payload });
+                queueOfflineAction({ endpoint: '/.netlify/functions/pie-contacts', payload: payload });
               });
 
               showToast('Contact info saved');
@@ -3849,13 +3857,7 @@
     let activityCache = [];
     let activityFilter = 'all';
     let selectedActivityType = null;
-    // ── Unified API Gateway ──
-    const API_GATEWAY = 'https://informativ-sales-api.netlify.app';
-    const API_HEADERS = {
-      'Content-Type': 'application/json',
-      'X-API-Key': 'UI37Oom7hb8WodwTginyz_a4IcgvyvVZQzWSGDrRhhA'
-    };
-    const ACTIVITY_ENDPOINT = `${API_GATEWAY}/api/analytics/field-activity`;
+    const ACTIVITY_ENDPOINT = '/.netlify/functions/pie-activity';
 
     // FAB + Sheet control
     document.getElementById('fabBtn').addEventListener('click', openActivitySheet);
@@ -3980,7 +3982,7 @@
       try {
         const resp = await fetch(ACTIVITY_ENDPOINT, {
           method: 'POST',
-          headers: API_HEADERS,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(activity)
         });
         if (!resp.ok) throw new Error('Server error');
@@ -4181,7 +4183,7 @@
 
       // Try to fetch from server (fire-and-forget merge)
       try {
-        const resp = await fetch(`${ACTIVITY_ENDPOINT}?rep=${encodeURIComponent(currentRep)}&days=90`, { headers: { 'X-API-Key': API_HEADERS['X-API-Key'] } });
+        const resp = await fetch(`${ACTIVITY_ENDPOINT}?rep=${encodeURIComponent(currentRep)}&days=90`);
         if (resp.ok) {
           const data = await resp.json();
           if (data.activities && data.activities.length > 0) {
@@ -4255,7 +4257,7 @@
       // Fire to server — queue offline if it fails
       fetch(ACTIVITY_ENDPOINT, {
         method: 'POST',
-        headers: API_HEADERS,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(activity)
       }).catch(() => {
         queueOfflineAction({ endpoint: ACTIVITY_ENDPOINT, payload: activity });
@@ -4293,8 +4295,8 @@
     // PHASE 3: Chuck AI + Pricing Calculator
     // ============================================================
 
-    const CHUCK_ENDPOINT = `${API_GATEWAY}/api/ai/mobile`;
-    const REPRICE_ENDPOINT = `${API_GATEWAY}/api/pricing/reprice`;
+    const CHUCK_ENDPOINT = '/.netlify/functions/chuck-api';
+    const REPRICE_ENDPOINT = '/.netlify/functions/reprice-pricing';
 
     // ── Chuck AI ──
     function buildProspectPayload() {
@@ -4362,7 +4364,7 @@
       try {
         const resp = await fetch(CHUCK_ENDPOINT, {
           method: 'POST',
-          headers: API_HEADERS,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: action,
             prospect: buildProspectPayload(),
@@ -4483,7 +4485,7 @@
       try {
         const resp = await fetch(REPRICE_ENDPOINT, {
           method: 'POST',
-          headers: API_HEADERS,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(customer)
         });
 
@@ -4604,8 +4606,7 @@
         const t = data.tier_pricing[name.toLowerCase()] || data.tier_pricing[name];
         if (!t) continue;
         const price = useManager ? (t.manager_price || t.recommended_price) : (t.recommended_price || t.list_price);
-        const gm = useManager ? (t.gm_at_manager || 0) : (t.gm_at_recommended || 0);
-        lines.push(`${name}: $${Math.round(price).toLocaleString()}/mo (${gm.toFixed(1)}% GM)`);
+        lines.push(`${name}: $${Math.round(price).toLocaleString()}/mo`);
       }
 
       const text = lines.join('\n');
@@ -4653,7 +4654,7 @@
       // Gather activity data across ALL reps
       let allActivities = [];
       try {
-        const resp = await fetch(`${ACTIVITY_ENDPOINT}?all=true&days=30`, { headers: { 'X-API-Key': API_HEADERS['X-API-Key'] } });
+        const resp = await fetch(`${ACTIVITY_ENDPOINT}?all=true&days=30`);
         if (resp.ok) {
           const data = await resp.json();
           allActivities = data.activities || [];
@@ -5105,7 +5106,7 @@
         const endpoint = item.endpoint || ACTIVITY_ENDPOINT;
         const resp = await fetch(endpoint, {
           method: 'POST',
-          headers: API_HEADERS,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(item.payload || item)
         });
         return resp.ok;
@@ -5192,7 +5193,6 @@
         // Only cache same-origin navigation and static assets
         if (event.request.method !== 'GET') return;
         if (url.pathname.startsWith('/.netlify/functions/')) return; // Don't cache API calls
-        if (url.hostname === 'informativ-sales-api.netlify.app') return; // Don't cache gateway API calls
 
         event.respondWith(
           caches.match(event.request).then(cached => {
