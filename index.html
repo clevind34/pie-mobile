@@ -1158,6 +1158,93 @@
       background: #5517d4;
     }
 
+    /* Hide FAB — activity logging moved into prospect detail panel */
+    .fab { display: none !important; }
+
+    /* Inline Activity Type Pills (detail panel) */
+    .detail-activity-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+      margin-top: 8px;
+    }
+    .detail-activity-pills::-webkit-scrollbar { display: none; }
+    .activity-pill {
+      flex-shrink: 0;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 150ms ease;
+      min-height: 36px;
+    }
+    .activity-pill:active,
+    .activity-pill.selected {
+      background: #F0EBFF;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Detail panel dealer intel */
+    .detail-dealer-intel {
+      background: #FAFAFE;
+      border: 1px solid #E8E6F0;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .detail-dealer-intel .intel-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .detail-intel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .detail-intel-grid .form-section { margin-bottom: 0; }
+    .detail-intel-grid .form-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      margin-bottom: 4px;
+    }
+    .detail-intel-grid select,
+    .detail-intel-grid input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: var(--surface);
+      -webkit-appearance: none;
+    }
+    .detail-intel-grid select:focus,
+    .detail-intel-grid input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(102, 39, 232, 0.1);
+    }
+    .detail-intel-grid input[type="number"] { -moz-appearance: textfield; }
+    .detail-intel-grid input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
     /* Empty State */
     .empty-state {
       padding: 64px 16px;
@@ -3305,21 +3392,34 @@
 
       content += `
         <div class="disposition-section">
-          <div class="detail-section-title">Update Status</div>
-          <div class="disposition-form">
-            <select id="dispositionSelect" class="disposition-select">
-              <option value="">Select disposition...</option>
+          <div class="detail-section-title">Log Activity</div>
+
+          <div class="detail-activity-pills" id="detailActivityPills">
+            <button class="activity-pill" data-dtype="call_outbound">Call Out</button>
+            <button class="activity-pill" data-dtype="call_inbound">Call In</button>
+            <button class="activity-pill" data-dtype="email">Email</button>
+            <button class="activity-pill" data-dtype="visit">Visit</button>
+            <button class="activity-pill" data-dtype="meeting">Meeting</button>
+            <button class="activity-pill" data-dtype="demo">Demo</button>
+            <button class="activity-pill" data-dtype="text">Text</button>
+          </div>
+
+          <div class="disposition-form" style="margin-top:12px;">
+            <select id="detailOutcome" class="disposition-select">
+              <option value="">Select outcome...</option>
               <optgroup label="Contact Outcomes">
                 <option value="interested">Contacted - Interested</option>
                 <option value="not-interested">Contacted - Not Interested</option>
                 <option value="followup">Contacted - Follow Up</option>
                 <option value="voicemail">Left Voicemail</option>
+                <option value="no-answer">No Answer</option>
                 <option value="email-sent">Email Sent</option>
               </optgroup>
               <optgroup label="Pipeline Progress">
-                <option value="meeting">Meeting Scheduled</option>
+                <option value="meeting">Solution Fit Meeting Scheduled</option>
                 <option value="demo">Demo Scheduled</option>
                 <option value="pricing">Pricing Sent</option>
+                <option value="opp-created">Opportunity Created</option>
               </optgroup>
               <optgroup label="Closed">
                 <option value="won">Closed Won</option>
@@ -3333,20 +3433,99 @@
                 <option value="duplicate">Duplicate</option>
               </optgroup>
             </select>
-            <textarea id="dispositionNotes" class="disposition-textarea" placeholder="Add notes..."></textarea>
-            <button class="disposition-save" onclick="saveDisposition()">Save Disposition</button>
+            <textarea id="detailNotes" class="disposition-textarea" placeholder="Add notes..."></textarea>
+
+            <div class="detail-dealer-intel" id="detailDealerIntel" style="display:none;">
+              <div class="intel-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Dealer Intelligence
+              </div>
+              <div class="detail-intel-grid">
+                <div class="form-section">
+                  <div class="form-label">Vehicles Sold/mo</div>
+                  <input type="number" id="ddiVehicles" placeholder="e.g. 200" inputmode="numeric">
+                </div>
+                <div class="form-section">
+                  <div class="form-label">Inventory</div>
+                  <input type="number" id="ddiInventory" placeholder="e.g. 500" inputmode="numeric">
+                </div>
+                <div class="form-section">
+                  <div class="form-label">CRM</div>
+                  <select id="ddiCRM">
+                    <option value="">—</option>
+                    <option>CDK CRM</option>
+                    <option>DealerSocket CRM</option>
+                    <option>Elead CRM</option>
+                    <option>VinSolutions</option>
+                    <option>DealerBuilt</option>
+                    <option>ProMax</option>
+                    <option>Other</option>
+                    <option>Unknown</option>
+                  </select>
+                </div>
+                <div class="form-section">
+                  <div class="form-label">DMS</div>
+                  <select id="ddiDMS">
+                    <option value="">—</option>
+                    <option>CDK/ADP</option>
+                    <option>Reynolds</option>
+                    <option>Dealertrack</option>
+                    <option>Auto/Mate</option>
+                    <option>DealerBuilt</option>
+                    <option>Quorum</option>
+                    <option>PBS</option>
+                    <option>Other</option>
+                    <option>Unknown</option>
+                  </select>
+                </div>
+                <div class="form-section">
+                  <div class="form-label">Credit Provider</div>
+                  <select id="ddiCredit">
+                    <option value="">—</option>
+                    <option>700Credit</option>
+                    <option>RouteOne</option>
+                    <option>DealerTrack</option>
+                    <option>Informativ</option>
+                    <option>AppOne</option>
+                    <option>CUDL</option>
+                    <option>Other</option>
+                    <option>Unknown</option>
+                  </select>
+                </div>
+                <div class="form-section">
+                  <div class="form-label">LOS</div>
+                  <select id="ddiLOS">
+                    <option value="">—</option>
+                    <option>DealerTrack</option>
+                    <option>RouteOne</option>
+                    <option>AppOne</option>
+                    <option>CUDL</option>
+                    <option>Other</option>
+                    <option>Unknown</option>
+                  </select>
+                </div>
+                <div class="form-section" style="grid-column: span 2;">
+                  <div class="form-label">Hard Pulls/mo</div>
+                  <input type="number" id="ddiHardPulls" placeholder="e.g. 400" inputmode="numeric">
+                </div>
+              </div>
+            </div>
+
+            <button class="disposition-save" id="detailSaveBtn" onclick="saveDetailActivity()">Save Activity</button>
           </div>
         </div>
       `;
 
       document.getElementById('detailContent').innerHTML = content;
 
-      // Load existing disposition
+      // Load existing disposition into new outcome dropdown
       const prospectId = prospect.id || `${prospect.co}-${prospect.cn}`;
       if (dispositions[prospectId]) {
         const disp = dispositions[prospectId];
-        document.getElementById('dispositionSelect').value = disp.status || '';
-        document.getElementById('dispositionNotes').value = disp.notes || '';
+        const outcomeEl = document.getElementById('detailOutcome');
+        if (outcomeEl && disp.status) outcomeEl.value = disp.status;
+        const notesEl = document.getElementById('detailNotes');
+        if (notesEl && disp.notes) notesEl.value = disp.notes;
       }
 
       // Show panel
@@ -3355,6 +3534,9 @@
 
       // Attach edit handlers
       makeFieldsEditable();
+
+      // Attach activity type pill + dealer intel handlers
+      initDetailActivityForm();
     }
 
     function closeDetail() {
@@ -4264,6 +4446,135 @@
       });
 
       showToast('✓ Disposition saved');
+      closeDetail();
+    }
+
+    // ============================================================
+    // Unified Activity Logging (inside prospect detail panel)
+    // ============================================================
+
+    var _detailActivityType = null;
+
+    // Successful call outcomes that trigger dealer intel fields
+    var SUCCESSFUL_CALL_OUTCOMES = ['interested', 'followup', 'meeting', 'demo', 'pricing', 'opp-created'];
+
+    function initDetailActivityForm() {
+      _detailActivityType = null;
+      var pills = document.querySelectorAll('#detailActivityPills .activity-pill');
+      pills.forEach(function(pill) {
+        pill.addEventListener('click', function() {
+          pills.forEach(function(p) { p.classList.remove('selected'); });
+          pill.classList.add('selected');
+          _detailActivityType = pill.dataset.dtype;
+          toggleDetailDealerIntel();
+        });
+      });
+
+      // Outcome change also toggles dealer intel for call types
+      var outcomeEl = document.getElementById('detailOutcome');
+      if (outcomeEl) {
+        outcomeEl.addEventListener('change', function() {
+          toggleDetailDealerIntel();
+        });
+      }
+    }
+
+    function toggleDetailDealerIntel() {
+      var el = document.getElementById('detailDealerIntel');
+      if (!el) return;
+
+      var show = false;
+      // Always show for Visit or Meeting
+      if (_detailActivityType === 'visit' || _detailActivityType === 'meeting') {
+        show = true;
+      }
+      // Show for Call types when outcome is a successful contact
+      if (_detailActivityType === 'call_inbound' || _detailActivityType === 'call_outbound') {
+        var outcome = (document.getElementById('detailOutcome') || {}).value || '';
+        if (SUCCESSFUL_CALL_OUTCOMES.indexOf(outcome) !== -1) {
+          show = true;
+        }
+      }
+
+      el.style.display = show ? 'block' : 'none';
+    }
+
+    function saveDetailActivity() {
+      if (!currentProspect) return;
+
+      var outcome = (document.getElementById('detailOutcome') || {}).value;
+      if (!outcome && !_detailActivityType) {
+        showToast('Select an activity type or outcome');
+        return;
+      }
+
+      var btn = document.getElementById('detailSaveBtn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
+
+      var prospectId = currentProspect.id || ((currentProspect.co || currentProspect.n || '') + '-' + (currentProspect.cn || ''));
+      var prospectName = currentProspect.co || currentProspect.n || '';
+      var prospectType = currentSubTab === 'cross-sell' ? 'cross_sell' : (currentSubTab === 'affiliate' ? 'affiliate' : 'net_new');
+      var notes = (document.getElementById('detailNotes') || {}).value || null;
+
+      // Build activity record
+      var activity = {
+        id: 'act-' + Date.now(),
+        rep: currentRep,
+        prospect_id: prospectId,
+        prospect_name: prospectName,
+        prospect_type: prospectType,
+        activity_type: _detailActivityType || 'disposition',
+        outcome: outcome || null,
+        notes: notes,
+        timestamp: new Date().toISOString(),
+        source: 'pie_mobile'
+      };
+
+      // Collect dealer intel if visible
+      var intelEl = document.getElementById('detailDealerIntel');
+      if (intelEl && intelEl.style.display !== 'none') {
+        var di = {};
+        var v = (document.getElementById('ddiVehicles') || {}).value;
+        var inv = (document.getElementById('ddiInventory') || {}).value;
+        var hp = (document.getElementById('ddiHardPulls') || {}).value;
+        if (v) di.vehicles_sold = parseInt(v);
+        if (inv) di.inventory = parseInt(inv);
+        if (hp) di.hard_pulls = parseInt(hp);
+        var crm = (document.getElementById('ddiCRM') || {}).value;
+        var dms = (document.getElementById('ddiDMS') || {}).value;
+        var credit = (document.getElementById('ddiCredit') || {}).value;
+        var los = (document.getElementById('ddiLOS') || {}).value;
+        if (crm) di.crm = crm;
+        if (dms) di.dms = dms;
+        if (credit) di.credit_provider = credit;
+        if (los) di.los = los;
+        if (Object.keys(di).length > 0) activity.dealer_intel = di;
+      }
+
+      // Save disposition to localStorage (same as old saveDisposition)
+      if (outcome) {
+        dispositions[prospectId] = {
+          status: outcome,
+          notes: notes,
+          timestamp: activity.timestamp
+        };
+        localStorage.setItem('dispositions', JSON.stringify(dispositions));
+      }
+
+      // Add to activity cache
+      activityCache.unshift(activity);
+      localStorage.setItem('activityCache', JSON.stringify(activityCache));
+
+      // Fire to server — queue offline if it fails
+      fetch(ACTIVITY_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(activity)
+      }).catch(function() {
+        queueOfflineAction({ endpoint: ACTIVITY_ENDPOINT, payload: activity });
+      });
+
+      showToast('✓ Activity saved');
       closeDetail();
     }
 
