@@ -2479,10 +2479,16 @@
       <!-- Prospects Tab -->
       <div class="tab-content active" id="prospectsTab">
         <div class="prospects-header">
-          <div class="sub-tabs">
-            <button class="sub-tab active" data-sub="net-new">Net New</button>
-            <button class="sub-tab" data-sub="cross-sell">Cross-Sell</button>
-            <button class="sub-tab" data-sub="affiliate">Affiliate</button>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="sub-tabs" style="flex:1;">
+              <button class="sub-tab active" data-sub="net-new">Net New</button>
+              <button class="sub-tab" data-sub="cross-sell">Cross-Sell</button>
+              <button class="sub-tab" data-sub="affiliate">Affiliate</button>
+            </div>
+            <button onclick="openMobileAddStore()" style="background:#6627E8;color:white;border:none;padding:6px 12px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add
+            </button>
           </div>
 
           <div class="search-bar">
@@ -2696,6 +2702,57 @@
       <path d="M12 5v14M5 12h14"></path>
     </svg>
   </button>
+
+  <!-- Add Store Sheet -->
+  <div class="activity-sheet-overlay" id="addStoreSheetOverlay"></div>
+  <div class="activity-sheet" id="addStoreSheet" style="max-height:80vh;">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Add New Store</div>
+    <div style="padding:0 4px;">
+      <div style="display:grid;grid-template-columns:1fr;gap:10px;">
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:3px;display:block;">Company Name *</label>
+          <input type="text" id="mobAddStoreCompany" placeholder="e.g., AutoNation Honda" style="width:100%;padding:10px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0'">
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;">
+          <div>
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:3px;display:block;">City *</label>
+            <input type="text" id="mobAddStoreCity" placeholder="Miami" style="width:100%;padding:10px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0'">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:3px;display:block;">State *</label>
+            <input type="text" id="mobAddStoreState" placeholder="FL" maxlength="2" style="width:100%;padding:10px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;text-transform:uppercase;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0'">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:3px;display:block;">Contact Name</label>
+            <input type="text" id="mobAddStoreContact" placeholder="John Smith" style="width:100%;padding:10px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0'">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:3px;display:block;">Phone</label>
+            <input type="tel" id="mobAddStorePhone" placeholder="(305) 555-1234" style="width:100%;padding:10px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0'">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:3px;display:block;">OEM / Brand</label>
+            <input type="text" id="mobAddStoreOEM" placeholder="Honda" style="width:100%;padding:10px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0'">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:3px;display:block;">Est. Vehicles</label>
+            <input type="number" id="mobAddStoreVehicles" placeholder="150" min="0" style="width:100%;padding:10px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0'">
+          </div>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:3px;display:block;">Group</label>
+          <input type="text" id="mobAddStoreGroup" placeholder="AutoNation" style="width:100%;padding:10px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0'">
+        </div>
+      </div>
+      <div id="mobAddStoreStatus" style="display:none;margin-top:10px;padding:8px 12px;border-radius:10px;font-size:13px;font-weight:600;"></div>
+      <button id="mobAddStoreSubmit" onclick="submitMobileAddStore()" style="width:100%;margin-top:14px;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#6627E8,#8B5CF6);color:white;font-weight:800;font-size:15px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Add Store</button>
+    </div>
+  </div>
 
   <!-- Activity Type Sheet -->
   <div class="activity-sheet-overlay" id="actSheetOverlay"></div>
@@ -2913,6 +2970,7 @@
       if (!currentRep) {
         showRepSelector();
       } else {
+        loadMobileCustomProspects();
         renderProspects();
         setupEventListeners();
         initRoute();
@@ -2934,6 +2992,7 @@
       localStorage.setItem('selectedRep', rep);
       document.getElementById('repModal').classList.remove('active');
       loadSavedContacts(); // Load any previously saved contact edits
+      loadMobileCustomProspects(); // Load custom stores + group associations
       initRoute(); // Load route for this rep
       initRouteListeners(); // Attach route event delegation
       renderProspects();
@@ -3384,6 +3443,33 @@
           </svg>
           Add to Route
         </button>
+
+        <div class="detail-section" style="margin-top:12px;">
+          <div class="detail-section-title">Group & Contacts</div>
+          <div class="detail-field">
+            <div>
+              <div class="detail-label">Group</div>
+              <input type="text" id="mobileGroupInput" value="${prospect.grp || prospect.group || ''}" placeholder="Assign to group..." style="width:100%;padding:8px 12px;border:1px solid #E2E8F0;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0';saveMobileGroupAssoc(this.value)">
+            </div>
+          </div>
+          <button onclick="toggleMobileAddContact()" style="width:100%;background:white;color:#64748B;border:1px dashed #E2E8F0;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Contact
+          </button>
+          <div id="mobileAddContactForm" style="display:none;margin-top:8px;background:#F8FAFC;border-radius:10px;padding:12px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <input type="text" id="mobNewContactName" placeholder="Name" style="padding:8px 10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;">
+              <input type="text" id="mobNewContactTitle" placeholder="Title" style="padding:8px 10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;">
+              <input type="email" id="mobNewContactEmail" placeholder="Email" style="padding:8px 10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;">
+              <input type="tel" id="mobNewContactPhone" placeholder="Phone" style="padding:8px 10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;">
+            </div>
+            <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end;">
+              <button onclick="document.getElementById('mobileAddContactForm').style.display='none'" style="padding:8px 16px;border:1px solid #E2E8F0;border-radius:8px;background:white;color:#64748B;font-size:13px;cursor:pointer;">Cancel</button>
+              <button onclick="saveMobileNewContact()" style="padding:8px 16px;border:none;border-radius:8px;background:#6627E8;color:white;font-weight:700;font-size:13px;cursor:pointer;">Save</button>
+            </div>
+          </div>
+          <div id="mobileAdditionalContacts"></div>
+        </div>
       `;
 
       // Chuck AI Actions
@@ -5731,6 +5817,200 @@
     // ============================================================
     // SERVICE WORKER — Real Implementation
     // ============================================================
+
+    // ===== FEATURE 3: ADD STORE / ADD CONTACT / SET GROUP =====
+    const PROSPECTS_API = 'https://informativ-sales-api.netlify.app/api/cs/prospects';
+    const PROSPECTS_HEADERS = { 'Content-Type': 'application/json', 'X-API-Key': 'UI37Oom7hb8WodwTginyz_a4IcgvyvVZQzWSGDrRhhA' };
+    var _mobileCustomProspects = {};
+    var _mobileGroupAssocs = {};
+    var _mobileAdditionalContacts = {};
+
+    async function loadMobileCustomProspects() {
+      try {
+        var resp = await fetch(PROSPECTS_API, { headers: PROSPECTS_HEADERS });
+        if (!resp.ok) return;
+        var data = await resp.json();
+        if (!data.success) return;
+        _mobileCustomProspects = data.prospects || {};
+        _mobileGroupAssocs = data.group_associations || {};
+        _mobileAdditionalContacts = data.additional_contacts || {};
+
+        // Inject custom prospects into PIE_NN
+        if (typeof PIE_NN !== 'undefined') {
+          Object.entries(_mobileCustomProspects).forEach(function(entry) {
+            var id = entry[0], p = entry[1];
+            var exists = PIE_NN.some(function(np) { return np.id === id; });
+            if (!exists) {
+              PIE_NN.push({
+                id: id, r: 9999, co: p.company_name, cn: p.contact_name || '',
+                ti: p.title || '', em: p.email || '', ph: p.phone || '',
+                ter: '', rep: p.assigned_rep || p.created_by || '',
+                sc: 0, conf: 'N/A', dm: false, nc: 0,
+                oem: p.oem || '', tier: 'Enrich', sig: ['Rep-sourced'],
+                city: p.city || '', st: p.state || '', src: 'custom',
+                afs: null, grp: p.group || '', veh: p.est_vehicles || 0,
+                _isCustom: true
+              });
+            }
+          });
+        }
+
+        // Apply group associations
+        Object.entries(_mobileGroupAssocs).forEach(function(entry) {
+          var recordId = entry[0], ga = entry[1];
+          if (typeof PIE_NN !== 'undefined') {
+            var nn = PIE_NN.find(function(p) { return p.id === recordId; });
+            if (nn) { nn.grp = ga.group; return; }
+          }
+          if (typeof PIE_CS !== 'undefined') {
+            var cs = PIE_CS.find(function(c) { return c.id === recordId || String(c.id) === recordId; });
+            if (cs) cs.grp = ga.group;
+          }
+        });
+
+        renderProspects();
+      } catch(e) {
+        console.warn('loadMobileCustomProspects:', e.message);
+      }
+    }
+
+    function openMobileAddStore() {
+      document.getElementById('addStoreSheet').classList.add('active');
+      document.getElementById('addStoreSheetOverlay').classList.add('active');
+      setTimeout(function() { document.getElementById('mobAddStoreCompany').focus(); }, 200);
+    }
+
+    function closeMobileAddStore() {
+      document.getElementById('addStoreSheet').classList.remove('active');
+      document.getElementById('addStoreSheetOverlay').classList.remove('active');
+      document.getElementById('mobAddStoreStatus').style.display = 'none';
+      ['mobAddStoreCompany','mobAddStoreCity','mobAddStoreState','mobAddStoreContact','mobAddStorePhone','mobAddStoreOEM','mobAddStoreVehicles','mobAddStoreGroup'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+    }
+
+    document.getElementById('addStoreSheetOverlay').addEventListener('click', closeMobileAddStore);
+
+    async function submitMobileAddStore() {
+      var company = document.getElementById('mobAddStoreCompany').value.trim();
+      var city = document.getElementById('mobAddStoreCity').value.trim();
+      var state = document.getElementById('mobAddStoreState').value.trim().toUpperCase();
+      if (!company || !city || !state) {
+        var st = document.getElementById('mobAddStoreStatus');
+        st.style.display = 'block'; st.style.background = '#FEF2F2'; st.style.color = '#991B1B';
+        st.textContent = 'Company, City, and State are required.';
+        return;
+      }
+      var btn = document.getElementById('mobAddStoreSubmit');
+      btn.disabled = true; btn.textContent = 'Saving...';
+      var payload = {
+        company_name: company, city: city, state: state,
+        contact_name: document.getElementById('mobAddStoreContact').value.trim(),
+        phone: document.getElementById('mobAddStorePhone').value.trim(),
+        oem: document.getElementById('mobAddStoreOEM').value.trim(),
+        est_vehicles: parseInt(document.getElementById('mobAddStoreVehicles').value) || 0,
+        group: document.getElementById('mobAddStoreGroup').value.trim(),
+        pipeline: 'net_new',
+        assigned_rep: typeof selectedRep !== 'undefined' ? selectedRep : '',
+        created_by: typeof selectedRep !== 'undefined' ? selectedRep : 'Unknown'
+      };
+      try {
+        var resp = await fetch(PROSPECTS_API + '?action=add_store', {
+          method: 'POST', headers: PROSPECTS_HEADERS, body: JSON.stringify(payload)
+        });
+        var data = await resp.json();
+        if (data.success) {
+          if (typeof PIE_NN !== 'undefined') {
+            PIE_NN.push({
+              id: data.prospect_id, r: 9999, co: payload.company_name, cn: payload.contact_name,
+              ti: '', em: '', ph: payload.phone, ter: '', rep: payload.assigned_rep,
+              sc: 0, conf: 'N/A', dm: false, nc: 0, oem: payload.oem, tier: 'Enrich',
+              sig: ['Rep-sourced'], city: payload.city, st: payload.state, src: 'custom',
+              afs: null, grp: payload.group, veh: payload.est_vehicles, _isCustom: true
+            });
+          }
+          renderProspects();
+          var st = document.getElementById('mobAddStoreStatus');
+          st.style.display = 'block'; st.style.background = '#ECFDF5'; st.style.color = '#065F46';
+          st.textContent = '✓ ' + payload.company_name + ' added';
+          setTimeout(closeMobileAddStore, 1200);
+        } else { throw new Error(data.error || 'Failed'); }
+      } catch(e) {
+        var st = document.getElementById('mobAddStoreStatus');
+        st.style.display = 'block'; st.style.background = '#FEF2F2'; st.style.color = '#991B1B';
+        st.textContent = 'Error: ' + e.message;
+        queueOfflineAction({ endpoint: PROSPECTS_API + '?action=add_store', payload: payload });
+      } finally {
+        btn.disabled = false; btn.textContent = 'Add Store';
+      }
+    }
+
+    function toggleMobileAddContact() {
+      var form = document.getElementById('mobileAddContactForm');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      if (form.style.display === 'block') {
+        setTimeout(function() { document.getElementById('mobNewContactName').focus(); }, 100);
+      }
+    }
+
+    async function saveMobileNewContact() {
+      if (!currentProspect) return;
+      var recordId = currentProspect.id || currentProspect.co || '';
+      var payload = {
+        record_id: String(recordId),
+        contact_name: (document.getElementById('mobNewContactName') || {}).value || '',
+        title: (document.getElementById('mobNewContactTitle') || {}).value || '',
+        email: (document.getElementById('mobNewContactEmail') || {}).value || '',
+        phone: (document.getElementById('mobNewContactPhone') || {}).value || '',
+        added_by: typeof selectedRep !== 'undefined' ? selectedRep : 'Unknown'
+      };
+      try {
+        await fetch(PROSPECTS_API + '?action=add_contact', {
+          method: 'POST', headers: PROSPECTS_HEADERS, body: JSON.stringify(payload)
+        });
+        if (!_mobileAdditionalContacts[recordId]) _mobileAdditionalContacts[recordId] = [];
+        _mobileAdditionalContacts[recordId].push(payload);
+        renderMobileAdditionalContacts(recordId);
+        document.getElementById('mobileAddContactForm').style.display = 'none';
+      } catch(e) {
+        queueOfflineAction({ endpoint: PROSPECTS_API + '?action=add_contact', payload: payload });
+        if (!_mobileAdditionalContacts[recordId]) _mobileAdditionalContacts[recordId] = [];
+        _mobileAdditionalContacts[recordId].push(payload);
+        renderMobileAdditionalContacts(recordId);
+        document.getElementById('mobileAddContactForm').style.display = 'none';
+      }
+    }
+
+    function renderMobileAdditionalContacts(recordId) {
+      var container = document.getElementById('mobileAdditionalContacts');
+      if (!container) return;
+      var contacts = _mobileAdditionalContacts[String(recordId)] || [];
+      if (contacts.length === 0) { container.innerHTML = ''; return; }
+      container.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin:10px 0 6px;">Additional Contacts</div>' +
+        contacts.map(function(c) { return '<div style="background:#F8FAFC;border-radius:8px;padding:8px 10px;margin-bottom:4px;font-size:13px;color:#334155;">' +
+          (c.contact_name || 'Unnamed') + (c.title ? ' · ' + c.title : '') +
+          (c.email ? '<br><span style="color:#6627E8;font-size:12px;">' + c.email + '</span>' : '') +
+          (c.phone ? ' · <span style="color:#6627E8;font-size:12px;">' + c.phone + '</span>' : '') +
+        '</div>'; }).join('');
+    }
+
+    async function saveMobileGroupAssoc(group) {
+      if (!currentProspect || !group) return;
+      var recordId = String(currentProspect.id || currentProspect.co || '');
+      try {
+        await fetch(PROSPECTS_API + '?action=set_group', {
+          method: 'POST', headers: PROSPECTS_HEADERS,
+          body: JSON.stringify({ record_id: recordId, group: group, set_by: typeof selectedRep !== 'undefined' ? selectedRep : 'Unknown' })
+        });
+        currentProspect.grp = group;
+        currentProspect.group = group;
+        var input = document.getElementById('mobileGroupInput');
+        if (input) { input.style.borderColor = '#059669'; setTimeout(function() { input.style.borderColor = '#E2E8F0'; }, 1200); }
+      } catch(e) {
+        queueOfflineAction({ endpoint: PROSPECTS_API + '?action=set_group', payload: { record_id: recordId, group: group, set_by: 'Unknown' } });
+      }
+    }
 
     const SW_CODE = `
       const CACHE_NAME = 'pie-mobile-v2';
