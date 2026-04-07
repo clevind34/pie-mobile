@@ -2470,6 +2470,42 @@
       background: var(--accent);
       color: white;
     }
+
+    /* Group typeahead - mobile */
+    .mob-gta-wrap { position: relative; width: 100%; }
+    .mob-gta-input {
+      width: 100%; padding: 10px 14px; border: 1px solid #E2E8F0; border-radius: 10px;
+      font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; background: #F8FAFC;
+    }
+    .mob-gta-input:focus { border-color: var(--accent); }
+    .mob-gta-dd {
+      display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 9999;
+      background: white; border: 1px solid #E2E8F0; border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12); max-height: 220px; overflow-y: auto;
+      margin-top: 4px;
+    }
+    .mob-gta-dd.open { display: block; }
+    .mob-gta-item {
+      padding: 12px 16px; font-size: 14px; font-weight: 500; color: #334155;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      border-bottom: 1px solid #F1F5F9; min-height: 44px; display: flex; align-items: center;
+    }
+    .mob-gta-item:last-child { border-bottom: none; }
+    .mob-gta-item:active { background: #F1F5F9; }
+    .mob-gta-item.add-new { color: var(--accent); font-weight: 700; gap: 8px; }
+    .mob-gta-item .mob-gta-count { font-size: 11px; color: #94A3B8; margin-left: auto; }
+    .mob-gta-item .mob-gta-hl { font-weight: 800; color: var(--accent); }
+
+    /* Group filter chip */
+    .group-filter-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      background: #F1F5F9; color: #334155; border: 1px solid #E2E8F0; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; white-space: nowrap; max-width: 150px;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .group-filter-chip.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .group-filter-chip .chip-x { font-size: 14px; line-height: 1; }
   </style>
 </head>
 <body>
@@ -2500,7 +2536,12 @@
           </div>
 
           <div class="filter-chips" id="filterChips"></div>
-        <div class="prospect-count" id="prospectCount" style="font-size:12px;color:#94A3B8;padding:0 16px 4px;font-family:DM Sans,sans-serif;"></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:0 16px 4px;">
+            <select id="mobileGroupFilterSelect" style="flex:1;padding:6px 10px;border:1px solid #E2E8F0;border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#334155;background:white;outline:none;max-width:200px;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2394A3B8%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22></polyline></svg>');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;">
+              <option value="">All Groups</option>
+            </select>
+            <div class="prospect-count" id="prospectCount" style="font-size:12px;color:#94A3B8;font-family:DM Sans,sans-serif;"></div>
+          </div>
         </div>
 
         <div class="prospects-list" id="prospectsList">
@@ -2746,7 +2787,7 @@
         </div>
         <div>
           <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:3px;display:block;">Group</label>
-          <input type="text" id="mobAddStoreGroup" placeholder="AutoNation" style="width:100%;padding:10px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0'">
+          <div id="mobAddStoreGroupTypeahead"></div>
         </div>
       </div>
       <div id="mobAddStoreStatus" style="display:none;margin-top:10px;padding:8px 12px;border-radius:10px;font-size:13px;font-weight:600;"></div>
@@ -2992,7 +3033,9 @@
       localStorage.setItem('selectedRep', rep);
       document.getElementById('repModal').classList.remove('active');
       loadSavedContacts(); // Load any previously saved contact edits
-      loadMobileCustomProspects(); // Load custom stores + group associations
+      autoPopulateMobileGroups(); // Auto-populate net-new groups from cross-sell
+      buildMobileGroupIndex(); // Build group index from baked-in data
+      loadMobileCustomProspects(); // Load custom stores + group associations (also rebuilds index)
       initRoute(); // Load route for this rep
       initRouteListeners(); // Attach route event delegation
       renderProspects();
@@ -3037,6 +3080,12 @@
 
       // Search
       document.getElementById('searchInput').addEventListener('input', (e) => {
+        filterAndRender();
+      });
+
+      // Group filter
+      document.getElementById('mobileGroupFilterSelect').addEventListener('change', function() {
+        _mobileGroupFilter = this.value;
         filterAndRender();
       });
 
@@ -3124,7 +3173,8 @@
       let filtered = list.filter(p => {
         const company = (p.co || p.n || '').toLowerCase();
         const contact = ((p.cn || '') + ' ' + (p.fn || '') + ' ' + (p.ln || '')).toLowerCase();
-        const matchesSearch = !search || company.includes(search) || contact.includes(search);
+        const grpSearch = (p.grp || p.group || '').toLowerCase();
+        const matchesSearch = !search || company.includes(search) || contact.includes(search) || grpSearch.includes(search);
         const rep = p.rep || p.own || '';
         const matchesRep = (rep === currentRep);
         if (!matchesRep) return false;
@@ -3146,6 +3196,12 @@
             const aff = (p.aff || '').toLowerCase();
             if (activeFilter !== aff) return false;
           }
+        }
+
+        // Group filter
+        if (_mobileGroupFilter) {
+          var grp = p.grp || p.group || '';
+          if (grp !== _mobileGroupFilter) return false;
         }
 
         return true;
@@ -3449,7 +3505,7 @@
           <div class="detail-field">
             <div>
               <div class="detail-label">Group</div>
-              <input type="text" id="mobileGroupInput" value="${prospect.grp || prospect.group || ''}" placeholder="Assign to group..." style="width:100%;padding:8px 12px;border:1px solid #E2E8F0;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;" onfocus="this.style.borderColor='#6627E8'" onblur="this.style.borderColor='#E2E8F0';saveMobileGroupAssoc(this.value)">
+              <div id="mobileGroupTypeaheadContainer"></div>
             </div>
           </div>
           <button onclick="toggleMobileAddContact()" style="width:100%;background:white;color:#64748B;border:1px dashed #E2E8F0;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;">
@@ -3728,6 +3784,10 @@
 
       // Attach activity type pill + dealer intel handlers
       initDetailActivityForm();
+
+      // Init group typeahead in detail panel
+      var gtaId = currentProspect.id || currentProspect.mcid || '';
+      createMobileGroupTypeahead('mobileGroupTypeaheadContainer', currentProspect.grp || currentProspect.group || '', gtaId, handleMobileGroupSelect);
     }
 
     function closeDetail() {
@@ -5824,6 +5884,139 @@
     var _mobileCustomProspects = {};
     var _mobileGroupAssocs = {};
     var _mobileAdditionalContacts = {};
+    var _mobileAllGroups = [];
+    var _mobileGroupFilter = '';
+
+    function buildMobileGroupIndex() {
+      var gs = new Set();
+      if (typeof PIE_CS !== 'undefined') PIE_CS.forEach(function(c) { if (c.grp) gs.add(c.grp); });
+      if (typeof PIE_NN !== 'undefined') PIE_NN.forEach(function(p) { if (p.grp) gs.add(p.grp); });
+      _mobileAllGroups = Array.from(gs).sort(function(a,b) { return a.localeCompare(b); });
+      // Populate group filter dropdown
+      var sel = document.getElementById('mobileGroupFilterSelect');
+      if (sel) {
+        var val = sel.value;
+        sel.innerHTML = '<option value="">All Groups</option>';
+        _mobileAllGroups.forEach(function(g) {
+          var opt = document.createElement('option');
+          opt.value = g;
+          opt.textContent = g.length > 30 ? g.substring(0,27) + '...' : g;
+          sel.appendChild(opt);
+        });
+        if (val) sel.value = val;
+      }
+    }
+
+    function autoPopulateMobileGroups() {
+      if (typeof PIE_CS === 'undefined' || typeof PIE_NN === 'undefined') return;
+      var csMap = {};
+      PIE_CS.forEach(function(c) {
+        if (c.grp && (c.n || c.co)) {
+          var key = (c.n || c.co).toLowerCase().trim();
+          if (!csMap[key]) csMap[key] = c.grp;
+        }
+      });
+      PIE_NN.forEach(function(p) {
+        if (!p.grp && p.co) {
+          var key = p.co.toLowerCase().trim();
+          if (csMap[key]) p.grp = csMap[key];
+        }
+      });
+    }
+
+    function createMobileGroupTypeahead(containerId, currentValue, recordId, onSelect) {
+      var container = document.getElementById(containerId);
+      if (!container) return;
+      var uid = 'mgta_' + (recordId || Date.now());
+      container.innerHTML = '<div class="mob-gta-wrap" id="' + uid + '_wrap">' +
+        '<input type="text" class="mob-gta-input" id="' + uid + '_input" value="' + (currentValue || '').replace(/"/g, '&quot;') + '" placeholder="Search groups or add new..." autocomplete="off">' +
+        '<div class="mob-gta-dd" id="' + uid + '_dd"></div></div>';
+
+      var input = document.getElementById(uid + '_input');
+      var dd = document.getElementById(uid + '_dd');
+
+      function renderDD(query) {
+        var q = (query || '').toLowerCase().trim();
+        var matches = q.length > 0 ? _mobileAllGroups.filter(function(g) { return g.toLowerCase().includes(q); }) : _mobileAllGroups.slice(0, 6);
+        matches.sort(function(a,b) {
+          if (q) { var aS = a.toLowerCase().indexOf(q) === 0 ? 0 : 1; var bS = b.toLowerCase().indexOf(q) === 0 ? 0 : 1; if (aS !== bS) return aS - bS; }
+          return a.localeCompare(b);
+        });
+        matches = matches.slice(0, 6);
+        var html = '';
+        matches.forEach(function(g) {
+          var cnt = (typeof PIE_CS !== 'undefined' ? PIE_CS.filter(function(c) { return c.grp === g; }).length : 0) +
+                    (typeof PIE_NN !== 'undefined' ? PIE_NN.filter(function(p) { return p.grp === g; }).length : 0);
+          var display = g;
+          if (q) { var idx = g.toLowerCase().indexOf(q); if (idx >= 0) display = g.substring(0,idx) + '<span class="mob-gta-hl">' + g.substring(idx, idx + q.length) + '</span>' + g.substring(idx + q.length); }
+          html += '<div class="mob-gta-item" data-value="' + g.replace(/"/g,'&quot;') + '">' + display + '<span class="mob-gta-count">' + cnt + '</span></div>';
+        });
+        var exactMatch = q && _mobileAllGroups.some(function(g) { return g.toLowerCase() === q; });
+        if (q && !exactMatch) {
+          html += '<div class="mob-gta-item add-new" data-value="__new__">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' +
+            'Add: "' + query.trim() + '"</div>';
+        }
+        dd.innerHTML = html;
+        if (html) dd.classList.add('open'); else dd.classList.remove('open');
+
+        dd.querySelectorAll('.mob-gta-item').forEach(function(item) {
+          item.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            var val = item.dataset.value;
+            if (val === '__new__') val = query.trim();
+            input.value = val;
+            dd.classList.remove('open');
+            if (onSelect) onSelect(val, recordId);
+          });
+          item.addEventListener('click', function(e) {
+            e.preventDefault();
+            var val = item.dataset.value;
+            if (val === '__new__') val = query.trim();
+            input.value = val;
+            dd.classList.remove('open');
+            if (onSelect) onSelect(val, recordId);
+          });
+        });
+      }
+
+      input.addEventListener('focus', function() { renderDD(input.value); });
+      input.addEventListener('input', function() { renderDD(input.value); });
+      input.addEventListener('blur', function() {
+        setTimeout(function() { dd.classList.remove('open'); }, 200);
+        var val = input.value.trim();
+        if (val && val !== currentValue && onSelect) onSelect(val, recordId);
+      });
+      return input;
+    }
+
+    function handleMobileGroupSelect(groupValue, recordId) {
+      if (groupValue && !_mobileAllGroups.includes(groupValue)) {
+        _mobileAllGroups.push(groupValue);
+        _mobileAllGroups.sort(function(a,b) { return a.localeCompare(b); });
+      }
+      saveMobileGroupAssocValue(recordId, groupValue);
+    }
+
+    async function saveMobileGroupAssocValue(recordId, group) {
+      if (!group || !recordId) return;
+      var currentRep = typeof selectedRep !== 'undefined' ? selectedRep : 'Unknown';
+      try {
+        var resp = await fetch(PROSPECTS_API + '?action=set_group', {
+          method: 'POST', headers: PROSPECTS_HEADERS,
+          body: JSON.stringify({ record_id: recordId, group: group, set_by: currentRep })
+        });
+        var data = await resp.json();
+        if (data.success) {
+          _mobileGroupAssocs[recordId] = { group: group, set_by: currentRep };
+          if (typeof PIE_NN !== 'undefined') { var nn = PIE_NN.find(function(p) { return p.id === recordId; }); if (nn) nn.grp = group; }
+          if (typeof PIE_CS !== 'undefined') { var cs = PIE_CS.find(function(c) { return c.id === recordId || String(c.id) === recordId; }); if (cs) cs.grp = group; }
+          buildMobileGroupIndex();
+        }
+      } catch(e) {
+        queueOfflineAction({ endpoint: PROSPECTS_API + '?action=set_group', payload: { record_id: recordId, group: group, set_by: currentRep } });
+      }
+    }
 
     async function loadMobileCustomProspects() {
       try {
@@ -5868,6 +6061,8 @@
           }
         });
 
+        autoPopulateMobileGroups();
+        buildMobileGroupIndex();
         renderProspects();
       } catch(e) {
         console.warn('loadMobileCustomProspects:', e.message);
@@ -5877,6 +6072,8 @@
     function openMobileAddStore() {
       document.getElementById('addStoreSheet').classList.add('active');
       document.getElementById('addStoreSheetOverlay').classList.add('active');
+      window._mobAddStoreGroupValue = '';
+      createMobileGroupTypeahead('mobAddStoreGroupTypeahead', '', 'mobAddStore', function(val) { window._mobAddStoreGroupValue = val; });
       setTimeout(function() { document.getElementById('mobAddStoreCompany').focus(); }, 200);
     }
 
@@ -5884,10 +6081,11 @@
       document.getElementById('addStoreSheet').classList.remove('active');
       document.getElementById('addStoreSheetOverlay').classList.remove('active');
       document.getElementById('mobAddStoreStatus').style.display = 'none';
-      ['mobAddStoreCompany','mobAddStoreCity','mobAddStoreState','mobAddStoreContact','mobAddStorePhone','mobAddStoreOEM','mobAddStoreVehicles','mobAddStoreGroup'].forEach(function(id) {
+      ['mobAddStoreCompany','mobAddStoreCity','mobAddStoreState','mobAddStoreContact','mobAddStorePhone','mobAddStoreOEM','mobAddStoreVehicles'].forEach(function(id) {
         var el = document.getElementById(id);
         if (el) el.value = '';
       });
+      window._mobAddStoreGroupValue = '';
     }
 
     document.getElementById('addStoreSheetOverlay').addEventListener('click', closeMobileAddStore);
@@ -5910,7 +6108,7 @@
         phone: document.getElementById('mobAddStorePhone').value.trim(),
         oem: document.getElementById('mobAddStoreOEM').value.trim(),
         est_vehicles: parseInt(document.getElementById('mobAddStoreVehicles').value) || 0,
-        group: document.getElementById('mobAddStoreGroup').value.trim(),
+        group: window._mobAddStoreGroupValue || (document.querySelector('#mobAddStoreGroupTypeahead input') || {}).value || '',
         pipeline: 'net_new',
         assigned_rep: typeof selectedRep !== 'undefined' ? selectedRep : '',
         created_by: typeof selectedRep !== 'undefined' ? selectedRep : 'Unknown'
