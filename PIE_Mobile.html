@@ -3044,7 +3044,7 @@
 
     function loadSavedContacts() {
       // Load saved contact edits from pie-contacts API
-      fetch('/.netlify/functions/pie-contacts', { method: 'GET' })
+      fetch(CONTACTS_ENDPOINT, { method: 'GET', headers: API_HEADERS })
         .then(r => r.json())
         .then(data => {
           if (data.contacts && typeof data.contacts === 'object') {
@@ -3843,13 +3843,13 @@
                 value: newValue,
                 edited_by: selectedRep
               };
-              fetch('/.netlify/functions/pie-contacts', {
+              fetch(CONTACTS_ENDPOINT, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: API_HEADERS,
                 body: JSON.stringify(payload)
               }).catch(err => {
                 console.warn('Contact edit save failed, queuing offline:', err);
-                queueOfflineAction({ endpoint: '/.netlify/functions/pie-contacts', payload: payload });
+                queueOfflineAction({ endpoint: CONTACTS_ENDPOINT, payload: payload });
               });
 
               showToast('Contact info saved');
@@ -4434,7 +4434,10 @@
     let activityCache = [];
     let activityFilter = 'all';
     let selectedActivityType = null;
-    const ACTIVITY_ENDPOINT = '/.netlify/functions/pie-activity';
+    const API_GATEWAY = 'https://informativ-sales-api.netlify.app';
+    const API_HEADERS = { 'Content-Type': 'application/json', 'X-API-Key': 'UI37Oom7hb8WodwTginyz_a4IcgvyvVZQzWSGDrRhhA' };
+    const ACTIVITY_ENDPOINT = API_GATEWAY + '/api/analytics/field-activity';
+    const CONTACTS_ENDPOINT = API_GATEWAY + '/api/cs/contacts';
 
     // FAB + Sheet control
     document.getElementById('fabBtn').addEventListener('click', openActivitySheet);
@@ -4559,7 +4562,7 @@
       try {
         const resp = await fetch(ACTIVITY_ENDPOINT, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: API_HEADERS,
           body: JSON.stringify(activity)
         });
         if (!resp.ok) throw new Error('Server error');
@@ -4760,7 +4763,7 @@
 
       // Try to fetch from server (fire-and-forget merge)
       try {
-        const resp = await fetch(`${ACTIVITY_ENDPOINT}?rep=${encodeURIComponent(currentRep)}&days=90`);
+        const resp = await fetch(`${ACTIVITY_ENDPOINT}?rep=${encodeURIComponent(currentRep)}&days=90`, { headers: API_HEADERS });
         if (resp.ok) {
           const data = await resp.json();
           if (data.activities && data.activities.length > 0) {
@@ -4834,7 +4837,7 @@
       // Fire to server — queue offline if it fails
       fetch(ACTIVITY_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: API_HEADERS,
         body: JSON.stringify(activity)
       }).catch(() => {
         queueOfflineAction({ endpoint: ACTIVITY_ENDPOINT, payload: activity });
@@ -4963,7 +4966,7 @@
       // Fire to server — queue offline if it fails
       fetch(ACTIVITY_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: API_HEADERS,
         body: JSON.stringify(activity)
       }).catch(function() {
         queueOfflineAction({ endpoint: ACTIVITY_ENDPOINT, payload: activity });
@@ -5001,10 +5004,10 @@
     // PHASE 3: Chuck AI + Pricing Calculator
     // ============================================================
 
-    const CHUCK_ENDPOINT = '/.netlify/functions/chuck-api';
-    const REPRICE_ENDPOINT = '/.netlify/functions/reprice-pricing';
-    const ROUTE_API = 'https://informativ-sales-api.netlify.app/api/cs/routes';
-    const ROUTE_HEADERS = { 'Content-Type': 'application/json', 'X-API-Key': 'UI37Oom7hb8WodwTginyz_a4IcgvyvVZQzWSGDrRhhA' };
+    const CHUCK_ENDPOINT = API_GATEWAY + '/api/ai/mobile';
+    const REPRICE_ENDPOINT = API_GATEWAY + '/api/pricing/reprice';
+    const ROUTE_API = API_GATEWAY + '/api/cs/routes';
+    const ROUTE_HEADERS = API_HEADERS;
 
     // ── Chuck AI ──
     function buildProspectPayload() {
@@ -5072,7 +5075,7 @@
       try {
         const resp = await fetch(CHUCK_ENDPOINT, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: API_HEADERS,
           body: JSON.stringify({
             action: action,
             prospect: buildProspectPayload(),
@@ -5193,7 +5196,7 @@
       try {
         const resp = await fetch(REPRICE_ENDPOINT, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: API_HEADERS,
           body: JSON.stringify(customer)
         });
 
@@ -5362,7 +5365,7 @@
       // Gather activity data across ALL reps
       let allActivities = [];
       try {
-        const resp = await fetch(`${ACTIVITY_ENDPOINT}?all=true&days=30`);
+        const resp = await fetch(`${ACTIVITY_ENDPOINT}?all=true&days=30`, { headers: API_HEADERS });
         if (resp.ok) {
           const data = await resp.json();
           allActivities = data.activities || [];
@@ -5814,7 +5817,7 @@
         const endpoint = item.endpoint || ACTIVITY_ENDPOINT;
         const resp = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: API_HEADERS,
           body: JSON.stringify(item.payload || item)
         });
         return resp.ok;
@@ -5879,8 +5882,8 @@
     // ============================================================
 
     // ===== FEATURE 3: ADD STORE / ADD CONTACT / SET GROUP =====
-    const PROSPECTS_API = 'https://informativ-sales-api.netlify.app/api/cs/prospects';
-    const PROSPECTS_HEADERS = { 'Content-Type': 'application/json', 'X-API-Key': 'UI37Oom7hb8WodwTginyz_a4IcgvyvVZQzWSGDrRhhA' };
+    const PROSPECTS_API = API_GATEWAY + '/api/cs/prospects';
+    const PROSPECTS_HEADERS = API_HEADERS;
     var _mobileCustomProspects = {};
     var _mobileGroupAssocs = {};
     var _mobileAdditionalContacts = {};
@@ -6232,7 +6235,7 @@
         const url = new URL(event.request.url);
         // Only cache same-origin navigation and static assets
         if (event.request.method !== 'GET') return;
-        if (url.pathname.startsWith('/.netlify/functions/')) return; // Don't cache API calls
+        if (url.hostname === 'informativ-sales-api.netlify.app') return; // Don't cache gateway API calls
 
         event.respondWith(
           caches.match(event.request).then(cached => {
