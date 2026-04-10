@@ -2507,6 +2507,58 @@
     .group-filter-chip.active { background: var(--accent); color: white; border-color: var(--accent); }
     .group-filter-chip .chip-x { font-size: 14px; line-height: 1; }
   </style>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+// --- Informativ Identity Login ---
+(function(){
+'use strict';
+var IDENTITY_URL='https://informativ-sales-api.netlify.app/.identity';
+if(window.netlifyIdentity){window.netlifyIdentity.init({APIUrl:IDENTITY_URL})}
+window._identityToken=null;window._identityUser=null;
+function createLoginOverlay(){
+if(document.getElementById('identity-overlay'))return;
+var o=document.createElement('div');o.id='identity-overlay';
+o.innerHTML='<div style="position:fixed;inset:0;background:rgba(0,20,50,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Plus Jakarta Sans,sans-serif"><div style="background:#fff;border-radius:16px;padding:48px 40px;max-width:400px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.3)"><div style="width:56px;height:56px;background:linear-gradient(135deg,#6627E8,#002757);border-radius:12px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h2 style="margin:0 0 8px;font-size:22px;font-weight:800;color:#002757">Informativ</h2><p style="margin:0 0 32px;font-size:14px;color:#6B7280">Sign in to continue</p><button id="identity-login-btn" style="width:100%;padding:14px 24px;background:linear-gradient(135deg,#6627E8,#4F1FBA);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.02em">Sign In</button></div></div>';
+document.body.appendChild(o);
+document.getElementById('identity-login-btn').addEventListener('click',function(){if(window.netlifyIdentity)window.netlifyIdentity.open('login')});
+}
+function removeLoginOverlay(){var e=document.getElementById('identity-overlay');if(e){e.style.transition='opacity 0.3s';e.style.opacity='0';setTimeout(function(){e.remove()},300)}}
+function createUserPill(u){
+if(document.getElementById('identity-pill'))return;
+var email=u.email||'',name=email.split('@')[0]||'User',ini=name.charAt(0).toUpperCase();
+var p=document.createElement('div');p.id='identity-pill';
+p.style.cssText='position:fixed;top:12px;right:12px;z-index:9999;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #E5E7EB;border-radius:40px;padding:6px 14px 6px 8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);font-family:Plus Jakarta Sans,sans-serif;font-size:13px';
+p.innerHTML='<div style="width:28px;height:28px;background:#6627E8;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">'+ini+'</div><span style="color:#374151;font-weight:600">'+name+'</span><button id="identity-logout-btn" style="background:none;border:none;color:#9CA3AF;cursor:pointer;font-size:16px;padding:0 0 0 4px;line-height:1" title="Sign out"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+document.body.appendChild(p);
+document.getElementById('identity-logout-btn').addEventListener('click',function(){if(window.netlifyIdentity)window.netlifyIdentity.logout()});
+}
+function removeUserPill(){var e=document.getElementById('identity-pill');if(e)e.remove()}
+function handleLogin(u){
+if(!u||!u.token)return;
+window._identityToken=u.token.access_token;
+window._identityUser={email:u.email,id:u.id,roles:(u.app_metadata||{}).roles||[],team:(u.app_metadata||{}).team||null,rep_name:(u.app_metadata||{}).rep_name||null};
+removeLoginOverlay();createUserPill(u);
+window.dispatchEvent(new CustomEvent('identity:login',{detail:window._identityUser}));
+}
+function handleLogout(){window._identityToken=null;window._identityUser=null;removeUserPill();createLoginOverlay();window.dispatchEvent(new CustomEvent('identity:logout'))}
+function scheduleTokenRefresh(u){
+if(!u||!u.token)return;
+try{var parts=u.token.access_token.split('.');var payload=JSON.parse(atob(parts[1]));var refreshIn=payload.exp*1000-Date.now()-60000;
+if(refreshIn>0){setTimeout(function(){if(window.netlifyIdentity){var c=window.netlifyIdentity.currentUser();if(c)c.jwt().then(function(t){window._identityToken=t;scheduleTokenRefresh(c)})}},refreshIn)}
+}catch(e){setTimeout(function(){if(window.netlifyIdentity){var c=window.netlifyIdentity.currentUser();if(c)c.jwt().then(function(t){window._identityToken=t})}},50*60*1000)}
+}
+function init(){
+if(!window.netlifyIdentity){console.warn('[Identity] Widget not loaded');return}
+var u=window.netlifyIdentity.currentUser();
+if(u){u.jwt().then(function(t){window._identityToken=t;u.token=u.token||{};u.token.access_token=t;handleLogin(u);scheduleTokenRefresh(u)}).catch(function(){handleLogout()})}
+else{createLoginOverlay()}
+window.netlifyIdentity.on('login',function(u){handleLogin(u);scheduleTokenRefresh(u);window.netlifyIdentity.close()});
+window.netlifyIdentity.on('logout',function(){handleLogout()});
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}
+})();
+</script>
+
 </head>
 <body>
   <div class="app-container">
@@ -3044,7 +3096,7 @@
 
     function loadSavedContacts() {
       // Load saved contact edits from pie-contacts API
-      fetch(CONTACTS_ENDPOINT, { method: 'GET', headers: API_HEADERS })
+      fetch(CONTACTS_ENDPOINT, { method: 'GET', headers: API_HEADERS() })
         .then(r => r.json())
         .then(data => {
           if (data.contacts && typeof data.contacts === 'object') {
@@ -3845,7 +3897,7 @@
               };
               fetch(CONTACTS_ENDPOINT, {
                 method: 'POST',
-                headers: API_HEADERS,
+                headers: API_HEADERS(),
                 body: JSON.stringify(payload)
               }).catch(err => {
                 console.warn('Contact edit save failed, queuing offline:', err);
@@ -4435,7 +4487,7 @@
     let activityFilter = 'all';
     let selectedActivityType = null;
     const API_PROXY = '/.netlify/functions/api-proxy';
-    const API_HEADERS = { 'Content-Type': 'application/json' };
+    function API_HEADERS() { var h = { 'Content-Type': 'application/json' }; var t = window._identityToken; if (t) h['Authorization'] = 'Bearer ' + t; return h; }
     const ACTIVITY_ENDPOINT = API_PROXY + '?path=/api/analytics/field-activity';
     const CONTACTS_ENDPOINT = API_PROXY + '?path=/api/cs/contacts';
 
@@ -4562,7 +4614,7 @@
       try {
         const resp = await fetch(ACTIVITY_ENDPOINT, {
           method: 'POST',
-          headers: API_HEADERS,
+          headers: API_HEADERS(),
           body: JSON.stringify(activity)
         });
         if (!resp.ok) throw new Error('Server error');
@@ -4763,7 +4815,7 @@
 
       // Try to fetch from server (fire-and-forget merge)
       try {
-        const resp = await fetch(`${ACTIVITY_ENDPOINT}&rep=${encodeURIComponent(currentRep)}&days=90`, { headers: API_HEADERS });
+        const resp = await fetch(`${ACTIVITY_ENDPOINT}&rep=${encodeURIComponent(currentRep)}&days=90`, { headers: API_HEADERS() });
         if (resp.ok) {
           const data = await resp.json();
           if (data.activities && data.activities.length > 0) {
@@ -4837,7 +4889,7 @@
       // Fire to server — queue offline if it fails
       fetch(ACTIVITY_ENDPOINT, {
         method: 'POST',
-        headers: API_HEADERS,
+        headers: API_HEADERS(),
         body: JSON.stringify(activity)
       }).catch(() => {
         queueOfflineAction({ endpoint: ACTIVITY_ENDPOINT, payload: activity });
@@ -4966,7 +5018,7 @@
       // Fire to server — queue offline if it fails
       fetch(ACTIVITY_ENDPOINT, {
         method: 'POST',
-        headers: API_HEADERS,
+        headers: API_HEADERS(),
         body: JSON.stringify(activity)
       }).catch(function() {
         queueOfflineAction({ endpoint: ACTIVITY_ENDPOINT, payload: activity });
@@ -5075,7 +5127,7 @@
       try {
         const resp = await fetch(CHUCK_ENDPOINT, {
           method: 'POST',
-          headers: API_HEADERS,
+          headers: API_HEADERS(),
           body: JSON.stringify({
             action: action,
             prospect: buildProspectPayload(),
@@ -5196,7 +5248,7 @@
       try {
         const resp = await fetch(REPRICE_ENDPOINT, {
           method: 'POST',
-          headers: API_HEADERS,
+          headers: API_HEADERS(),
           body: JSON.stringify(customer)
         });
 
@@ -5365,7 +5417,7 @@
       // Gather activity data across ALL reps
       let allActivities = [];
       try {
-        const resp = await fetch(`${ACTIVITY_ENDPOINT}&all=true&days=30`, { headers: API_HEADERS });
+        const resp = await fetch(`${ACTIVITY_ENDPOINT}&all=true&days=30`, { headers: API_HEADERS() });
         if (resp.ok) {
           const data = await resp.json();
           allActivities = data.activities || [];
@@ -5817,7 +5869,7 @@
         const endpoint = item.endpoint || ACTIVITY_ENDPOINT;
         const resp = await fetch(endpoint, {
           method: 'POST',
-          headers: API_HEADERS,
+          headers: API_HEADERS(),
           body: JSON.stringify(item.payload || item)
         });
         return resp.ok;
