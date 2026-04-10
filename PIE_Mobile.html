@@ -3143,6 +3143,17 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 
     function initApp() {
       if (!currentRep) {
+        // Try auto-identity from SSO before showing manual selector
+        if (window._identityUser && window._identityUser.email) {
+          var autoName = (typeof _EM_N !== 'undefined') ? _EM_N[window._identityUser.email] : null;
+          var userRoles = (window._identityUser.roles || []);
+          var isManager = userRoles.some(function(r){ return ['admin','manager'].indexOf(r) !== -1; });
+          if (autoName && REPS.indexOf(autoName) !== -1 && !isManager) {
+            // Rep with matching identity — auto-select, skip modal
+            selectRep(autoName);
+            return;
+          }
+        }
         showRepSelector();
       } else {
         loadMobileCustomProspects();
@@ -3152,6 +3163,20 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
         initRouteListeners();
       }
     }
+
+    // SSO auto-identity — if login fires after DOMContentLoaded
+    window.addEventListener('identity:login', function(e) {
+      if (currentRep) return; // Already selected, don't override
+      var user = e.detail;
+      if (!user || !user.email) return;
+      var autoName = (typeof _EM_N !== 'undefined') ? _EM_N[user.email] : null;
+      var userRoles = (user.roles || []);
+      var isManager = userRoles.some(function(r){ return ['admin','manager'].indexOf(r) !== -1; });
+      if (autoName && REPS.indexOf(autoName) !== -1 && !isManager) {
+        selectRep(autoName);
+      }
+      // Managers still see the selector — no auto-select
+    });
 
     function showRepSelector() {
       const repGrid = document.getElementById('repGrid');
