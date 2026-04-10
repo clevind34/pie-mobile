@@ -2507,13 +2507,10 @@
     .group-filter-chip.active { background: var(--accent); color: white; border-color: var(--accent); }
     .group-filter-chip .chip-x { font-size: 14px; line-height: 1; }
   </style>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script>
 // --- Informativ Identity Login ---
 (function(){
 'use strict';
-var IDENTITY_URL='https://informativ-sales-api.netlify.app/.netlify/identity';
-if(window.netlifyIdentity){window.netlifyIdentity.init({APIUrl:IDENTITY_URL})}
 window._identityToken=null;window._identityUser=null;
 function createLoginOverlay(){
 if(document.getElementById('identity-overlay'))return;
