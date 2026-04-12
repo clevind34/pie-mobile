@@ -12,3 +12,9 @@
   for = "/*.html"
   [headers.values]
     Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/pie-data-*.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300, stale-while-revalidate=600"
+    Content-Type = "application/json"
