@@ -3427,7 +3427,7 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 
         // State filter
         if (_mobileStateFilter) {
-          var st = (p.st || p.sta || '').toUpperCase();
+          var st = _normalizeState(p.st || p.sta || '');
           if (st !== _mobileStateFilter) return false;
         }
 
@@ -6118,11 +6118,21 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
     var _mobileGroupFilter = '';
     var _mobileStateFilter = '';
 
+    var _STATE_ABBREV = {ALABAMA:'AL',ALASKA:'AK',ARIZONA:'AZ',ARKANSAS:'AR',CALIFORNIA:'CA',COLORADO:'CO',CONNECTICUT:'CT',DELAWARE:'DE',FLORIDA:'FL',GEORGIA:'GA',HAWAII:'HI',IDAHO:'ID',ILLINOIS:'IL',INDIANA:'IN',IOWA:'IA',KANSAS:'KS',KENTUCKY:'KY',LOUISIANA:'LA',MAINE:'ME',MARYLAND:'MD',MASSACHUSETTS:'MA',MICHIGAN:'MI',MINNESOTA:'MN',MISSISSIPPI:'MS',MISSOURI:'MO',MONTANA:'MT',NEBRASKA:'NE',NEVADA:'NV','NEW HAMPSHIRE':'NH','NEW JERSEY':'NJ','NEW MEXICO':'NM','NEW YORK':'NY','NORTH CAROLINA':'NC','NORTH DAKOTA':'ND',OHIO:'OH',OKLAHOMA:'OK',OREGON:'OR',PENNSYLVANIA:'PA','RHODE ISLAND':'RI','SOUTH CAROLINA':'SC','SOUTH DAKOTA':'SD',TENNESSEE:'TN',TEXAS:'TX',UTAH:'UT',VERMONT:'VT',VIRGINIA:'VA',WASHINGTON:'WA','WEST VIRGINIA':'WV',WISCONSIN:'WI',WYOMING:'WY','DISTRICT OF COLUMBIA':'DC','PUERTO RICO':'PR',GUAM:'GU','AMERICAN SAMOA':'AS','U.S. VIRGIN ISLANDS':'VI','NORTHERN MARIANA ISLANDS':'MP',ALBERTA:'AB'};
+    function _normalizeState(raw) {
+      if (!raw) return '';
+      var u = raw.trim().toUpperCase();
+      if (_STATE_ABBREV[u]) return _STATE_ABBREV[u];
+      var vals = Object.values ? Object.values(_STATE_ABBREV) : Object.keys(_STATE_ABBREV).map(function(k){return _STATE_ABBREV[k];});
+      if (vals.indexOf(u) !== -1) return u;
+      return u.length <= 3 ? u : '';
+    }
+
     function buildMobileStateIndex() {
       var states = new Set();
-      if (typeof PIE_NN !== 'undefined') PIE_NN.forEach(function(p) { var s = p.st || p.sta || ''; if (s) states.add(s.toUpperCase()); });
-      if (typeof PIE_CS !== 'undefined') PIE_CS.forEach(function(c) { var s = c.st || c.sta || ''; if (s) states.add(s.toUpperCase()); });
-      if (typeof AFFILIATE_RAW !== 'undefined') AFFILIATE_RAW.forEach(function(a) { var s = a.st || a.sta || a.state || ''; if (s) states.add(s.toUpperCase()); });
+      if (typeof PIE_NN !== 'undefined') PIE_NN.forEach(function(p) { var s = _normalizeState(p.st || p.sta || ''); if (s) states.add(s); });
+      if (typeof PIE_CS !== 'undefined') PIE_CS.forEach(function(c) { var s = _normalizeState(c.st || c.sta || ''); if (s) states.add(s); });
+      if (typeof AFFILIATE_RAW !== 'undefined') AFFILIATE_RAW.forEach(function(a) { var s = _normalizeState(a.st || a.sta || a.state || ''); if (s) states.add(s); });
       var sorted = Array.from(states).sort();
       var sel = document.getElementById('mobileStateFilterSelect');
       if (sel) {
