@@ -2696,6 +2696,9 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 
           <div class="filter-chips" id="filterChips"></div>
           <div style="display:flex;align-items:center;gap:8px;padding:0 16px 4px;">
+            <select id="mobileStateFilterSelect" style="flex:0 0 auto;width:90px;padding:6px 10px;border:1px solid #E2E8F0;border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#334155;background:white;outline:none;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2394A3B8%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22></polyline></svg>');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;">
+              <option value="">State</option>
+            </select>
             <select id="mobileGroupFilterSelect" style="flex:1;padding:6px 10px;border:1px solid #E2E8F0;border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;color:#334155;background:white;outline:none;max-width:200px;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2394A3B8%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22></polyline></svg>');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;">
               <option value="">All Groups</option>
             </select>
@@ -3246,6 +3249,7 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
       loadSavedContacts(); // Load any previously saved contact edits
       autoPopulateMobileGroups(); // Auto-populate net-new groups from cross-sell
       buildMobileGroupIndex(); // Build group index from baked-in data
+      buildMobileStateIndex(); // Build state filter index
       loadMobileCustomProspects(); // Load custom stores + group associations (also rebuilds index)
       initRoute(); // Load route for this rep
       initRouteListeners(); // Attach route event delegation
@@ -3291,6 +3295,12 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 
       // Search
       document.getElementById('searchInput').addEventListener('input', (e) => {
+        filterAndRender();
+      });
+
+      // State filter
+      document.getElementById('mobileStateFilterSelect').addEventListener('change', function() {
+        _mobileStateFilter = this.value;
         filterAndRender();
       });
 
@@ -3413,6 +3423,12 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
         if (_mobileGroupFilter) {
           var grp = p.grp || p.group || '';
           if (grp !== _mobileGroupFilter) return false;
+        }
+
+        // State filter
+        if (_mobileStateFilter) {
+          var st = (p.st || p.sta || '').toUpperCase();
+          if (st !== _mobileStateFilter) return false;
         }
 
         return true;
@@ -6100,6 +6116,27 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
     var _mobileAdditionalContacts = {};
     var _mobileAllGroups = [];
     var _mobileGroupFilter = '';
+    var _mobileStateFilter = '';
+
+    function buildMobileStateIndex() {
+      var states = new Set();
+      if (typeof PIE_NN !== 'undefined') PIE_NN.forEach(function(p) { var s = p.st || p.sta || ''; if (s) states.add(s.toUpperCase()); });
+      if (typeof PIE_CS !== 'undefined') PIE_CS.forEach(function(c) { var s = c.st || c.sta || ''; if (s) states.add(s.toUpperCase()); });
+      if (typeof AFFILIATE_RAW !== 'undefined') AFFILIATE_RAW.forEach(function(a) { var s = a.st || a.sta || a.state || ''; if (s) states.add(s.toUpperCase()); });
+      var sorted = Array.from(states).sort();
+      var sel = document.getElementById('mobileStateFilterSelect');
+      if (sel) {
+        var val = sel.value;
+        sel.innerHTML = '<option value="">State</option>';
+        sorted.forEach(function(st) {
+          var opt = document.createElement('option');
+          opt.value = st;
+          opt.textContent = st;
+          sel.appendChild(opt);
+        });
+        if (val) sel.value = val;
+      }
+    }
 
     function buildMobileGroupIndex() {
       var gs = new Set();
@@ -6226,6 +6263,7 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
           if (typeof PIE_NN !== 'undefined') { var nn = PIE_NN.find(function(p) { return p.id === recordId; }); if (nn) nn.grp = group; }
           if (typeof PIE_CS !== 'undefined') { var cs = PIE_CS.find(function(c) { return c.id === recordId || String(c.id) === recordId; }); if (cs) cs.grp = group; }
           buildMobileGroupIndex();
+          buildMobileStateIndex();
         }
       } catch(e) {
         queueOfflineAction({ endpoint: PROSPECTS_API + '&action=set_group', payload: { record_id: recordId, group: group, set_by: currentRep } });
@@ -6283,6 +6321,7 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 
         autoPopulateMobileGroups();
         buildMobileGroupIndex();
+        buildMobileStateIndex();
         renderProspects();
       } catch(e) {
         console.warn('loadMobileCustomProspects:', e.message);
