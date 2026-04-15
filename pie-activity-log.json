@@ -1,53 +1,5 @@
 {
-  "activities": [
-    {
-      "id": "bbfef415-0aff-4933-9bed-7618ce591f9e",
-      "rep": "Trish Smith",
-      "prospect_id": "662aa4a6e5954ebc",
-      "prospect_name": "Nissan of Boerne",
-      "prospect_type": "net_new",
-      "activity_type": "call_outbound",
-      "outcome": "interested",
-      "notes": "Test activity from Phase 2 verification",
-      "dealer_intel": null,
-      "source": "pie_mobile",
-      "timestamp": "2026-04-04T10:01:31.376Z"
-    },
-    {
-      "id": "4121f4de-e02b-44ab-99b5-b5fadccfbfb0",
-      "rep": "Trish Smith",
-      "prospect_id": "9f7567a014680bfa",
-      "prospect_name": "Lost Pines Toyota",
-      "prospect_type": "net_new",
-      "activity_type": "disposition",
-      "outcome": "meeting",
-      "notes": "Phase 2 disposition test",
-      "dealer_intel": null,
-      "source": "pie_mobile",
-      "timestamp": "2026-04-04T10:01:45.468Z"
-    },
-    {
-      "id": "bb3b0d94-ca25-4624-bd9f-52a0448c5a39",
-      "rep": "Trish Smith",
-      "prospect_id": null,
-      "prospect_name": null,
-      "prospect_type": "net_new",
-      "activity_type": "visit",
-      "outcome": "interested",
-      "notes": "Site visit with dealer intel test",
-      "dealer_intel": {
-        "vehicles_sold": 200,
-        "inventory": 500,
-        "hard_pulls": 400,
-        "crm": "VinSolutions",
-        "dms": "CDK/ADP",
-        "credit_provider": "700Credit",
-        "los": "RouteOne"
-      },
-      "source": "pie_mobile",
-      "timestamp": "2026-04-04T10:02:30.882Z"
-    }
-  ],
+  "activities": [],
   "schema_version": "1.0",
-  "last_updated": "2026-04-04T10:02:31.300Z"
+  "last_updated": "2026-04-15T12:00:00.000Z"
 }
