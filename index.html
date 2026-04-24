@@ -2734,6 +2734,49 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
         </div>
       </div>
 
+      <!-- Tasks Tab -->
+      <div class="tab-content" id="tasksTab">
+        <div style="padding:16px;">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;">
+            <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:800;margin:0;color:var(--text-primary);">My Tasks</h2>
+            <div id="mobTasksDate" style="font-size:11px;color:var(--text-tertiary);font-weight:500;">—</div>
+          </div>
+
+          <!-- Summary pills -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 18px 0;">
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;">
+              <div id="mobKpiToday" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;line-height:1;color:var(--text-primary);">0</div>
+              <div style="font-size:9px;color:var(--text-tertiary);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-top:3px;">Today</div>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;">
+              <div id="mobKpiOverdue" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;line-height:1;color:#EF4444;">0</div>
+              <div style="font-size:9px;color:var(--text-tertiary);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-top:3px;">Overdue</div>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;">
+              <div id="mobKpiUpcoming" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;line-height:1;color:var(--text-primary);">0</div>
+              <div style="font-size:9px;color:var(--text-tertiary);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-top:3px;">Upcoming</div>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;">
+              <div id="mobKpiDone" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;line-height:1;color:#10B981;">0</div>
+              <div style="font-size:9px;color:var(--text-tertiary);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-top:3px;">Done (14d)</div>
+            </div>
+          </div>
+
+          <!-- Section chips -->
+          <div style="display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;">
+            <button class="mob-task-chip active" data-section="today" style="flex:0 0 auto;padding:8px 14px;border-radius:100px;border:1px solid var(--accent);background:var(--accent);color:white;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;">Today</button>
+            <button class="mob-task-chip" data-section="upcoming" style="flex:0 0 auto;padding:8px 14px;border-radius:100px;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;">Upcoming</button>
+            <button class="mob-task-chip" data-section="completed" style="flex:0 0 auto;padding:8px 14px;border-radius:100px;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;">Completed</button>
+            <button class="mob-task-chip" data-section="focus" style="flex:0 0 auto;padding:8px 14px;border-radius:100px;border:1px solid #F59E0B;background:#FEF3C7;color:#92400E;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;">★ Focus</button>
+          </div>
+
+          <!-- Tasks list -->
+          <div id="mobTasksList" style="display:flex;flex-direction:column;gap:8px;">
+            <div style="padding:40px 20px;text-align:center;color:var(--text-tertiary);font-size:13px;">Loading tasks...</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Route Tab -->
       <div class="tab-content" id="routeTab">
         <div class="route-content">
@@ -2858,6 +2901,15 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
         Activity
       </button>
 
+      <button class="nav-item" data-tab="tasksTab" aria-selected="false" role="tab" aria-label="Tasks" style="position:relative;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 11l3 3L22 4"></path>
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+        </svg>
+        Tasks
+        <span class="sync-badge" id="tasksNavBadge" style="display:none;">0</span>
+      </button>
+
       <button class="nav-item" data-tab="routeTab" aria-selected="false" role="tab" aria-label="Route">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
@@ -2906,6 +2958,154 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
       <path d="M12 5v14M5 12h14"></path>
     </svg>
   </button>
+
+  <!-- Set Follow-Up Sheet -->
+  <div class="activity-sheet-overlay" id="mobTaskSheetOverlay"></div>
+  <div class="activity-sheet" id="mobTaskSheet" style="max-height:80vh;">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="mobTaskSheetTitle">Set Follow-Up</div>
+    <div id="mobTaskSheetSubtitle" style="font-size:12px;color:var(--text-tertiary);margin:-10px 0 14px 0;">—</div>
+    <input type="hidden" id="mobTaskSheetId" value="">
+    <input type="hidden" id="mobTaskSheetPid" value="">
+    <input type="hidden" id="mobTaskSheetPtype" value="">
+    <input type="hidden" id="mobTaskSheetPname" value="">
+    <input type="hidden" id="mobTaskSheetCity" value="">
+    <input type="hidden" id="mobTaskSheetState" value="">
+    <input type="hidden" id="mobTaskSheetSource" value="manual">
+    <div style="padding:0 4px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:6px;display:block;">Due Date</label>
+      <input type="date" id="mobTaskSheetDate" style="width:100%;padding:12px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;margin-bottom:10px;">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">
+        <button class="mob-task-quick" data-days="0" type="button" style="padding:8px 4px;border:1px solid var(--border);border-radius:8px;background:white;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;">Today</button>
+        <button class="mob-task-quick" data-days="1" type="button" style="padding:8px 4px;border:1px solid var(--border);border-radius:8px;background:white;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;">Tomorrow</button>
+        <button class="mob-task-quick" data-days="3" type="button" style="padding:8px 4px;border:1px solid var(--border);border-radius:8px;background:white;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;">+3d</button>
+        <button class="mob-task-quick" data-days="7" type="button" style="padding:8px 4px;border:1px solid var(--border);border-radius:8px;background:white;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;">+1wk</button>
+      </div>
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:6px;display:block;">Note (Optional)</label>
+      <textarea id="mobTaskSheetNote" rows="3" placeholder="Follow up on..." style="width:100%;padding:12px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;resize:vertical;margin-bottom:14px;"></textarea>
+      <div style="display:flex;gap:8px;">
+        <button id="mobTaskSheetCancelBtn" style="flex:1;padding:13px;border:1px solid var(--border);border-radius:10px;background:white;color:var(--text-secondary);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;">Cancel</button>
+        <button id="mobTaskSheetSubmitBtn" style="flex:2;padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--accent),#4F1FBA);color:white;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;" id="mobTaskSheetSubmitLabel">Set Follow-Up</button>
+      </div>
+      <div id="mobTaskSheetStatus" style="display:none;margin-top:10px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;"></div>
+    </div>
+  </div>
+
+  <!-- Complete Task Sheet (full disposition capture) -->
+  <div class="activity-sheet-overlay" id="mobCompleteSheetOverlay"></div>
+  <div class="activity-sheet" id="mobCompleteSheet" style="max-height:90vh;overflow-y:auto;">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Complete Task</div>
+    <div id="mobCompleteSubtitle" style="font-size:12px;color:var(--text-tertiary);margin:-10px 0 14px 0;">—</div>
+    <input type="hidden" id="mobCompleteTaskId" value="">
+    <input type="hidden" id="mobCompletePid" value="">
+    <input type="hidden" id="mobCompletePtype" value="">
+    <input type="hidden" id="mobCompletePname" value="">
+    <input type="hidden" id="mobCompleteCity" value="">
+    <input type="hidden" id="mobCompleteState" value="">
+    <div style="padding:0 4px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:6px;display:block;">Disposition *</label>
+      <select id="mobCompleteDisposition" style="width:100%;padding:12px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;margin-bottom:12px;">
+        <option value="">Select...</option>
+        <option value="Contacted - Interested">Contacted - Interested</option>
+        <option value="Contacted - Not Interested">Contacted - Not Interested</option>
+        <option value="Contacted - Follow Up">Contacted - Follow Up</option>
+        <option value="Left Voicemail">Left Voicemail</option>
+        <option value="Email Sent">Email Sent</option>
+        <option value="Meeting Scheduled">Meeting Scheduled</option>
+        <option value="Bad Data - Wrong Contact">Bad Data - Wrong Contact</option>
+        <option value="Bad Data - Wrong Number">Bad Data - Wrong Number</option>
+        <option value="Not a Fit">Not a Fit</option>
+        <option value="Already a Customer">Already a Customer</option>
+      </select>
+
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:6px;display:block;">Lead Rating</label>
+      <div id="mobCompleteStars" style="display:flex;gap:6px;padding:4px 0;font-size:28px;color:#D1D5DB;cursor:pointer;user-select:none;margin-bottom:12px;">
+        <span class="mob-ct-star" data-value="1">★</span>
+        <span class="mob-ct-star" data-value="2">★</span>
+        <span class="mob-ct-star" data-value="3">★</span>
+        <span class="mob-ct-star" data-value="4">★</span>
+        <span class="mob-ct-star" data-value="5">★</span>
+      </div>
+      <input type="hidden" id="mobCompleteLeadRating" value="">
+
+      <details style="margin-bottom:12px;">
+        <summary style="font-size:12px;font-weight:700;color:var(--text-secondary);cursor:pointer;padding:4px 0;">+ Volume & Tech Stack (optional)</summary>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0;">
+          <input type="number" id="mobCompleteVehicles" placeholder="Veh/mo" style="padding:10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#F8FAFC;">
+          <input type="number" id="mobCompleteHP" placeholder="HP/mo" style="padding:10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#F8FAFC;">
+          <input type="number" id="mobCompleteSP" placeholder="SP/mo" style="padding:10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#F8FAFC;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <select id="mobCompleteCRM" style="padding:10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#F8FAFC;">
+            <option value="">CRM…</option><option>VinSolutions</option><option>DealerSocket</option><option>Elead</option><option>Dealer.com</option><option>ProMax</option><option>Tekion</option><option>None</option><option>Unknown</option>
+          </select>
+          <select id="mobCompleteDMS" style="padding:10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#F8FAFC;">
+            <option value="">DMS…</option><option>CDK</option><option>Reynolds &amp; Reynolds</option><option>Dealertrack DMS</option><option>Auto/Mate</option><option>Tekion</option><option>None</option><option>Unknown</option>
+          </select>
+          <select id="mobCompleteLOS" style="padding:10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#F8FAFC;">
+            <option value="">LOS…</option><option>DealerTrack</option><option>RouteOne</option><option>AppOne</option><option>CUDL</option><option>None</option><option>Unknown</option>
+          </select>
+          <select id="mobCompleteCredit" style="padding:10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#F8FAFC;">
+            <option value="">Credit…</option><option>Informativ</option><option>700Credit</option><option>NCC</option><option>DealerTrack Credit</option><option>RouteOne Credit</option><option>None</option><option>Unknown</option>
+          </select>
+          <select id="mobCompleteCompliance" style="padding:10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#F8FAFC;grid-column:span 2;">
+            <option value="">Compliance…</option><option>Informativ</option><option>Dealertrack Compliance</option><option>RouteOne Compliance</option><option>ComplyAuto</option><option>Compli</option><option>None</option><option>Unknown</option>
+          </select>
+        </div>
+      </details>
+
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin-bottom:6px;display:block;">Notes / Outcome</label>
+      <textarea id="mobCompleteNotes" rows="2" placeholder="What happened?" style="width:100%;padding:12px 14px;border:1px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#F8FAFC;resize:vertical;margin-bottom:12px;"></textarea>
+
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;margin-bottom:10px;cursor:pointer;">
+        <input type="checkbox" id="mobCompleteSchedNext" style="width:18px;height:18px;cursor:pointer;">
+        Schedule next follow-up
+      </label>
+      <div id="mobCompleteNextWrap" style="display:none;margin-bottom:12px;padding:10px;background:#F8FAFC;border-radius:8px;">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px;">
+          <button class="mob-next-quick" data-days="1" type="button" style="padding:6px;border:1px solid var(--border);border-radius:6px;background:white;font-size:10px;font-weight:700;cursor:pointer;">Tmrw</button>
+          <button class="mob-next-quick" data-days="3" type="button" style="padding:6px;border:1px solid var(--border);border-radius:6px;background:white;font-size:10px;font-weight:700;cursor:pointer;">+3d</button>
+          <button class="mob-next-quick" data-days="7" type="button" style="padding:6px;border:1px solid var(--border);border-radius:6px;background:white;font-size:10px;font-weight:700;cursor:pointer;">+1wk</button>
+          <button class="mob-next-quick" data-days="14" type="button" style="padding:6px;border:1px solid var(--border);border-radius:6px;background:white;font-size:10px;font-weight:700;cursor:pointer;">+2wk</button>
+        </div>
+        <input type="date" id="mobCompleteNextDate" style="width:100%;padding:8px 10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-bottom:6px;">
+        <input type="text" id="mobCompleteNextNote" placeholder="Next note (optional)" style="width:100%;padding:8px 10px;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;">
+      </div>
+
+      <div style="display:flex;gap:8px;">
+        <button id="mobCompleteCancelBtn" style="flex:1;padding:13px;border:1px solid var(--border);border-radius:10px;background:white;color:var(--text-secondary);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;">Cancel</button>
+        <button id="mobCompleteSubmitBtn" style="flex:2;padding:13px;border:none;border-radius:10px;background:#10B981;color:white;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;">✓ Complete &amp; Log</button>
+      </div>
+      <div id="mobCompleteStatus" style="display:none;margin-top:10px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;"></div>
+    </div>
+  </div>
+
+  <!-- Chuck Response Sheet -->
+  <div class="activity-sheet-overlay" id="mobChuckOverlay"></div>
+  <div class="activity-sheet" id="mobChuckSheet" style="max-height:90vh;overflow-y:auto;">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <div class="sheet-title" id="mobChuckTitle" style="margin:0;">Prep with Chuck</div>
+    </div>
+    <div id="mobChuckSubtitle" style="font-size:12px;color:var(--text-tertiary);margin-bottom:12px;">—</div>
+    <input type="hidden" id="mobChuckTaskId" value="">
+    <input type="hidden" id="mobChuckMode" value="">
+    <input type="hidden" id="mobChuckEmail" value="">
+    <div id="mobChuckBody" style="background:#F8FAFC;border-radius:10px;padding:14px;min-height:120px;max-height:55vh;overflow-y:auto;font-size:14px;line-height:1.55;color:var(--text-primary);white-space:pre-wrap;margin-bottom:12px;">
+      <div style="text-align:center;color:var(--text-tertiary);padding:30px 20px;">
+        <div style="display:inline-block;width:24px;height:24px;border:3px solid #E2E8F0;border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:10px;"></div>
+        <div style="font-size:12px;font-weight:600;">Chuck is preparing...</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <button id="mobChuckCopyBtn" style="flex:1;padding:12px;border:1px solid var(--border);border-radius:10px;background:white;color:var(--text-secondary);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;" disabled>Copy</button>
+      <button id="mobChuckMailtoBtn" style="flex:1;padding:12px;border:1px solid var(--border);border-radius:10px;background:white;color:var(--text-secondary);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;display:none;">Email</button>
+      <button id="mobChuckSaveBtn" style="flex:1;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--accent),#4F1FBA);color:white;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;display:none;">Save</button>
+      <button id="mobChuckCloseBtn" style="flex:1;padding:12px;border:1px solid var(--border);border-radius:10px;background:white;color:var(--text-secondary);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;">Close</button>
+    </div>
+  </div>
 
   <!-- Add Store Sheet -->
   <div class="activity-sheet-overlay" id="addStoreSheetOverlay"></div>
@@ -3726,6 +3926,21 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
           </svg>
           Add to Route
+        </button>
+
+        <div id="mobileActiveTaskBanner" style="display:none;margin-top:8px;padding:10px 12px;background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:1px solid #10B981;border-radius:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:11px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:0.05em;">Active Task</div>
+              <div id="mobileActiveTaskMeta" style="font-size:12px;color:#065F46;margin-top:2px;"></div>
+            </div>
+            <button id="mobileCompleteActiveTaskBtn" style="padding:8px 14px;border:none;border-radius:8px;background:#10B981;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">✓ Complete</button>
+          </div>
+        </div>
+
+        <button id="mobileSetFollowUpBtn" onclick="mobileOpenSetFollowUp()" style="width:100%;margin-top:8px;background:white;color:var(--accent);border:1.5px solid var(--accent);padding:12px 16px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Set Follow-Up
         </button>
 
         <div class="detail-section" style="margin-top:12px;">
@@ -6530,6 +6745,740 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
         setInterval(() => reg.update(), 3600000); // hourly
       }).catch(() => {});
     }
+
+    // ===============================================================
+    // PIE MOBILE — MY TASKS SYSTEM (April 24, 2026)
+    // Follow-up tasks + Chuck AI + Daily Focus + Auto-task from dispositions
+    // ===============================================================
+
+    const TASKS_ENDPOINT = API_PROXY + '?path=/api/cs/tasks';
+    const CHUCK_CHAT_ENDPOINT = API_PROXY + '?path=/api/ai/chat';
+    var _mobTaskCache = { tasks: [], summary: {}, last_fetched: null };
+    var _mobTaskSection = 'today';
+    var _mobActiveTaskForProspect = null;
+
+    // --- Utilities ---
+    function _mtTodayStr() {
+        const d = new Date();
+        return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    }
+    function _mtAddDays(iso, days) {
+        const d = new Date(iso + 'T00:00:00');
+        d.setDate(d.getDate() + days);
+        return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    }
+    function _mtFormatDate(iso) {
+        if (!iso) return '—';
+        const d = new Date(iso + 'T00:00:00');
+        return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+    function _mtEsc(s) {
+        return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function _mtCurrentRep() {
+        try { if (typeof currentRep !== 'undefined' && currentRep) return currentRep; } catch(e){}
+        try { if (typeof selectedRep !== 'undefined' && selectedRep) return selectedRep; } catch(e){}
+        try { if (window._identityUser && window._identityUser.rep_name) return window._identityUser.rep_name; } catch(e){}
+        try { if (window._identityUser && window._identityUser.email) return window._identityUser.email; } catch(e){}
+        return '';
+    }
+
+    function _mtToast(msg, type) {
+        var el = document.getElementById('_mtToast');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = '_mtToast';
+            el.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:20000;padding:12px 20px;border-radius:10px;font-weight:700;font-size:13px;color:white;box-shadow:0 8px 24px rgba(0,0,0,0.2);transition:opacity 0.3s;opacity:0;max-width:90%;text-align:center;';
+            document.body.appendChild(el);
+        }
+        el.style.background = type === 'error' ? '#EF4444' : (type === 'success' ? '#10B981' : '#001B3D');
+        el.textContent = msg;
+        el.style.opacity = '1';
+        clearTimeout(el._fade);
+        el._fade = setTimeout(function() { el.style.opacity = '0'; }, 2800);
+    }
+
+    // --- API ---
+    async function fetchMobTasks() {
+        const rep = _mtCurrentRep();
+        if (!rep) {
+            _mobTaskCache = { tasks: [], summary: { today:0, upcoming:0, overdue:0, total_open:0, completed_14d:0 }, last_fetched: Date.now() };
+            return _mobTaskCache;
+        }
+        try {
+            const url = TASKS_ENDPOINT + '&rep=' + encodeURIComponent(rep) + '&date_range=all';
+            const resp = await fetch(url, { headers: API_HEADERS() });
+            const data = await resp.json();
+            if (data.success) {
+                _mobTaskCache = { tasks: data.tasks || [], summary: data.summary || {}, last_fetched: Date.now() };
+            }
+        } catch(e) { console.error('fetchMobTasks:', e); }
+        return _mobTaskCache;
+    }
+
+    async function mobCreateTask(payload) {
+        const rep = _mtCurrentRep();
+        if (!rep) return { success: false, error: 'No rep selected' };
+        try {
+            const resp = await fetch(TASKS_ENDPOINT + '&rep=' + encodeURIComponent(rep) + '&action=create', {
+                method: 'POST', headers: API_HEADERS(), body: JSON.stringify(payload)
+            });
+            return await resp.json();
+        } catch(e) {
+            if (typeof queueOfflineAction === 'function') queueOfflineAction({ endpoint: TASKS_ENDPOINT + '&rep=' + encodeURIComponent(rep) + '&action=create', payload: payload });
+            return { success: false, error: e.message, offline: true };
+        }
+    }
+
+    async function mobCompleteTaskApi(taskId, completionNote) {
+        const rep = _mtCurrentRep();
+        try {
+            const resp = await fetch(TASKS_ENDPOINT + '&rep=' + encodeURIComponent(rep) + '&action=complete', {
+                method: 'POST', headers: API_HEADERS(),
+                body: JSON.stringify({ task_id: taskId, completion_note: completionNote || '' })
+            });
+            return await resp.json();
+        } catch(e) {
+            if (typeof queueOfflineAction === 'function') queueOfflineAction({ endpoint: TASKS_ENDPOINT + '&rep=' + encodeURIComponent(rep) + '&action=complete', payload: { task_id: taskId, completion_note: completionNote || '' } });
+            return { success: false, error: e.message, offline: true };
+        }
+    }
+
+    async function mobRescheduleTask(taskId, newDate, note) {
+        const rep = _mtCurrentRep();
+        try {
+            const resp = await fetch(TASKS_ENDPOINT + '&rep=' + encodeURIComponent(rep) + '&action=reschedule', {
+                method: 'POST', headers: API_HEADERS(),
+                body: JSON.stringify({ task_id: taskId, new_due_date: newDate, note: note || '' })
+            });
+            return await resp.json();
+        } catch(e) { return { success: false, error: e.message }; }
+    }
+
+    async function mobSaveChuckOutput(taskId, chuckOutput, mode) {
+        const rep = _mtCurrentRep();
+        try {
+            const resp = await fetch(TASKS_ENDPOINT + '&rep=' + encodeURIComponent(rep) + '&action=save_chuck_output', {
+                method: 'POST', headers: API_HEADERS(),
+                body: JSON.stringify({ task_id: taskId, chuck_output: chuckOutput, chuck_mode: mode })
+            });
+            return await resp.json();
+        } catch(e) { return { success: false, error: e.message }; }
+    }
+
+    // --- Render ---
+    async function renderMobileTasks() {
+        const dateEl = document.getElementById('mobTasksDate');
+        if (dateEl) dateEl.textContent = new Date(_mtTodayStr() + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        await fetchMobTasks();
+        const sum = _mobTaskCache.summary || {};
+        document.getElementById('mobKpiToday').textContent = sum.today || 0;
+        document.getElementById('mobKpiOverdue').textContent = sum.overdue || 0;
+        document.getElementById('mobKpiUpcoming').textContent = sum.upcoming || 0;
+        document.getElementById('mobKpiDone').textContent = sum.completed_14d || 0;
+        _renderMobileSection();
+        updateMobileTasksBadge();
+    }
+
+    function updateMobileTasksBadge() {
+        const sum = _mobTaskCache.summary || {};
+        const count = (sum.today || 0) + (sum.overdue || 0);
+        const badge = document.getElementById('tasksNavBadge');
+        if (!badge) return;
+        if (count > 0) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = 'flex'; }
+        else { badge.style.display = 'none'; }
+    }
+
+    function _renderMobileSection() {
+        const container = document.getElementById('mobTasksList');
+        if (!container) return;
+        const section = _mobTaskSection;
+        const today = _mtTodayStr();
+        const tasks = _mobTaskCache.tasks || [];
+        var list = [];
+        if (section === 'today') list = tasks.filter(function(t) { return t.status === 'open' && t.due_date <= today; });
+        else if (section === 'upcoming') list = tasks.filter(function(t) { return t.status === 'open' && t.due_date > today; });
+        else if (section === 'completed') list = tasks.filter(function(t) { return t.status === 'completed'; });
+        else if (section === 'focus') { _renderMobileDailyFocus(container); return; }
+
+        if (list.length === 0) {
+            const emptyMsg = section === 'today' ? "No tasks due today. You're caught up." :
+                             section === 'upcoming' ? 'No upcoming tasks in the next 7 days.' :
+                             'No completed tasks in the last 14 days.';
+            container.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--text-tertiary);font-size:13px;background:var(--bg);border-radius:10px;">' + _mtEsc(emptyMsg) + '</div>';
+            return;
+        }
+        var html = '';
+        for (var i = 0; i < list.length; i++) html += _renderMobileTaskRow(list[i], section === 'completed');
+        container.innerHTML = html;
+        _wireMobileTaskHandlers(container);
+    }
+
+    function _renderMobileTaskRow(task, isCompleted) {
+        const today = _mtTodayStr();
+        const isOverdue = !isCompleted && task.due_date < today;
+        const isToday = !isCompleted && task.due_date === today;
+
+        var dateBadge;
+        if (isOverdue) dateBadge = '<span style="background:#EF4444;color:white;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">OVERDUE</span>';
+        else if (isToday) dateBadge = '<span style="background:#F59E0B;color:white;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">TODAY</span>';
+        else if (!isCompleted) dateBadge = '<span style="background:var(--bg);color:var(--text-secondary);padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">' + _mtFormatDate(task.due_date) + '</span>';
+        else dateBadge = '<span style="background:#10B981;color:white;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">DONE</span>';
+
+        const typeBadge = task.prospect_type === 'cs' ? 'CS' : (task.prospect_type === 'aff' ? 'AFF' : 'NN');
+        const border = isOverdue ? '#EF4444' : (isToday ? '#F59E0B' : 'var(--border)');
+        const chuckPrepped = task.chuck_output ? '<span style="background:#EDE9FE;color:#6D28D9;padding:2px 6px;border-radius:6px;font-size:9px;font-weight:700;">★ Chuck</span>' : '';
+
+        var actions = '';
+        if (isCompleted) {
+            actions = '<button data-mt-action="delete" data-mt-id="' + _mtEsc(task.id) + '" style="padding:7px 12px;border:1px solid var(--border);border-radius:8px;background:white;color:var(--text-tertiary);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">Remove</button>';
+        } else {
+            actions = '<button data-mt-action="chuck-prep" data-mt-id="' + _mtEsc(task.id) + '" style="padding:7px 12px;border:1px solid #C4B5FD;border-radius:8px;background:#F5F3FF;color:#6D28D9;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">Prep</button>' +
+                      '<button data-mt-action="chuck-email" data-mt-id="' + _mtEsc(task.id) + '" style="padding:7px 12px;border:1px solid #C4B5FD;border-radius:8px;background:#F5F3FF;color:#6D28D9;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">Email</button>' +
+                      '<button data-mt-action="complete" data-mt-id="' + _mtEsc(task.id) + '" style="padding:7px 14px;border:none;border-radius:8px;background:#10B981;color:white;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">✓</button>';
+        }
+
+        return '<div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid ' + border + ';border-radius:10px;padding:12px;">' +
+               '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">' +
+                 '<span style="font-weight:700;color:var(--text-primary);font-size:14px;flex:1;min-width:0;">' + _mtEsc(task.prospect_name || 'Unknown') + '</span>' +
+                 '<span style="background:var(--bg);color:var(--text-tertiary);padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;">' + typeBadge + '</span>' +
+                 dateBadge + chuckPrepped +
+               '</div>' +
+               (task.city || task.state ? '<div style="font-size:11px;color:var(--text-tertiary);margin-bottom:4px;">' + _mtEsc(task.city || '') + (task.city && task.state ? ', ' : '') + _mtEsc(task.state || '') + '</div>' : '') +
+               (task.note ? '<div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;line-height:1.4;">' + _mtEsc(task.note) + '</div>' : '') +
+               (task.completion_note ? '<div style="font-size:11px;color:#10B981;margin-bottom:8px;font-style:italic;">✓ ' + _mtEsc(task.completion_note) + '</div>' : '') +
+               '<div style="display:flex;gap:6px;flex-wrap:wrap;">' + actions + '</div>' +
+               '</div>';
+    }
+
+    function _wireMobileTaskHandlers(container) {
+        container.querySelectorAll('[data-mt-action]').forEach(function(btn) {
+            btn.addEventListener('click', function(ev) {
+                ev.stopPropagation();
+                const action = btn.getAttribute('data-mt-action');
+                const taskId = btn.getAttribute('data-mt-id');
+                const task = (_mobTaskCache.tasks || []).find(function(t) { return t.id === taskId; });
+                if (!task) return;
+                if (action === 'complete') mobOpenCompleteSheet(task);
+                else if (action === 'chuck-prep') mobRunChuck(task, 'call_prep');
+                else if (action === 'chuck-email') mobRunChuck(task, 'follow_up');
+                else if (action === 'delete') {
+                    if (confirm('Remove this task?')) {
+                        const rep = _mtCurrentRep();
+                        fetch(TASKS_ENDPOINT + '&rep=' + encodeURIComponent(rep) + '&task_id=' + encodeURIComponent(taskId), { method: 'DELETE', headers: API_HEADERS() })
+                            .then(function() { _mtToast('Task removed', 'success'); renderMobileTasks(); });
+                    }
+                }
+            });
+        });
+    }
+
+    // --- Daily Focus (top 10 ICP with no activity) ---
+    function _renderMobileDailyFocus(container) {
+        const rep = _mtCurrentRep();
+        if (!rep) {
+            container.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--text-tertiary);font-size:13px;">Select a rep to see Daily Focus.</div>';
+            return;
+        }
+        var repProspects = [];
+        try {
+            const all = (typeof PIE_NN !== 'undefined' ? PIE_NN : []);
+            repProspects = all.filter(function(p) {
+                if (p._flaggedCustomer) return false;
+                if (p.rep && p.rep !== rep) return false;
+                var hasHist = p._history && p._history.length > 0;
+                var hasDisp = p.disposition && String(p.disposition).length > 0;
+                return !hasHist && !hasDisp;
+            });
+        } catch(e) { repProspects = []; }
+        repProspects.sort(function(a, b) { return (b.icp || b.score || 0) - (a.icp || a.score || 0); });
+        const taskPids = new Set((_mobTaskCache.tasks || []).filter(function(t) { return t.status === 'open'; }).map(function(t) { return String(t.prospect_id); }));
+        repProspects = repProspects.filter(function(p) { return !taskPids.has(String(p.id || p.prospect_id)); });
+        const top10 = repProspects.slice(0, 10);
+        if (top10.length === 0) {
+            container.innerHTML = '<div style="padding:30px 20px;text-align:center;color:var(--text-secondary);font-size:13px;">All high-ICP prospects are in your tasks or have activity.</div>';
+            return;
+        }
+        var html = '<div style="padding:10px 12px;margin-bottom:10px;background:#FEF3C7;border-radius:10px;font-size:11px;color:#92400E;">★ Top 10 ICP prospects with no activity yet. Tap + to add.</div>';
+        for (var i = 0; i < top10.length; i++) {
+            var p = top10[i];
+            var pid = String(p.id || p.prospect_id || '');
+            var nm = _mtEsc(p.co || p.company_name || 'Unknown');
+            var city = _mtEsc(p.city || p.cty || '');
+            var st = _mtEsc(p.st || p.state || '');
+            var icp = p.icp || p.score || 0;
+            html += '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;">' +
+                    '<span style="background:#F59E0B;color:white;font-weight:700;font-size:10px;padding:4px 8px;border-radius:10px;min-width:38px;text-align:center;">' + icp + '</span>' +
+                    '<div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:13px;color:var(--text-primary);">' + nm + '</div>' +
+                    (city || st ? '<div style="font-size:11px;color:var(--text-tertiary);">' + city + (city && st ? ', ' : '') + st + '</div>' : '') + '</div>' +
+                    '<button data-mob-focus-add="' + _mtEsc(pid) + '" style="padding:8px 14px;border:none;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#D97706);color:white;font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;">+ Add</button>' +
+                    '</div>';
+        }
+        container.innerHTML = html;
+        container.querySelectorAll('[data-mob-focus-add]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const pid = btn.getAttribute('data-mob-focus-add');
+                const p = repProspects.find(function(x) { return String(x.id || x.prospect_id) === pid; });
+                if (p) mobAddFocusToTasks(p);
+            });
+        });
+    }
+
+    async function mobAddFocusToTasks(p) {
+        const r = await mobCreateTask({
+            prospect_id: String(p.id || p.prospect_id),
+            prospect_type: 'nn',
+            prospect_name: p.co || p.company_name || '',
+            city: p.city || p.cty || '',
+            state: p.st || p.state || '',
+            due_date: _mtTodayStr(),
+            note: 'Daily Focus — high-ICP, no prior activity. Prep with Chuck before first outreach.',
+            source: 'daily_focus'
+        });
+        if (r.success || r.offline) { _mtToast('Added to today', 'success'); renderMobileTasks(); }
+        else _mtToast(r.error || 'Could not add', 'error');
+    }
+
+    // --- Section switcher ---
+    function mobSelectTaskSection(section) {
+        _mobTaskSection = section;
+        document.querySelectorAll('.mob-task-chip').forEach(function(chip) {
+            const isActive = chip.getAttribute('data-section') === section;
+            if (isActive) {
+                if (section === 'focus') {
+                    chip.style.cssText = 'flex:0 0 auto;padding:8px 14px;border-radius:100px;border:1px solid #F59E0B;background:#F59E0B;color:white;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;';
+                } else {
+                    chip.style.cssText = 'flex:0 0 auto;padding:8px 14px;border-radius:100px;border:1px solid var(--accent);background:var(--accent);color:white;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;';
+                }
+            } else {
+                if (chip.getAttribute('data-section') === 'focus') {
+                    chip.style.cssText = 'flex:0 0 auto;padding:8px 14px;border-radius:100px;border:1px solid #F59E0B;background:#FEF3C7;color:#92400E;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;';
+                } else {
+                    chip.style.cssText = 'flex:0 0 auto;padding:8px 14px;border-radius:100px;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;';
+                }
+            }
+        });
+        _renderMobileSection();
+    }
+
+    // --- Set Follow-Up sheet ---
+    function mobileOpenSetFollowUp() {
+        // Context comes from currentProspect (set by openDetail)
+        if (typeof currentProspect === 'undefined' || !currentProspect) {
+            _mtToast('No prospect selected', 'error');
+            return;
+        }
+        const p = currentProspect;
+        const type = (typeof currentSubTab !== 'undefined' && currentSubTab === 'cross-sell') ? 'cs' :
+                     (typeof currentSubTab !== 'undefined' && currentSubTab === 'affiliate') ? 'aff' : 'nn';
+        document.getElementById('mobTaskSheetId').value = '';
+        document.getElementById('mobTaskSheetPid').value = String(p.id || p.mcid || p.prospect_id || '');
+        document.getElementById('mobTaskSheetPtype').value = type;
+        document.getElementById('mobTaskSheetPname').value = p.co || p.n || p.company_name || '';
+        document.getElementById('mobTaskSheetCity').value = p.city || p.cty || '';
+        document.getElementById('mobTaskSheetState').value = p.st || p.state || '';
+        document.getElementById('mobTaskSheetSource').value = 'manual';
+        document.getElementById('mobTaskSheetTitle').textContent = 'Set Follow-Up';
+        document.getElementById('mobTaskSheetSubtitle').textContent = p.co || p.n || p.company_name || '';
+        document.getElementById('mobTaskSheetDate').value = _mtAddDays(_mtTodayStr(), 3);
+        document.getElementById('mobTaskSheetNote').value = '';
+        document.getElementById('mobTaskSheetStatus').style.display = 'none';
+        document.getElementById('mobTaskSheetOverlay').classList.add('active');
+        document.getElementById('mobTaskSheet').classList.add('active');
+    }
+
+    function mobileCloseSetFollowUp() {
+        document.getElementById('mobTaskSheetOverlay').classList.remove('active');
+        document.getElementById('mobTaskSheet').classList.remove('active');
+    }
+
+    async function mobileSubmitSetFollowUp() {
+        const pid = document.getElementById('mobTaskSheetPid').value;
+        const due = document.getElementById('mobTaskSheetDate').value;
+        const note = document.getElementById('mobTaskSheetNote').value;
+        const status = document.getElementById('mobTaskSheetStatus');
+        if (!due) {
+            status.textContent = 'Pick a due date';
+            status.style.cssText = 'display:block;margin-top:10px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;background:#FEE2E2;color:#991B1B;';
+            return;
+        }
+        const r = await mobCreateTask({
+            prospect_id: pid,
+            prospect_type: document.getElementById('mobTaskSheetPtype').value,
+            prospect_name: document.getElementById('mobTaskSheetPname').value,
+            city: document.getElementById('mobTaskSheetCity').value,
+            state: document.getElementById('mobTaskSheetState').value,
+            due_date: due,
+            note: note,
+            source: document.getElementById('mobTaskSheetSource').value || 'manual'
+        });
+        if (r.success || r.offline) {
+            mobileCloseSetFollowUp();
+            _mtToast(r.offline ? 'Queued (offline)' : 'Follow-up set', 'success');
+            if (_mobTaskCache.tasks) renderMobileTasks();
+            _mobCheckActiveTaskForProspect();
+        } else {
+            status.textContent = r.error || 'Failed';
+            status.style.cssText = 'display:block;margin-top:10px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;background:#FEE2E2;color:#991B1B;';
+        }
+    }
+
+    // --- Complete Task sheet ---
+    function mobOpenCompleteSheet(task) {
+        document.getElementById('mobCompleteTaskId').value = task.id;
+        document.getElementById('mobCompletePid').value = task.prospect_id || '';
+        document.getElementById('mobCompletePtype').value = task.prospect_type || 'nn';
+        document.getElementById('mobCompletePname').value = task.prospect_name || '';
+        document.getElementById('mobCompleteCity').value = task.city || '';
+        document.getElementById('mobCompleteState').value = task.state || '';
+        document.getElementById('mobCompleteSubtitle').textContent = (task.prospect_name || '') + ' · ' + _mtFormatDate(task.due_date);
+        document.getElementById('mobCompleteDisposition').value = '';
+        document.getElementById('mobCompleteNotes').value = '';
+        ['mobCompleteVehicles','mobCompleteHP','mobCompleteSP','mobCompleteCRM','mobCompleteDMS','mobCompleteLOS','mobCompleteCredit','mobCompleteCompliance']
+            .forEach(function(id) { const el = document.getElementById(id); if (el) el.value = ''; });
+        document.getElementById('mobCompleteLeadRating').value = '';
+        document.querySelectorAll('#mobCompleteStars .mob-ct-star').forEach(function(s) { s.style.color = '#D1D5DB'; });
+        document.getElementById('mobCompleteSchedNext').checked = false;
+        document.getElementById('mobCompleteNextWrap').style.display = 'none';
+        document.getElementById('mobCompleteNextDate').value = _mtAddDays(_mtTodayStr(), 7);
+        document.getElementById('mobCompleteNextNote').value = '';
+        document.getElementById('mobCompleteStatus').style.display = 'none';
+        document.getElementById('mobCompleteSheetOverlay').classList.add('active');
+        document.getElementById('mobCompleteSheet').classList.add('active');
+    }
+
+    function mobCloseCompleteSheet() {
+        document.getElementById('mobCompleteSheetOverlay').classList.remove('active');
+        document.getElementById('mobCompleteSheet').classList.remove('active');
+    }
+
+    async function mobSubmitComplete() {
+        const taskId = document.getElementById('mobCompleteTaskId').value;
+        const disposition = document.getElementById('mobCompleteDisposition').value;
+        const notes = document.getElementById('mobCompleteNotes').value;
+        const status = document.getElementById('mobCompleteStatus');
+        const pname = document.getElementById('mobCompletePname').value;
+        const ptype = document.getElementById('mobCompletePtype').value;
+        const pid = document.getElementById('mobCompletePid').value;
+        if (!disposition) {
+            status.textContent = 'Please select a disposition';
+            status.style.cssText = 'display:block;margin-top:10px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;background:#FEE2E2;color:#991B1B;';
+            return;
+        }
+        const leadRating = document.getElementById('mobCompleteLeadRating').value || '';
+        const vehicles = document.getElementById('mobCompleteVehicles').value || '';
+        const hp = document.getElementById('mobCompleteHP').value || '';
+        const sp = document.getElementById('mobCompleteSP').value || '';
+        const crm = document.getElementById('mobCompleteCRM').value || '';
+        const dms = document.getElementById('mobCompleteDMS').value || '';
+        const los = document.getElementById('mobCompleteLOS').value || '';
+        const credit = document.getElementById('mobCompleteCredit').value || '';
+        const compliance = document.getElementById('mobCompleteCompliance').value || '';
+
+        // 1. Complete task
+        const r = await mobCompleteTaskApi(taskId, disposition + (notes ? ' — ' + notes : ''));
+        if (!r.success && !r.offline) {
+            status.textContent = r.error || 'Failed';
+            status.style.cssText = 'display:block;margin-top:10px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;background:#FEE2E2;color:#991B1B;';
+            return;
+        }
+
+        // 2. Log disposition (fire-and-forget to shared store via cs/dispositions + field-activity)
+        try {
+            const dispPayload = {
+                customer_name: pname,
+                customer_id: ptype === 'cs' ? pid : null,
+                disposition: disposition,
+                notes: notes || '',
+                source: 'PIE Mobile',
+                rep: _mtCurrentRep(),
+                lead_rating: leadRating || '',
+                tech_stack: { crm: crm, dms: dms, los: los, credit_provider: credit, compliance_provider: compliance },
+                volumes: { vehicles_sold: vehicles ? parseInt(vehicles) : null, hard_pulls: hp ? parseInt(hp) : null, soft_pulls: sp ? parseInt(sp) : null }
+            };
+            fetch(API_PROXY + '?path=/api/cs/dispositions', {
+                method: 'POST', headers: API_HEADERS(), body: JSON.stringify(dispPayload)
+            }).catch(function() {});
+            // Field activity log (mobile)
+            if (typeof ACTIVITY_ENDPOINT !== 'undefined') {
+                fetch(ACTIVITY_ENDPOINT, {
+                    method: 'POST', headers: API_HEADERS(),
+                    body: JSON.stringify({
+                        rep: _mtCurrentRep(),
+                        activity_type: 'disposition',
+                        outcome: disposition,
+                        prospect: pname,
+                        notes: notes || '',
+                        timestamp: new Date().toISOString()
+                    })
+                }).catch(function() {});
+            }
+        } catch(e) { console.warn('disposition log on mobile complete:', e); }
+
+        // 3. Optionally schedule next
+        if (document.getElementById('mobCompleteSchedNext').checked) {
+            const nextDate = document.getElementById('mobCompleteNextDate').value;
+            if (nextDate) {
+                await mobCreateTask({
+                    prospect_id: pid,
+                    prospect_type: ptype,
+                    prospect_name: pname,
+                    city: document.getElementById('mobCompleteCity').value,
+                    state: document.getElementById('mobCompleteState').value,
+                    due_date: nextDate,
+                    note: document.getElementById('mobCompleteNextNote').value || ('Follow-up after: ' + disposition),
+                    source: 'manual'
+                });
+            }
+        }
+
+        mobCloseCompleteSheet();
+        _mtToast(r.offline ? 'Queued (offline)' : 'Task completed · disposition logged', 'success');
+        renderMobileTasks();
+        _mobCheckActiveTaskForProspect();
+    }
+
+    // --- Chuck ---
+    async function mobRunChuck(task, mode) {
+        const overlay = document.getElementById('mobChuckOverlay');
+        const sheet = document.getElementById('mobChuckSheet');
+        const titleEl = document.getElementById('mobChuckTitle');
+        const subEl = document.getElementById('mobChuckSubtitle');
+        const bodyEl = document.getElementById('mobChuckBody');
+        const copyBtn = document.getElementById('mobChuckCopyBtn');
+        const mailtoBtn = document.getElementById('mobChuckMailtoBtn');
+        const saveBtn = document.getElementById('mobChuckSaveBtn');
+        const labels = { call_prep: 'Pre-Call Plan', follow_up: 'Follow-Up Email', discovery_script: 'Discovery Script' };
+        titleEl.textContent = labels[mode] || mode;
+        subEl.textContent = task.prospect_name || '';
+        bodyEl.innerHTML = '<div style="text-align:center;color:var(--text-tertiary);padding:30px 20px;"><div style="display:inline-block;width:24px;height:24px;border:3px solid #E2E8F0;border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:10px;"></div><div style="font-size:12px;font-weight:600;">Chuck is preparing...</div></div>';
+        copyBtn.disabled = true;
+        mailtoBtn.style.display = 'none';
+        saveBtn.style.display = 'none';
+        document.getElementById('mobChuckTaskId').value = task.id;
+        document.getElementById('mobChuckMode').value = mode;
+        overlay.classList.add('active');
+        sheet.classList.add('active');
+
+        var prospect = null;
+        try {
+            if (task.prospect_type === 'nn' && typeof PIE_NN !== 'undefined') prospect = PIE_NN.find(function(p) { return String(p.id || p.prospect_id) === String(task.prospect_id); });
+            else if (task.prospect_type === 'cs' && typeof PIE_CS !== 'undefined') prospect = PIE_CS.find(function(p) { return String(p.id || p.mcid) === String(task.prospect_id); });
+        } catch(e) {}
+
+        const p = prospect || {};
+        const companyName = task.prospect_name || p.co || p.n || 'this dealer';
+        const oem = p.oem || '';
+        const city = task.city || p.city || p.cty || '';
+        const state = task.state || p.st || p.state || '';
+        const contactName = p.cn || ((p.fn||'') + ' ' + (p.ln||'')).trim() || '';
+        const contactEmail = p.em || p.email || '';
+        const icp = p.icp || p.score || '';
+        const tier = p.tier || p.recommended_tier || '';
+        const tsNote = task.note || '';
+
+        var context = 'Dealer: ' + companyName;
+        if (oem) context += ' (' + oem + ')';
+        if (city || state) context += ' · ' + city + (city && state ? ', ' : '') + state;
+        if (contactName) context += '\nContact: ' + contactName;
+        if (contactEmail) context += ' · ' + contactEmail;
+        if (icp) context += '\nICP Score: ' + icp;
+        if (tier) context += ' · Tier: ' + tier;
+        if (tsNote) context += '\nTask Note: ' + tsNote;
+
+        var message;
+        if (mode === 'call_prep') {
+            message = 'Prepare a pre-call plan for my upcoming call. Context:\n\n' + context +
+                      '\n\nGive me: opening hook, 3-4 talking points, discovery questions, likely objections + responses, products to position. Tight — rep is about to dial.';
+        } else if (mode === 'follow_up') {
+            message = 'Draft a follow-up email based on this context:\n\n' + context +
+                      '\n\nInclude subject line and 3-4 paragraph body. Professional but conversational. No placeholder brackets — write real copy.';
+        } else {
+            message = 'Create a 5-bullet discovery call script for this prospect:\n\n' + context +
+                      '\n\nStructure: intro, pain hook, value statement, qualifying question, soft close. Tight bullets.';
+        }
+
+        const payload = {
+            mode: mode,
+            message: message,
+            rep: _mtCurrentRep(),
+            context: { prospect_name: companyName, prospect_type: task.prospect_type, city: city, state: state, oem: oem, icp_score: icp, recommended_tier: tier, task_note: tsNote }
+        };
+
+        try {
+            const resp = await fetch(CHUCK_CHAT_ENDPOINT, {
+                method: 'POST', headers: API_HEADERS(), body: JSON.stringify(payload)
+            });
+            const data = await resp.json();
+            if (data.error) throw new Error(data.error);
+            const text = data.text || data.response || data.message || data.content || '';
+            if (!text) throw new Error('Empty response from Chuck');
+            bodyEl.textContent = text;
+            copyBtn.disabled = false;
+            saveBtn.style.display = 'inline-block';
+            if (mode === 'follow_up') {
+                mailtoBtn.style.display = 'inline-block';
+                const subject = encodeURIComponent('Follow-up: ' + (task.prospect_name || ''));
+                mailtoBtn.onclick = function() {
+                    const body = encodeURIComponent(bodyEl.textContent);
+                    window.open('mailto:' + contactEmail + '?subject=' + subject + '&body=' + body, '_blank');
+                };
+            }
+        } catch(e) {
+            bodyEl.innerHTML = '<div style="color:#EF4444;padding:20px;text-align:center;font-size:13px;">Chuck is unavailable right now. Please try again.</div>';
+        }
+    }
+
+    function mobCloseChuck() {
+        document.getElementById('mobChuckOverlay').classList.remove('active');
+        document.getElementById('mobChuckSheet').classList.remove('active');
+    }
+
+    async function mobChuckCopy() {
+        try { await navigator.clipboard.writeText(document.getElementById('mobChuckBody').textContent); _mtToast('Copied', 'success'); }
+        catch(e) { _mtToast('Copy failed', 'error'); }
+    }
+
+    async function mobChuckSave() {
+        const taskId = document.getElementById('mobChuckTaskId').value;
+        const mode = document.getElementById('mobChuckMode').value;
+        const text = document.getElementById('mobChuckBody').textContent;
+        if (!taskId || !text) return;
+        const r = await mobSaveChuckOutput(taskId, text, mode);
+        if (r.success) { _mtToast('Saved to task', 'success'); mobCloseChuck(); renderMobileTasks(); }
+        else _mtToast('Save failed', 'error');
+    }
+
+    // --- Detail panel active task check ---
+    async function _mobCheckActiveTaskForProspect() {
+        const banner = document.getElementById('mobileActiveTaskBanner');
+        const meta = document.getElementById('mobileActiveTaskMeta');
+        const btn = document.getElementById('mobileCompleteActiveTaskBtn');
+        if (!banner || typeof currentProspect === 'undefined' || !currentProspect) {
+            if (banner) banner.style.display = 'none';
+            _mobActiveTaskForProspect = null;
+            return;
+        }
+        const pid = String(currentProspect.id || currentProspect.mcid || currentProspect.prospect_id || '');
+        // Refresh cache
+        await fetchMobTasks();
+        const active = (_mobTaskCache.tasks || []).find(function(t) {
+            return t.status === 'open' && String(t.prospect_id) === pid;
+        });
+        if (active) {
+            banner.style.display = 'block';
+            meta.textContent = 'Due ' + _mtFormatDate(active.due_date) + (active.note ? ' · ' + active.note.slice(0, 40) + (active.note.length > 40 ? '...' : '') : '');
+            _mobActiveTaskForProspect = active;
+            btn.onclick = function() { mobOpenCompleteSheet(active); };
+        } else {
+            banner.style.display = 'none';
+            _mobActiveTaskForProspect = null;
+        }
+    }
+
+    // --- Auto-task from mobile disposition ---
+    const _MOB_DISPOSITION_AUTO_TASK = {
+        'Contacted - Interested': 3, 'Contacted - Follow Up': 3,
+        'Left Voicemail': 2, 'Email Sent': 3, 'Meeting Scheduled': 1
+    };
+    window.mobMaybeCreateAutoTask = function(disposition, notes, prospectCtx) {
+        try {
+            if (!disposition || !prospectCtx) return;
+            const days = _MOB_DISPOSITION_AUTO_TASK[disposition];
+            if (days === undefined) return;
+            const due = _mtAddDays(_mtTodayStr(), days);
+            mobCreateTask({
+                prospect_id: String(prospectCtx.prospect_id || ''),
+                prospect_type: prospectCtx.prospect_type || 'nn',
+                prospect_name: prospectCtx.prospect_name || '',
+                city: prospectCtx.city || '',
+                state: prospectCtx.state || '',
+                due_date: due,
+                note: disposition + (notes ? ' — ' + notes.slice(0, 200) : ''),
+                source: 'disposition_auto'
+            }).then(function(r) {
+                if (r.success || r.offline) _mtToast('Follow-up scheduled ' + _mtFormatDate(due), 'info');
+            });
+        } catch(e) { console.warn('mobile auto-task:', e); }
+    };
+
+    // --- Wire up ---
+    document.addEventListener('DOMContentLoaded', function() {
+        var b;
+        // Section chips
+        document.querySelectorAll('.mob-task-chip').forEach(function(c) {
+            c.addEventListener('click', function() { mobSelectTaskSection(c.getAttribute('data-section')); });
+        });
+        // Set Follow-Up sheet
+        b = document.getElementById('mobTaskSheetCancelBtn'); if (b) b.addEventListener('click', mobileCloseSetFollowUp);
+        b = document.getElementById('mobTaskSheetSubmitBtn'); if (b) b.addEventListener('click', mobileSubmitSetFollowUp);
+        b = document.getElementById('mobTaskSheetOverlay'); if (b) b.addEventListener('click', mobileCloseSetFollowUp);
+        document.querySelectorAll('.mob-task-quick').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const d = parseInt(btn.getAttribute('data-days'), 10) || 0;
+                document.getElementById('mobTaskSheetDate').value = _mtAddDays(_mtTodayStr(), d);
+            });
+        });
+        // Complete sheet
+        b = document.getElementById('mobCompleteCancelBtn'); if (b) b.addEventListener('click', mobCloseCompleteSheet);
+        b = document.getElementById('mobCompleteSubmitBtn'); if (b) b.addEventListener('click', mobSubmitComplete);
+        b = document.getElementById('mobCompleteSheetOverlay'); if (b) b.addEventListener('click', mobCloseCompleteSheet);
+        b = document.getElementById('mobCompleteSchedNext'); if (b) b.addEventListener('change', function() {
+            document.getElementById('mobCompleteNextWrap').style.display = b.checked ? 'block' : 'none';
+        });
+        document.querySelectorAll('.mob-next-quick').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const d = parseInt(btn.getAttribute('data-days'), 10) || 0;
+                document.getElementById('mobCompleteNextDate').value = _mtAddDays(_mtTodayStr(), d);
+            });
+        });
+        // Star rating
+        document.querySelectorAll('#mobCompleteStars .mob-ct-star').forEach(function(s) {
+            s.addEventListener('click', function() {
+                const v = parseInt(s.getAttribute('data-value'), 10);
+                document.getElementById('mobCompleteLeadRating').value = v;
+                document.querySelectorAll('#mobCompleteStars .mob-ct-star').forEach(function(x) {
+                    const xv = parseInt(x.getAttribute('data-value'), 10);
+                    x.style.color = xv <= v ? '#F59E0B' : '#D1D5DB';
+                });
+            });
+        });
+        // Chuck sheet
+        b = document.getElementById('mobChuckCloseBtn'); if (b) b.addEventListener('click', mobCloseChuck);
+        b = document.getElementById('mobChuckOverlay'); if (b) b.addEventListener('click', mobCloseChuck);
+        b = document.getElementById('mobChuckCopyBtn'); if (b) b.addEventListener('click', mobChuckCopy);
+        b = document.getElementById('mobChuckSaveBtn'); if (b) b.addEventListener('click', mobChuckSave);
+
+        // Hook switchTab
+        if (typeof switchTab === 'function') {
+            const _origSwitchTabMob = switchTab;
+            window.switchTab = function(tabId) {
+                _origSwitchTabMob(tabId);
+                if (tabId === 'tasksTab') renderMobileTasks();
+            };
+        }
+
+        // Hook openDetail to check for active task on panel open
+        if (typeof openDetail === 'function') {
+            const _origOpenDetail = openDetail;
+            window.openDetail = function(prospect) {
+                const result = _origOpenDetail.apply(this, arguments);
+                setTimeout(_mobCheckActiveTaskForProspect, 100);
+                return result;
+            };
+        }
+
+        // Initial badge refresh
+        setTimeout(function() { if (_mtCurrentRep()) fetchMobTasks().then(updateMobileTasksBadge); }, 2000);
+    });
+
+    // Expose
+    window.renderMobileTasks = renderMobileTasks;
+    window.mobileOpenSetFollowUp = mobileOpenSetFollowUp;
+    window.mobSelectTaskSection = mobSelectTaskSection;
+    window.mobOpenCompleteSheet = mobOpenCompleteSheet;
+    window.mobRunChuck = mobRunChuck;
+
   </script>
 </body>
 </html>
