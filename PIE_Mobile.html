@@ -6783,6 +6783,40 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
         return '';
     }
 
+    // Parse Chuck's follow-up email response into clean subject + body for mailto
+    // Strips markdown header, AI sign-off, [Your Name] placeholder, and coaching notes.
+    // IT injects the rep's real signature so we cut at the sign-off.
+    function _mtExtractEmailForMailto(rawText, prospectName) {
+        if (!rawText) return { subject: 'Follow-up: ' + (prospectName || ''), body: '' };
+        var text = String(rawText);
+        var subject = null;
+        var subjMatch = text.match(/\*\*Subject:?\*\*\s*(.+?)(?:\n|$)/i) || text.match(/^\s*Subject:\s*(.+?)(?:\n|$)/im);
+        if (subjMatch) subject = subjMatch[1].trim().replace(/^\*+|\*+$/g, '').trim();
+        var parts = text.split(/\n\s*---+\s*\n/);
+        var body;
+        if (parts.length >= 2) {
+            body = parts[1];
+            if (!/^\s*(Hi|Hello|Dear|Good morning|Good afternoon)\b/i.test(body)) {
+                for (var i = 0; i < parts.length; i++) {
+                    if (/^\s*(Hi|Hello|Dear|Good morning|Good afternoon)\b/i.test(parts[i])) { body = parts[i]; break; }
+                }
+            }
+        } else {
+            body = text.replace(/^[\s\S]*?\*\*Subject:?\*\*.*?\n/, '').replace(/^#.*\n/m, '');
+        }
+        body = body.replace(/\n\s*(Best|Regards|Thanks|Sincerely|Cheers|Warm regards|Kind regards|Best regards|All the best),?\s*\n[\s\S]*$/im, '');
+        body = body.replace(/\n\s*\[(Your Name|Name|Sender Name|Your Title|Rep Name)\][\s\S]*$/im, '');
+        body = body.replace(/\[(Your Name|Name|Sender Name|Your Title|Rep Name)\]/gi, '');
+        body = body.replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*([^*]+?)\*/g, '$1');
+        body = body.replace(/\n##[\s\S]*$/i, '');
+        body = body.replace(/\n✓[\s\S]*$/, '');
+        body = body.trim().replace(/\n{3,}/g, '\n\n');
+        return {
+            subject: subject || ('Follow-up: ' + (prospectName || '')),
+            body: body || rawText
+        };
+    }
+
     function _mtToast(msg, type) {
         var el = document.getElementById('_mtToast');
         if (!el) {
@@ -7318,9 +7352,10 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
             saveBtn.style.display = 'inline-block';
             if (mode === 'follow_up') {
                 mailtoBtn.style.display = 'inline-block';
-                const subject = encodeURIComponent('Follow-up: ' + (task.prospect_name || ''));
                 mailtoBtn.onclick = function() {
-                    const body = encodeURIComponent(bodyEl.textContent);
+                    const parsed = _mtExtractEmailForMailto(bodyEl.textContent, task.prospect_name || '');
+                    const subject = encodeURIComponent(parsed.subject);
+                    const body = encodeURIComponent(parsed.body);
                     window.open('mailto:' + contactEmail + '?subject=' + subject + '&body=' + body, '_blank');
                 };
             }
