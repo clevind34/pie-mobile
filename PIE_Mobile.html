@@ -2523,10 +2523,10 @@ function removeLoginOverlay(){var e=document.getElementById('identity-overlay');
 function createUserPill(u){
 if(document.getElementById('identity-pill'))return;
 var email=(u.email||'').toLowerCase(),fullName='',role='';
-var _EM_N={"mbyrd@informativ.com":"Michael Byrd","cbyrd@informativ.com":"Carson Byrd","dcarner@informativ.com":"David Carner","klang@informativ.com":"Kimberly Lang","nbrignola@informativ.com":"Nick Brignola","tbordenet@informativ.com":"Teresa Bordenet","jcarlucci@informativ.com":"Joel Carlucci","cknievel@informativ.com":"Curtis Knievel","ksandoval@informativ.com":"Kiristen Sandoval","csanford@informativ.com":"Carol Sanford","mhanaman@informativ.com":"Matt Hanaman","trichter@informativ.com":"Tami Richter","tsmith@informativ.com":"Trish Smith","cromero@informativ.com":"Clarence Romero","jbellinghausen@informativ.com":"Jackson Bellinghausen","agough@informativ.com":"Ashton Gough","gcutlip@informativ.com":"Greg Cutlip","wcarroll@informativ.com":"Ward Carroll","wfowler@informativ.com":"William Fowler","bhutchinson@informativ.com":"Brock Hutchinson","calvarado@informativ.com":"Crly Alvarado","tcanley@informativ.com":"Tim Canley","asweet@informativ.com":"Andrea Sweet","cmanz@informativ.com":"Chad Manz","cbouvier@informativ.com":"Chaquowa Bouvier","ischweitzer@informativ.com":"Irma Schweitzer","jcraddock@informativ.com":"Jennifer Craddock","kbutler@informativ.com":"Kedrick Butler","kfelder@informativ.com":"Kelly Felder","mmiller@informativ.com":"Melissa Miller","eaikey@informativ.com":"Esther Aikey","rgomez@informativ.com":"Ruby Gomez"};
-var _EM_R={"mbyrd@informativ.com":"admin","cbyrd@informativ.com":"admin","dcarner@informativ.com":"elt","klang@informativ.com":"elt","nbrignola@informativ.com":"elt","tbordenet@informativ.com":"manager","jcarlucci@informativ.com":"manager","cknievel@informativ.com":"manager","ksandoval@informativ.com":"manager","csanford@informativ.com":"rep","mhanaman@informativ.com":"rep","trichter@informativ.com":"rep","tsmith@informativ.com":"rep","cromero@informativ.com":"rep","jbellinghausen@informativ.com":"rep","agough@informativ.com":"rep","gcutlip@informativ.com":"rep","wcarroll@informativ.com":"rep","wfowler@informativ.com":"rep","bhutchinson@informativ.com":"rep","calvarado@informativ.com":"rep","tcanley@informativ.com":"rep","asweet@informativ.com":"cs","cmanz@informativ.com":"cs","cbouvier@informativ.com":"cs","ischweitzer@informativ.com":"cs","jcraddock@informativ.com":"cs","kbutler@informativ.com":"cs","kfelder@informativ.com":"cs","mmiller@informativ.com":"cs","eaikey@informativ.com":"cs","rgomez@informativ.com":"cs"};
-var _RL={"admin":"Admin","elt":"ELT","manager":"Manager","rep":"Sales Rep","cs":"Customer Success"};
-var _RC={"admin":"background:rgba(196,154,60,0.15);color:#E0BC64","elt":"background:rgba(196,154,60,0.15);color:#E0BC64","manager":"background:rgba(102,39,232,0.15);color:#953CF5","rep":"background:rgba(29,184,123,0.12);color:#34D399","cs":"background:rgba(59,130,246,0.12);color:#60A5FA"};
+var _EM_N={"mbyrd@informativ.com":"Michael Byrd","cbyrd@informativ.com":"Carson Byrd","dcarner@informativ.com":"David Carner","klang@informativ.com":"Kimberly Lang","nbrignola@informativ.com":"Nick Brignola","tbordenet@informativ.com":"Teresa Bordenet","jcarlucci@informativ.com":"Joel Carlucci","cknievel@informativ.com":"Curtis Knievel","ksandoval@informativ.com":"Kiristen Sandoval","csanford@informativ.com":"Carol Sanford","mhanaman@informativ.com":"Matt Hanaman","trichter@informativ.com":"Tami Richter","tsmith@informativ.com":"Trish Smith","cromero@informativ.com":"Clarence Romero","jbellinghausen@informativ.com":"Jackson Bellinghausen","agough@informativ.com":"Ashton Gough","gcutlip@informativ.com":"Greg Cutlip","wcarroll@informativ.com":"Ward Carroll","wfowler@informativ.com":"William Fowler","bhutchinson@informativ.com":"Brock Hutchinson","calvarado@informativ.com":"Crly Alvarado","tcanley@informativ.com":"Tim Canley","asweet@informativ.com":"Andrea Sweet","cmanz@informativ.com":"Chad Manz","cbouvier@informativ.com":"Chaquowa Bouvier","ischweitzer@informativ.com":"Irma Schweitzer","jcraddock@informativ.com":"Jennifer Craddock","kbutler@informativ.com":"Kedrick Butler","kfelder@informativ.com":"Kelly Felder","mmiller@informativ.com":"Melissa Miller","eaikey@informativ.com":"Esther Aikey","rgomez@informativ.com":"Ruby Gomez","lcrabtree@informativ.com":"Lynn Crabtree"};
+var _EM_R={"mbyrd@informativ.com":"admin","cbyrd@informativ.com":"admin","dcarner@informativ.com":"elt","klang@informativ.com":"elt","nbrignola@informativ.com":"elt","tbordenet@informativ.com":"manager","jcarlucci@informativ.com":"manager","cknievel@informativ.com":"manager","ksandoval@informativ.com":"manager","csanford@informativ.com":"rep","mhanaman@informativ.com":"rep","trichter@informativ.com":"rep","tsmith@informativ.com":"rep","cromero@informativ.com":"rep","jbellinghausen@informativ.com":"rep","agough@informativ.com":"rep","gcutlip@informativ.com":"rep","wcarroll@informativ.com":"rep","wfowler@informativ.com":"rep","bhutchinson@informativ.com":"rep","calvarado@informativ.com":"rep","tcanley@informativ.com":"rep","asweet@informativ.com":"cs","cmanz@informativ.com":"cs","cbouvier@informativ.com":"cs","ischweitzer@informativ.com":"cs","jcraddock@informativ.com":"cs","kbutler@informativ.com":"cs","kfelder@informativ.com":"cs","mmiller@informativ.com":"cs","eaikey@informativ.com":"cs","rgomez@informativ.com":"cs","lcrabtree@informativ.com":"elt_observer"};
+var _RL={"admin":"Admin","elt":"ELT","manager":"Manager","rep":"Sales Rep","cs":"Customer Success","elt_observer":"ELT Observer"};
+var _RC={"admin":"background:rgba(196,154,60,0.15);color:#E0BC64","elt":"background:rgba(196,154,60,0.15);color:#E0BC64","manager":"background:rgba(102,39,232,0.15);color:#953CF5","rep":"background:rgba(29,184,123,0.12);color:#34D399","cs":"background:rgba(59,130,246,0.12);color:#60A5FA","elt_observer":"background:rgba(196,154,60,0.10);color:#E0BC64"};
 fullName=_EM_N[email]||email.split('@')[0]||'User';
 var firstName=fullName.split(' ')[0];
 var ini=(firstName.charAt(0)+(fullName.split(' ')[1]||'').charAt(0)).toUpperCase()||firstName.charAt(0).toUpperCase();
@@ -2651,7 +2651,7 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
   </script>
 </head>
 <body>
-<script>/* gateway SSO token pass-through v4 */(function(){try{var h=window.location.hash||"";var m=h.match(/[#&]gw=([^&]+)/);if(!m)return;var tok=decodeURIComponent(m[1]);history.replaceState(null,"",window.location.pathname+window.location.search);var raw=tok.split(".")[1];raw=raw.replace(/-/g,"+").replace(/_/g,"/");while(raw.length%4)raw+="=";var p=JSON.parse(atob(raw));var meta=p.app_metadata||{};var roles=meta.roles||[];var email=(p.email||"").toLowerCase();var EM_ROLE={"mbyrd@informativ.com":"admin","cbyrd@informativ.com":"admin","dcarner@informativ.com":"elt","klang@informativ.com":"elt","nbrignola@informativ.com":"elt","tbordenet@informativ.com":"manager","jcarlucci@informativ.com":"manager","cknievel@informativ.com":"manager","ksandoval@informativ.com":"manager","csanford@informativ.com":"rep","mhanaman@informativ.com":"rep","trichter@informativ.com":"rep","tsmith@informativ.com":"rep","cromero@informativ.com":"rep","jbellinghausen@informativ.com":"rep","agough@informativ.com":"rep","gcutlip@informativ.com":"rep","wcarroll@informativ.com":"rep","wfowler@informativ.com":"rep","bhutchinson@informativ.com":"rep","calvarado@informativ.com":"rep","tcanley@informativ.com":"rep","asweet@informativ.com":"cs","cmanz@informativ.com":"cs","cbouvier@informativ.com":"cs","ischweitzer@informativ.com":"cs","jcraddock@informativ.com":"cs","kbutler@informativ.com":"cs","kfelder@informativ.com":"cs","mmiller@informativ.com":"cs","eaikey@informativ.com":"cs","rgomez@informativ.com":"cs"};var EM_NAME={"mbyrd@informativ.com":"Michael Byrd","cbyrd@informativ.com":"Carson Byrd","dcarner@informativ.com":"David Carner","klang@informativ.com":"Kimberly Lang","nbrignola@informativ.com":"Nick Brignola","tbordenet@informativ.com":"Teresa Bordenet","jcarlucci@informativ.com":"Joel Carlucci","cknievel@informativ.com":"Curtis Knievel","ksandoval@informativ.com":"Kiristen Sandoval","csanford@informativ.com":"Carol Sanford","mhanaman@informativ.com":"Matt Hanaman","trichter@informativ.com":"Tami Richter","tsmith@informativ.com":"Trish Smith","cromero@informativ.com":"Clarence Romero","jbellinghausen@informativ.com":"Jackson Bellinghausen","agough@informativ.com":"Ashton Gough","gcutlip@informativ.com":"Greg Cutlip","wcarroll@informativ.com":"Ward Carroll","wfowler@informativ.com":"William Fowler","bhutchinson@informativ.com":"Brock Hutchinson","calvarado@informativ.com":"Crly Alvarado","tcanley@informativ.com":"Tim Canley","asweet@informativ.com":"Andrea Sweet","cmanz@informativ.com":"Chad Manz","cbouvier@informativ.com":"Chaquowa Bouvier","ischweitzer@informativ.com":"Irma Schweitzer","jcraddock@informativ.com":"Jennifer Craddock","kbutler@informativ.com":"Kedrick Butler","kfelder@informativ.com":"Kelly Felder","mmiller@informativ.com":"Melissa Miller","eaikey@informativ.com":"Esther Aikey","rgomez@informativ.com":"Ruby Gomez"};if(!roles.length&&EM_ROLE[email])roles=[EM_ROLE[email]];var name=EM_NAME[email]||email.split("@")[0];var user={email:email,id:p.sub||"",roles:roles,rep_name:name};window._identityToken=tok;window._identityUser=user;window.addEventListener("DOMContentLoaded",function(){var o=document.getElementById("identity-overlay");if(o){o.style.transition="opacity 0.3s";o.style.opacity="0";setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o);},350);}if(typeof createUserPill==="function")createUserPill({email:email,token:{access_token:tok}});window.dispatchEvent(new CustomEvent("identity:login",{detail:user}));});}catch(e){console.error("SSO pass-through error:",e)}})();</script>
+<script>/* gateway SSO token pass-through v4 */(function(){try{var h=window.location.hash||"";var m=h.match(/[#&]gw=([^&]+)/);if(!m)return;var tok=decodeURIComponent(m[1]);history.replaceState(null,"",window.location.pathname+window.location.search);var raw=tok.split(".")[1];raw=raw.replace(/-/g,"+").replace(/_/g,"/");while(raw.length%4)raw+="=";var p=JSON.parse(atob(raw));var meta=p.app_metadata||{};var roles=meta.roles||[];var email=(p.email||"").toLowerCase();var EM_ROLE={"mbyrd@informativ.com":"admin","cbyrd@informativ.com":"admin","dcarner@informativ.com":"elt","klang@informativ.com":"elt","nbrignola@informativ.com":"elt","tbordenet@informativ.com":"manager","jcarlucci@informativ.com":"manager","cknievel@informativ.com":"manager","ksandoval@informativ.com":"manager","csanford@informativ.com":"rep","mhanaman@informativ.com":"rep","trichter@informativ.com":"rep","tsmith@informativ.com":"rep","cromero@informativ.com":"rep","jbellinghausen@informativ.com":"rep","agough@informativ.com":"rep","gcutlip@informativ.com":"rep","wcarroll@informativ.com":"rep","wfowler@informativ.com":"rep","bhutchinson@informativ.com":"rep","calvarado@informativ.com":"rep","tcanley@informativ.com":"rep","asweet@informativ.com":"cs","cmanz@informativ.com":"cs","cbouvier@informativ.com":"cs","ischweitzer@informativ.com":"cs","jcraddock@informativ.com":"cs","kbutler@informativ.com":"cs","kfelder@informativ.com":"cs","mmiller@informativ.com":"cs","eaikey@informativ.com":"cs","rgomez@informativ.com":"cs","lcrabtree@informativ.com":"elt_observer"};var EM_NAME={"mbyrd@informativ.com":"Michael Byrd","cbyrd@informativ.com":"Carson Byrd","dcarner@informativ.com":"David Carner","klang@informativ.com":"Kimberly Lang","nbrignola@informativ.com":"Nick Brignola","tbordenet@informativ.com":"Teresa Bordenet","jcarlucci@informativ.com":"Joel Carlucci","cknievel@informativ.com":"Curtis Knievel","ksandoval@informativ.com":"Kiristen Sandoval","csanford@informativ.com":"Carol Sanford","mhanaman@informativ.com":"Matt Hanaman","trichter@informativ.com":"Tami Richter","tsmith@informativ.com":"Trish Smith","cromero@informativ.com":"Clarence Romero","jbellinghausen@informativ.com":"Jackson Bellinghausen","agough@informativ.com":"Ashton Gough","gcutlip@informativ.com":"Greg Cutlip","wcarroll@informativ.com":"Ward Carroll","wfowler@informativ.com":"William Fowler","bhutchinson@informativ.com":"Brock Hutchinson","calvarado@informativ.com":"Crly Alvarado","tcanley@informativ.com":"Tim Canley","asweet@informativ.com":"Andrea Sweet","cmanz@informativ.com":"Chad Manz","cbouvier@informativ.com":"Chaquowa Bouvier","ischweitzer@informativ.com":"Irma Schweitzer","jcraddock@informativ.com":"Jennifer Craddock","kbutler@informativ.com":"Kedrick Butler","kfelder@informativ.com":"Kelly Felder","mmiller@informativ.com":"Melissa Miller","eaikey@informativ.com":"Esther Aikey","rgomez@informativ.com":"Ruby Gomez","lcrabtree@informativ.com":"Lynn Crabtree"};if(!roles.length&&EM_ROLE[email])roles=[EM_ROLE[email]];var name=EM_NAME[email]||email.split("@")[0];var user={email:email,id:p.sub||"",roles:roles,rep_name:name};window._identityToken=tok;window._identityUser=user;window.addEventListener("DOMContentLoaded",function(){var o=document.getElementById("identity-overlay");if(o){o.style.transition="opacity 0.3s";o.style.opacity="0";setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o);},350);}if(typeof createUserPill==="function")createUserPill({email:email,token:{access_token:tok}});window.dispatchEvent(new CustomEvent("identity:login",{detail:user}));});}catch(e){console.error("SSO pass-through error:",e)}})();</script>
 
 
 <div id="identity-overlay" style="position:fixed;inset:0;background:rgba(0,20,50,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Plus Jakarta Sans,sans-serif"><div style="background:#fff;border-radius:16px;padding:40px;max-width:400px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.3)"><div style="width:56px;height:56px;background:linear-gradient(135deg,#6627E8,#002757);border-radius:12px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h2 style="margin:0 0 6px;font-size:22px;font-weight:800;color:#002757">Informativ</h2><p style="margin:0 0 24px;font-size:14px;color:#6B7280">Sign in to continue</p><input id="identity-email" type="email" placeholder="Email address" autocomplete="email" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid #E5E7EB;border-radius:8px;font-size:14px;margin-bottom:10px;outline:none"><input id="identity-password" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid #E5E7EB;border-radius:8px;font-size:14px;margin-bottom:10px;outline:none"><div id="identity-error" style="display:none;color:#DC2626;font-size:13px;margin-bottom:10px;padding:8px;background:#FEF2F2;border-radius:6px"></div><button id="identity-login-btn" style="width:100%;padding:13px 24px;background:linear-gradient(135deg,#6627E8,#4F1FBA);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.02em">Sign In</button></div></div>
@@ -4261,6 +4261,14 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
       // Init group typeahead in detail panel
       var gtaId = currentProspect.id || currentProspect.mcid || '';
       createMobileGroupTypeahead('mobileGroupTypeaheadContainer', currentProspect.grp || currentProspect.group || '', gtaId, handleMobileGroupSelect);
+
+      // May 4, 2026 fix: render saved additional contacts on every panel open
+      // (previously only re-rendered after save → list disappeared on re-open)
+      var _ridForRender = String(gtaId || currentProspect.id || currentProspect.mcid || '');
+      if (_ridForRender) {
+        try { renderMobileAdditionalContacts(_ridForRender); } catch(e) {}
+        try { _mobRenderDmBanner(currentProspect); } catch(e) {}
+      }
     }
 
     function closeDetail() {
@@ -6792,6 +6800,22 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
         role: role,
         added_by: typeof selectedRep !== 'undefined' ? selectedRep : 'Unknown'
       };
+      // May 4, 2026: validation + dedupe
+      if (!payload.contact_name) { alert('Please enter a contact name.'); return; }
+      var _existing = _mobileAdditionalContacts[recordId] || [];
+      for (var _i = 0; _i < _existing.length; _i++) {
+        var _e = _existing[_i] || {};
+        var _sameName = (_e.contact_name || '').trim().toLowerCase() === (payload.contact_name || '').trim().toLowerCase();
+        var _sameEmail = payload.email && (_e.email || '').trim().toLowerCase() === (payload.email || '').trim().toLowerCase();
+        var _samePhone = payload.phone && (_e.phone || '').replace(/[^0-9+]/g,'') === (payload.phone || '').replace(/[^0-9+]/g,'');
+        if (_sameName && (_sameEmail || _samePhone)) {
+          alert((_e.contact_name || 'This contact') + ' is already on this account. Tap their Role dropdown below to change their role instead.');
+          var _formEl = document.getElementById('mobileAddContactForm');
+          if (_formEl) _formEl.style.display = 'none';
+          renderMobileAdditionalContacts(recordId);
+          return;
+        }
+      }
       function _localApply(idxOverride) {
         if (!_mobileAdditionalContacts[recordId]) _mobileAdditionalContacts[recordId] = [];
         _mobileAdditionalContacts[recordId].push(payload);
@@ -6835,7 +6859,7 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
       var roles = _mobileContactRoles[rid] || {};
       var html = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8B8FA8;margin:10px 0 6px;">Additional Contacts</div>';
 
-      // Rep-added additional contacts (editable, role select)
+      // Rep-added additional contacts (editable, role select, remove button)
       html += contacts.map(function(c, idx) {
         var key = String(idx);
         var currentRole = roles[key] || c.role || 'contact';
@@ -6846,7 +6870,10 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
               (c.title ? ' <span style="font-weight:500;color:#64748B;">· ' + c.title + '</span>' : '') +
               _mobRenderRoleBadge(currentRole) +
             '</div>' +
-            _mobRenderRoleSelect(rid, key, currentRole) +
+            '<div style="display:flex;align-items:center;gap:4px;">' +
+              _mobRenderRoleSelect(rid, key, currentRole) +
+              '<button class="mob-contact-remove-btn" data-recid="' + rid + '" data-cidx="' + idx + '" aria-label="Remove" style="background:white;border:1px solid #E2E8F0;border-radius:8px;width:32px;height:32px;font-size:18px;line-height:1;color:#64748B;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-family:inherit;padding:0;">×</button>' +
+            '</div>' +
           '</div>' +
           ((c.email || c.phone) ? '<div>' +
             (c.email ? '<a href="mailto:' + encodeURI(c.email) + '" style="color:#6627E8;font-size:12px;text-decoration:none;">' + c.email + '</a>' : '') +
@@ -6876,6 +6903,96 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
       }).join('');
 
       container.innerHTML = html;
+
+      // Wire Remove buttons (post-render addEventListener — survives re-render)
+      var rmBtns = container.querySelectorAll('.mob-contact-remove-btn');
+      rmBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var recid = btn.getAttribute('data-recid');
+          var cidx = parseInt(btn.getAttribute('data-cidx'), 10);
+          removeMobileAdditionalContact(recid, cidx);
+        });
+      });
+    }
+
+    // === REMOVE ADDITIONAL CONTACT (May 4, 2026) ===
+    async function removeMobileAdditionalContact(recordId, idx) {
+      if (!recordId || isNaN(idx) || idx < 0) return;
+      var contacts = _mobileAdditionalContacts[recordId] || [];
+      if (idx >= contacts.length) return;
+      var contact = contacts[idx];
+      var nameForConfirm = (contact && contact.contact_name) || 'this contact';
+      if (!confirm('Remove ' + nameForConfirm + '?')) return;
+
+      // Optimistic local update
+      contacts.splice(idx, 1);
+      if (contacts.length === 0) delete _mobileAdditionalContacts[recordId];
+      else _mobileAdditionalContacts[recordId] = contacts;
+
+      // Re-key contact_roles
+      if (_mobileContactRoles[recordId]) {
+        var oldRoles = _mobileContactRoles[recordId];
+        var newRoles = {};
+        if (oldRoles.primary !== undefined) newRoles.primary = oldRoles.primary;
+        Object.keys(oldRoles).forEach(function(k) {
+          if (k === 'primary') return;
+          var ki = parseInt(k, 10);
+          if (isNaN(ki)) return;
+          if (ki < idx) newRoles[String(ki)] = oldRoles[k];
+          else if (ki > idx) newRoles[String(ki - 1)] = oldRoles[k];
+        });
+        if (Object.keys(newRoles).length === 0) delete _mobileContactRoles[recordId];
+        else _mobileContactRoles[recordId] = newRoles;
+      }
+
+      renderMobileAdditionalContacts(recordId);
+      try { if (typeof renderProspects === 'function') renderProspects(); } catch(e) {}
+      try { if (currentProspect) _mobRenderDmBanner(currentProspect); } catch(e) {}
+
+      var rep = (typeof selectedRep !== 'undefined' && selectedRep) ? selectedRep : 'Unknown';
+      try {
+        await fetch(PROSPECTS_API + '&action=remove_contact', {
+          method: 'POST', headers: PROSPECTS_HEADERS,
+          body: JSON.stringify({ record_id: String(recordId), contact_index: idx, removed_by: rep })
+        });
+      } catch(e) {
+        queueOfflineAction({ endpoint: PROSPECTS_API + '?action=remove_contact', payload: { record_id: String(recordId), contact_index: idx, removed_by: rep } });
+      }
+    }
+
+    // === DM BANNER (May 4, 2026) ===
+    // Surfaces a promoted Decision Maker (from additional contacts) at the top of the
+    // mobile detail panel so reps see the active DM without re-reordering panel layout.
+    function _mobRenderDmBanner(record) {
+      if (!record) return;
+      var rid = String(record.id || record.mcid || record.prospect_id || '');
+      if (!rid) return;
+      var existing = document.getElementById('mobDmBanner');
+      if (existing) existing.remove();
+      if (typeof _mobGetDisplayContact !== 'function') return;
+      var display = _mobGetDisplayContact(record);
+      if (!display || display.source !== 'additional') return;
+      var roleLabels = { 'dm_group': 'DM — Group', 'dm_store': 'DM — Store', 'referrer': 'Referrer', 'contact': 'Contact' };
+      var roleLabel = roleLabels[display.role] || display.role;
+      var content = document.getElementById('detailContent');
+      if (!content) return;
+      var banner = document.createElement('div');
+      banner.id = 'mobDmBanner';
+      banner.style.cssText = 'background:linear-gradient(135deg,#EDE9FE 0%,#F5F3FF 100%);border:1px solid #C4B5FD;border-left:4px solid #6627E8;border-radius:10px;padding:12px;margin:10px 0;font-family:\'DM Sans\',sans-serif;';
+      banner.innerHTML =
+        '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6627E8" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' +
+          '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#6627E8;">Decision Maker</span>' +
+          '<span style="display:inline-block;padding:2px 8px;border-radius:9px;font-size:10px;font-weight:700;background:white;color:#6627E8;border:1px solid #C4B5FD;">' + roleLabel + '</span>' +
+        '</div>' +
+        '<div style="margin-top:6px;font-size:14px;font-weight:700;color:#0F172A;">' + (display.name || 'Unnamed') + (display.title ? ' <span style="font-weight:500;color:#64748B;font-size:12px;">· ' + display.title + '</span>' : '') + '</div>' +
+        ((display.email || display.phone) ? '<div style="margin-top:4px;font-size:12px;">' +
+          (display.email ? '<a href="mailto:' + encodeURI(display.email) + '" style="color:#6627E8;text-decoration:none;font-weight:600;">' + display.email + '</a>' : '') +
+          (display.email && display.phone ? ' &nbsp;·&nbsp; ' : '') +
+          (display.phone ? '<a href="tel:' + (display.phone || '').replace(/[^0-9+]/g,'') + '" style="color:#6627E8;text-decoration:none;font-weight:600;">' + display.phone + '</a>' : '') +
+        '</div>' : '');
+      // Insert at top of detail content
+      content.insertBefore(banner, content.firstChild);
     }
 
     async function saveMobileGroupAssoc(group) {
